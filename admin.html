@@ -33,11 +33,11 @@
 
     <main class="container admin-grid">
         <section class="admin-card">
-            <h2><i class="fa-solid fa-plus-circle"></i> إضافة منشور تلقائياً لموقعك</h2>
+            <h2><i class="fa-solid fa-plus-circle"></i> إضافة منشور جديد مع رفع صورة ملف</h2>
             
             <div class="form-group" style="background: #1e293b; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
                 <label style="color: #38bdf8;"><i class="fa-solid fa-key"></i> مفتاح GitHub Token (يُحفظ في جهازك):</label>
-                <input type="password" id="ghToken" placeholder="أنشئ Token وضع الكود هنا ليتم الحفظ أوتوماتيكياً">
+                <input type="password" id="ghToken" placeholder="ضع مفتاح GitHub Token الخاص بك هنا">
                 <button type="button" onclick="saveToken()" class="btn-card-dl" style="margin-top: 5px;">حفظ المفتاح</button>
             </div>
 
@@ -73,9 +73,14 @@
                     <input type="url" id="url" required placeholder="https://download-link.com">
                 </div>
 
+                <!-- اختيار صورة كملف من الجهاز -->
                 <div class="form-group">
-                    <label>رابط الصورة:</label>
-                    <input type="url" id="image" required placeholder="https://... رابط صورة">
+                    <label><i class="fa-solid fa-image"></i> اختر صورة الغلاف (ملف من جهازك):</label>
+                    <input type="file" id="imageFile" accept="image/*" required onchange="handleImageUpload(event)">
+                    <input type="hidden" id="imageBase64">
+                    <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
+                        <img id="imagePreview" src="" alt="معاينة الصورة" style="max-width: 120px; max-height: 120px; border-radius: 10px; border: 1px solid #334155;">
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -83,18 +88,16 @@
                     <textarea id="desc" rows="3" placeholder="اكتب شرحاً وتفاصيل كاملة..."></textarea>
                 </div>
 
-                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع أوتوماتيكياً</button>
+                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي بالصورة</button>
             </form>
         </section>
     </main>
 
     <script>
-        // --- ضع اسم حسابك واسم المستودع هنا ---
         const GITHUB_USERNAME = "markbrabos010-lab";
         const REPO_NAME = "ALIOPZTE-";
         const FILE_PATH = "data.json";
 
-        // تحميل الـ Token إذا كان محفوظاً سابقاً
         document.addEventListener("DOMContentLoaded", () => {
             const savedToken = localStorage.getItem("github_token");
             if (savedToken) {
@@ -112,6 +115,21 @@
             }
         }
 
+        // قراءة الملف وتحويله لـ Base64
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const base64String = evt.target.result;
+                    document.getElementById('imageBase64').value = base64String;
+                    document.getElementById('imagePreview').src = base64String;
+                    document.getElementById('imagePreviewContainer').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         async function autoSaveToGithub(e) {
             e.preventDefault();
 
@@ -121,12 +139,17 @@
                 return;
             }
 
+            const imgData = document.getElementById('imageBase64').value;
+            if (!imgData) {
+                alert("يرجى اختيار صورة ملف أولاً!");
+                return;
+            }
+
             const btn = document.getElementById("saveBtn");
             btn.disabled = true;
-            btn.innerText = "جاري النشر والتحديث تلقائياً...";
+            btn.innerText = "جاري جلب الملفات وتحويل الصورة إلى سيرفر GitHub...";
 
             try {
-                // 1. جلب الملف الحالي ومفتاح SHA الخاص به من GitHub
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
                 const getRes = await fetch(getUrl, {
                     headers: { 'Authorization': `token ${token}` }
@@ -142,7 +165,6 @@
                     currentData = JSON.parse(decodedData);
                 }
 
-                // 2. إضافة المنشور الجديد
                 const newItem = {
                     id: Date.now(),
                     title: document.getElementById('title').value,
@@ -152,13 +174,12 @@
                     rating: "4.8",
                     downloads: "1 k",
                     url: document.getElementById('url').value,
-                    image: document.getElementById('image').value,
+                    image: imgData, // الصورة كملف مخزنة
                     desc: document.getElementById('desc').value
                 };
 
                 currentData.unshift(newItem);
 
-                // 3. إرسال البيانات المحدثة أوتوماتيكياً لـ GitHub
                 const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
 
                 const putRes = await fetch(getUrl, {
@@ -168,15 +189,17 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `إضافة منشور تلقائي: ${newItem.title}`,
+                        message: `نشر جديد مع صورة ملف: ${newItem.title}`,
                         content: updatedContent,
                         sha: sha
                     })
                 });
 
                 if (putRes.ok) {
-                    alert("تم نشر المنشور أوتوماتيكياً وظهر للجميع بنجاح!");
+                    alert("تم النشر بنجاح مع رفع صورة الملف مباشرة!");
                     document.getElementById('addForm').reset();
+                    document.getElementById('imageBase64').value = '';
+                    document.getElementById('imagePreviewContainer').style.display = 'none';
                 } else {
                     const err = await putRes.json();
                     alert("حدث خطأ أثناء التحديث: " + (err.message || "تأكد من صحة الـ Token"));
@@ -186,7 +209,7 @@
                 alert("فشل الاتصال: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع أوتوماتيكياً';
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي بالصورة';
             }
         }
     </script>

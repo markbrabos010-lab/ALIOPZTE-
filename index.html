@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة التنزيلات والألعاب</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- الهيدر والقائمة -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-gamepad"></i> مركز التنزيلات
+        </div>
+        <nav>
+            <button class="nav-btn active" onclick="filterCategory('all')">الكل</button>
+            <button class="nav-btn" onclick="filterCategory('minecraft')"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
+            <button class="nav-btn" onclick="filterCategory('roblox')"><i class="fa-solid fa-robot"></i> روبلكس</button>
+            <button class="nav-btn" onclick="filterCategory('other-games')"><i class="fa-solid fa-ghost"></i> ألعاب أخرى</button>
+            <button class="nav-btn" onclick="filterCategory('videos')"><i class="fa-solid fa-video"></i> فيديوهات</button>
+        </nav>
+        <a href="admin.html" class="admin-link"><i class="fa-solid fa-user-gear"></i> لوحة التحكم</a>
+    </header>
+
+    <!-- شريط البحث -->
+    <section class="search-section">
+        <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن لعبة، مود، سكربت، أو فيديو...">
+    </section>
+
+    <!-- شبكة عرض البطاقات -->
+    <main>
+        <div class="cards-grid" id="cardsContainer">
+            <!-- سيتم تحميل المحتوى تلقائياً من البيانات المخزنة -->
+        </div>
+    </main>
+
+    <script>
+        // جلب البيانات من localStorage أو استخدام بيانات افتراضية
+        function getStoredData() {
+            const data = localStorage.getItem('hub_items');
+            return data ? JSON.parse(data) : [
+                {
+                    title: "مودات ماين كرافت الجاهزة",
+                    category: "minecraft",
+                    type: "link",
+                    url: "https://example.com",
+                    image: "https://via.placeholder.com/300x160/10b981/ffffff?text=Minecraft",
+                    desc: "حزمة مودات مميزة وشغالة 100%"
+                },
+                {
+                    title: "سكربت روبلكس المطور",
+                    category: "roblox",
+                    type: "link",
+                    url: "https://example.com",
+                    image: "https://via.placeholder.com/300x160/ef4444/ffffff?text=Roblox",
+                    desc: "أحدث سكربت مع دعم جميع التحديثات"
+                }
+            ];
+        }
+
+        let currentCategory = 'all';
+
+        function renderCards() {
+            const items = getStoredData();
+            const container = document.getElementById('cardsContainer');
+            container.innerHTML = '';
+
+            const filteredItems = items.filter(item => {
+                return currentCategory === 'all' || item.category === currentCategory;
+            });
+
+            if (filteredItems.length === 0) {
+                container.innerHTML = '<p class="no-data">لا يوجد محتوى في هذا القسم حالياً.</p>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                
+                let actionButton = '';
+                if (item.category === 'videos') {
+                    actionButton = `<a href="${item.url}" target="_blank" class="btn btn-video"><i class="fa-solid fa-play"></i> مشاهدة الفيديو</a>`;
+                } else {
+                    actionButton = `<a href="${item.url}" target="_blank" class="btn btn-download"><i class="fa-solid fa-download"></i> تحميل / انتقال</a>`;
+                }
+
+                card.innerHTML = `
+                    <img src="${item.image || 'https://via.placeholder.com/300x160'}" alt="${item.title}">
+                    <div class="card-body">
+                        <span class="badge ${item.category}">${getCategoryName(item.category)}</span>
+                        <h3>${item.title}</h3>
+                        <p>${item.desc || 'لا يوجد وصف متاح'}</p>
+                        ${actionButton}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function getCategoryName(cat) {
+            switch(cat) {
+                case 'minecraft': return 'ماين كرافت';
+                case 'roblox': return 'روبلكس';
+                case 'other-games': return 'ألعاب أخرى';
+                case 'videos': return 'فيديو';
+                default: return 'عام';
+            }
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCards();
+        }
+
+        function searchItems() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                const desc = card.querySelector('p').innerText.toLowerCase();
+                if (title.includes(query) || desc.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // تشغيل العرض عند التحميل
+        renderCards();
+    </script>
+</body>
+</html>

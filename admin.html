@@ -3,92 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - إضافة عناصر</title>
+    <title>لوحة التحكم - ALIOPZTE Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="admin-body">
 
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-sliders"></i> لوحة التحكم
+    <script>
+        // التحقق من الإذن قبل إظهار الصفحة
+        if (sessionStorage.getItem('aliopzte_auth') !== 'true') {
+            const pass = prompt("من فضلك أدخل كلمة السر للدخول للوحة التحكم:");
+            if (pass === "Aliyaser2012") {
+                sessionStorage.setItem('aliopzte_auth', 'true');
+            } else {
+                alert("كلمة السر خاطئة!");
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+
+    <header class="main-header">
+        <div class="header-container">
+            <div class="brand">
+                <i class="fa-solid fa-sliders logo-icon"></i>
+                <span class="logo-text">لوحة التحكم | <span>ALIOPZTE</span></span>
+            </div>
+            <a href="index.html" class="btn-admin"><i class="fa-solid fa-store"></i> العودة للمتجر</a>
         </div>
-        <a href="index.html" class="admin-link"><i class="fa-solid fa-house"></i> العودة للموقع</a>
     </header>
 
-    <div class="admin-container">
-        <h2>إضافة عنصر جديد (ملف / رابط / فيديو)</h2>
-        <form id="addForm" onsubmit="addItem(event)">
-            <div class="form-group">
-                <label>العنوان:</label>
-                <input type="text" id="title" required placeholder="مثال: مود ماين كرافت الجديد">
+    <main class="container admin-grid">
+        <!-- نموذج الإضافة -->
+        <section class="admin-card">
+            <h2><i class="fa-solid fa-plus-circle"></i> إضافة تطبيق / لعبة جديدة</h2>
+            <form id="addForm" onsubmit="addItem(event)">
+                <div class="form-group">
+                    <label>عنوان المنشور / اللعبة:</label>
+                    <input type="text" id="title" required placeholder="مثال: Minecraft Bedrock Edition">
+                </div>
+
+                <div class="form-group">
+                    <label>القسم:</label>
+                    <select id="category" required>
+                        <option value="minecraft">ماين كرافت</option>
+                        <option value="roblox">روبلكس</option>
+                        <option value="other-games">ألعاب أخرى</option>
+                        <option value="videos">فيديوهات</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>رقم الإصدار:</label>
+                        <input type="text" id="version" placeholder="v1.2.0">
+                    </div>
+                    <div class="form-group">
+                        <label>اسم المطور:</label>
+                        <input type="text" id="developer" placeholder="ALIOPZTE Studio">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط التحميل / الميديا فاير / الفيديو:</label>
+                    <input type="url" id="url" required placeholder="https://download-link.com">
+                </div>
+
+                <div class="form-group">
+                    <label>صورة الغلاف (اختر ملف من جهازك):</label>
+                    <input type="file" id="imageFile" accept="image/*" onchange="previewImageFile(event)">
+                    <input type="hidden" id="imageBase64">
+                </div>
+
+                <div class="form-group">
+                    <label>الوصف الشامل:</label>
+                    <textarea id="desc" rows="4" placeholder="اكتب شرحاً وتفاصيل كاملة..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر في المتجر</button>
+            </form>
+        </section>
+
+        <!-- قائمة إدارة المحتوى والحذف -->
+        <section class="admin-card">
+            <h2><i class="fa-solid fa-boxes-packing"></i> المنشورات الحالية (إدارة وحذف)</h2>
+            <div id="adminItemsList" class="admin-items-list">
+                <!-- سيتم عرض العناصر هنا مع أزرار الحذف -->
             </div>
-
-            <div class="form-group">
-                <label>القسم:</label>
-                <select id="category" required>
-                    <option value="minecraft">ماين كرافت</option>
-                    <option value="roblox">روبلكس</option>
-                    <option value="other-games">ألعاب أخرى</option>
-                    <option value="videos">فيديوهات</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>رابط التحميل / المشاهدة (من موقع خارجي):</label>
-                <input type="url" id="url" required placeholder="https://mediafire.com/... أو رابط يوتيوب">
-            </div>
-
-            <div class="form-group">
-                <label>رابط صورة الغلاف (اختياري):</label>
-                <input type="url" id="image" placeholder="https://... رابط صورة">
-            </div>
-
-            <div class="form-group">
-                <label>الوصف:</label>
-                <textarea id="desc" rows="3" placeholder="اكتب وصفاً قصيراً..."></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-download"><i class="fa-solid fa-plus"></i> إضافة إلى الموقع</button>
-        </form>
-
-        <hr style="margin: 30px 0; border: 1px solid #333;">
-
-        <h2>العناصر الحالية المخزنة</h2>
-        <div id="adminItemsList"></div>
-    </div>
+        </section>
+    </main>
 
     <script>
         function getStoredData() {
-            const data = localStorage.getItem('hub_items');
+            const data = localStorage.getItem('aliopzte_store_items');
             return data ? JSON.parse(data) : [];
+        }
+
+        // تحويل صورة الملف إلى صيغة Base64 لتخزينها
+        function previewImageFile(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('imageBase64').value = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
         function addItem(e) {
             e.preventDefault();
             const items = getStoredData();
 
+            const imgBase64 = document.getElementById('imageBase64').value;
+            const defaultImg = 'https://via.placeholder.com/150/0284c7/ffffff?text=ALIOPZTE';
+
             const newItem = {
                 id: Date.now(),
                 title: document.getElementById('title').value,
                 category: document.getElementById('category').value,
+                version: document.getElementById('version').value || 'v1.0',
+                developer: document.getElementById('developer').value || 'ALIOPZTE',
+                rating: (Math.random() * (5.0 - 4.2) + 4.2).toFixed(1),
+                downloads: Math.floor(Math.random() * 50 + 1) + ' k',
                 url: document.getElementById('url').value,
-                image: document.getElementById('image').value || 'https://via.placeholder.com/300x160',
+                image: imgBase64 || defaultImg,
                 desc: document.getElementById('desc').value
             };
 
-            items.push(newItem);
-            localStorage.setItem('hub_items', JSON.stringify(items));
-            alert('تمت إضافة العنصر بنجاح!');
+            items.unshift(newItem);
+            localStorage.setItem('aliopzte_store_items', JSON.stringify(items));
+            alert('تم نشر العنصر بنجاح في متجر ALIOPZTE Store!');
             document.getElementById('addForm').reset();
+            document.getElementById('imageBase64').value = '';
             loadAdminItems();
         }
 
         function deleteItem(id) {
-            if (confirm('هل أنت تأكد من حذف هذا العنصر؟')) {
+            if (confirm('هل أنت تأكد من إزالة هذا العنصر من المتجر؟')) {
                 let items = getStoredData();
                 items = items.filter(item => item.id !== id);
-                localStorage.setItem('hub_items', JSON.stringify(items));
+                localStorage.setItem('aliopzte_store_items', JSON.stringify(items));
                 loadAdminItems();
             }
         }
@@ -99,20 +153,24 @@
             listDiv.innerHTML = '';
 
             if (items.length === 0) {
-                listDiv.innerHTML = '<p>لا توجد عناصر حالياً.</p>';
+                listDiv.innerHTML = '<p class="no-items">لا توجد منشورات حتى الآن.</p>';
                 return;
             }
 
             items.forEach(item => {
-                const itemRow = document.createElement('div');
-                itemRow.className = 'admin-item-row';
-                itemRow.innerHTML = `
-                    <div>
-                        <strong>${item.title}</strong> (${item.category})
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="item-meta">
+                        <img src="${item.image}" alt="thumb">
+                        <div>
+                            <h4>${item.title}</h4>
+                            <span class="sub">${item.category} | ${item.version}</span>
+                        </div>
                     </div>
-                    <button onclick="deleteItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash"></i> حذف</button>
+                    <button onclick="deleteItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
                 `;
-                listDiv.appendChild(itemRow);
+                listDiv.appendChild(row);
             });
         }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALIOPZTE Store - متجر التنزيلات والألعاب</title>
+    <title>ALIOPZTE Store - المتجر الأسطوري</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,11 +18,11 @@
             
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، السكربتات...">
+                <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات...">
             </div>
 
             <button class="btn-admin" onclick="openAdminWithPassword()">
-                <i class="fa-solid fa-lock"></i> لوحة التحكم
+                <i class="fa-solid fa-gauge-high"></i> الداشبورد
             </button>
         </div>
 
@@ -37,15 +37,16 @@
 
     <main class="container">
         <div class="section-title">
-            <h2 id="currentCategoryTitle">أحدث الإصدارات والمستندات</h2>
+            <h2 id="currentCategoryTitle"><i class="fa-solid fa-fire-flame-curved"></i> أحدث الإصدارات والتنزيلات</h2>
+            <span class="refresh-indicator" id="refreshTimer"><i class="fa-solid fa-arrows-rotate fa-spin"></i> تحديث تلقائي فعال</span>
         </div>
 
         <div class="apps-grid" id="appsContainer">
-            <!-- يتم تحميل بطاقات التطبيقات والألعاب هنا -->
+            <!-- تحميل المنشورات هنا -->
         </div>
     </main>
 
-    <!-- شباك التفاصيل -->
+    <!-- Modal التفاصيل -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -53,9 +54,9 @@
                 <img id="modalImg" src="" alt="icon">
                 <div class="modal-title-info">
                     <h2 id="modalTitle">اسم التطبيق</h2>
-                    <p class="developer" id="modalDev">المطور: ALIOPZTE</p>
+                    <p class="developer" id="modalDev">المطور: ALIOPZTE Studio</p>
                     <div class="stats-row">
-                        <span><i class="fa-solid fa-star star"></i> <strong id="modalRating">4.8</strong></span>
+                        <span><i class="fa-solid fa-star star"></i> <strong id="modalRating">4.9</strong></span>
                         <span><i class="fa-solid fa-download"></i> <strong id="modalDownloads">10k+</strong> تنزيل</span>
                         <span class="verified"><i class="fa-solid fa-shield-halved"></i> آمن وموثوق</span>
                     </div>
@@ -63,12 +64,12 @@
             </div>
 
             <div class="modal-body">
-                <h3>عن هذا التطبيق / الملف</h3>
-                <p id="modalDesc">الوصف المفضل...</p>
+                <h3>تفاصيل الشرح والمعلومات</h3>
+                <p id="modalDesc">الوصف...</p>
                 
                 <div class="download-action">
                     <a id="modalDownloadLink" href="#" target="_blank" class="btn-download-big">
-                        <i class="fa-solid fa-download"></i> تنزيل الآن
+                        <i class="fa-solid fa-cloud-arrow-down"></i> تنزيل الآن (رابط مباشر)
                     </a>
                 </div>
             </div>
@@ -79,10 +80,14 @@
         let allItems = [];
         let currentCategory = 'all';
 
-        // جلب البيانات من ملف data.json على السيرفر
+        // تطبيق الثيم المحفوظ
+        const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
+        document.body.className = savedTheme;
+
         async function loadOnlineData() {
             try {
-                const response = await fetch('data.json');
+                // منع التخزين المؤقت لجلب أحدث البيانات
+                const response = await fetch('data.json?t=' + new Date().getTime());
                 allItems = await response.json();
                 renderCards();
             } catch (error) {
@@ -97,7 +102,7 @@
             const filteredItems = allItems.filter(item => currentCategory === 'all' || item.category === currentCategory);
 
             if (filteredItems.length === 0) {
-                container.innerHTML = '<div class="no-items">لا تتوفر عناصر في هذا القسم حالياً.</div>';
+                container.innerHTML = '<div class="no-items"><i class="fa-solid fa-box-open"></i> لا تتوفر عناصر في هذا القسم حالياً.</div>';
                 return;
             }
 
@@ -113,7 +118,7 @@
                             <h3>${item.title}</h3>
                             <span class="app-version">${item.version || 'v1.0'}</span>
                             <div class="card-meta">
-                                <span><i class="fa-solid fa-star star"></i> ${item.rating || '4.5'}</span>
+                                <span><i class="fa-solid fa-star star"></i> ${item.rating || '4.9'}</span>
                                 <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k+'}</span>
                             </div>
                         </div>
@@ -149,11 +154,7 @@
             const cards = document.querySelectorAll('.app-card');
             cards.forEach(card => {
                 const title = card.querySelector('h3').innerText.toLowerCase();
-                if (title.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = title.includes(query) ? 'flex' : 'none';
             });
         }
 
@@ -161,9 +162,9 @@
             document.getElementById('modalImg').src = item.image;
             document.getElementById('modalTitle').innerText = item.title;
             document.getElementById('modalDev').innerText = 'المطور: ' + (item.developer || 'ALIOPZTE');
-            document.getElementById('modalRating').innerText = item.rating || '4.5';
+            document.getElementById('modalRating').innerText = item.rating || '4.9';
             document.getElementById('modalDownloads').innerText = item.downloads || '1k+';
-            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف متاحة لهذا العنصر.';
+            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف متاح.';
             document.getElementById('modalDownloadLink').href = item.url;
             document.getElementById('detailsModal').style.display = 'flex';
         }
@@ -173,7 +174,7 @@
         }
 
         function openAdminWithPassword() {
-            const pass = prompt("أدخل كلمة السر للوصول إلى لوحة التحكم:");
+            const pass = prompt("أدخل كلمة السر للوصول للداشبورد:");
             if (pass === "Aliyaser2012") {
                 window.location.href = "admin.html";
             } else if (pass !== null) {
@@ -181,7 +182,11 @@
             }
         }
 
-        // تشغيل التحميل عند فتح الصفحة
+        // إشعار وإعادة تحميل تلقائي كل دقيقتين (120,000 مللي ثانية)
+        setInterval(() => {
+            loadOnlineData();
+        }, 120000);
+
         loadOnlineData();
     </script>
 </body>

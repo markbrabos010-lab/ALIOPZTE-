@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - إضافة عناصر</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-sliders"></i> لوحة التحكم
+        </div>
+        <a href="index.html" class="admin-link"><i class="fa-solid fa-house"></i> العودة للموقع</a>
+    </header>
+
+    <div class="admin-container">
+        <h2>إضافة عنصر جديد (ملف / رابط / فيديو)</h2>
+        <form id="addForm" onsubmit="addItem(event)">
+            <div class="form-group">
+                <label>العنوان:</label>
+                <input type="text" id="title" required placeholder="مثال: مود ماين كرافت الجديد">
+            </div>
+
+            <div class="form-group">
+                <label>القسم:</label>
+                <select id="category" required>
+                    <option value="minecraft">ماين كرافت</option>
+                    <option value="roblox">روبلكس</option>
+                    <option value="other-games">ألعاب أخرى</option>
+                    <option value="videos">فيديوهات</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>رابط التحميل / المشاهدة (من موقع خارجي):</label>
+                <input type="url" id="url" required placeholder="https://mediafire.com/... أو رابط يوتيوب">
+            </div>
+
+            <div class="form-group">
+                <label>رابط صورة الغلاف (اختياري):</label>
+                <input type="url" id="image" placeholder="https://... رابط صورة">
+            </div>
+
+            <div class="form-group">
+                <label>الوصف:</label>
+                <textarea id="desc" rows="3" placeholder="اكتب وصفاً قصيراً..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-download"><i class="fa-solid fa-plus"></i> إضافة إلى الموقع</button>
+        </form>
+
+        <hr style="margin: 30px 0; border: 1px solid #333;">
+
+        <h2>العناصر الحالية المخزنة</h2>
+        <div id="adminItemsList"></div>
+    </div>
+
+    <script>
+        function getStoredData() {
+            const data = localStorage.getItem('hub_items');
+            return data ? JSON.parse(data) : [];
+        }
+
+        function addItem(e) {
+            e.preventDefault();
+            const items = getStoredData();
+
+            const newItem = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                url: document.getElementById('url').value,
+                image: document.getElementById('image').value || 'https://via.placeholder.com/300x160',
+                desc: document.getElementById('desc').value
+            };
+
+            items.push(newItem);
+            localStorage.setItem('hub_items', JSON.stringify(items));
+            alert('تمت إضافة العنصر بنجاح!');
+            document.getElementById('addForm').reset();
+            loadAdminItems();
+        }
+
+        function deleteItem(id) {
+            if (confirm('هل أنت تأكد من حذف هذا العنصر؟')) {
+                let items = getStoredData();
+                items = items.filter(item => item.id !== id);
+                localStorage.setItem('hub_items', JSON.stringify(items));
+                loadAdminItems();
+            }
+        }
+
+        function loadAdminItems() {
+            const items = getStoredData();
+            const listDiv = document.getElementById('adminItemsList');
+            listDiv.innerHTML = '';
+
+            if (items.length === 0) {
+                listDiv.innerHTML = '<p>لا توجد عناصر حالياً.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const itemRow = document.createElement('div');
+                itemRow.className = 'admin-item-row';
+                itemRow.innerHTML = `
+                    <div>
+                        <strong>${item.title}</strong> (${item.category})
+                    </div>
+                    <button onclick="deleteItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash"></i> حذف</button>
+                `;
+                listDiv.appendChild(itemRow);
+            });
+        }
+
+        loadAdminItems();
+    </script>
+</body>
+</html>

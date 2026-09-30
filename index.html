@@ -3,97 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة التنزيلات والألعاب</title>
+    <title>ALIOPZTE Store - متجر التنزيلات والألعاب</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- الهيدر والقائمة -->
-    <header>
-        <div class="logo">
-            <i class="fa-solid fa-gamepad"></i> مركز التنزيلات
+    <!-- الشريط العلوي الرئيسي (Uptodown Style) -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="brand">
+                <i class="fa-solid fa-store logo-icon"></i>
+                <span class="logo-text">ALIOPZTE <span>Store</span></span>
+            </div>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، السكربتات...">
+            </div>
+
+            <button class="btn-admin" onclick="openAdminWithPassword()">
+                <i class="fa-solid fa-lock"></i> لوحة التحكم
+            </button>
         </div>
-        <nav>
-            <button class="nav-btn active" onclick="filterCategory('all')">الكل</button>
-            <button class="nav-btn" onclick="filterCategory('minecraft')"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
-            <button class="nav-btn" onclick="filterCategory('roblox')"><i class="fa-solid fa-robot"></i> روبلكس</button>
-            <button class="nav-btn" onclick="filterCategory('other-games')"><i class="fa-solid fa-ghost"></i> ألعاب أخرى</button>
-            <button class="nav-btn" onclick="filterCategory('videos')"><i class="fa-solid fa-video"></i> فيديوهات</button>
+
+        <!-- شريط الأقسام (Categories Bar) -->
+        <nav class="categories-bar">
+            <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
+            <button class="cat-btn" onclick="filterCategory('minecraft', this)"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
+            <button class="cat-btn" onclick="filterCategory('roblox', this)"><i class="fa-solid fa-robot"></i> روبلكس</button>
+            <button class="cat-btn" onclick="filterCategory('other-games', this)"><i class="fa-solid fa-gamepad"></i> ألعاب أخرى</button>
+            <button class="cat-btn" onclick="filterCategory('videos', this)"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
         </nav>
-        <a href="admin.html" class="admin-link"><i class="fa-solid fa-user-gear"></i> لوحة التحكم</a>
     </header>
 
-    <!-- شريط البحث -->
-    <section class="search-section">
-        <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن لعبة، مود، سكربت، أو فيديو...">
-    </section>
+    <!-- المحتوى الرئيسي -->
+    <main class="container">
+        <div class="section-title">
+            <h2 id="currentCategoryTitle">أحدث الإصدارات والمستندات</h2>
+        </div>
 
-    <!-- شبكة عرض البطاقات -->
-    <main>
-        <div class="cards-grid" id="cardsContainer">
-            <!-- سيتم تحميل المحتوى تلقائياً من البيانات المخزنة -->
+        <div class="apps-grid" id="appsContainer">
+            <!-- يتم تحميل بطاقات التطبيقات والألعاب هنا -->
         </div>
     </main>
 
+    <!-- شباك عرض تفاصيل التطبيق (Modal) على طريقة Uptodown -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <img id="modalImg" src="" alt="icon">
+                <div class="modal-title-info">
+                    <h2 id="modalTitle">اسم التطبيق</h2>
+                    <p class="developer" id="modalDev">المطور: ALIOPZTE Studio</p>
+                    <div class="stats-row">
+                        <span><i class="fa-solid fa-star star"></i> <strong id="modalRating">4.8</strong></span>
+                        <span><i class="fa-solid fa-download"></i> <strong id="modalDownloads">10k+</strong> تنزيل</span>
+                        <span class="verified"><i class="fa-solid fa-shield-halved"></i> آمن وموثوق</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <h3>عن هذا التطبيق / الملف</h3>
+                <p id="modalDesc">الوصف المفضل...</p>
+                
+                <div class="download-action">
+                    <a id="modalDownloadLink" href="#" target="_blank" class="btn-download-big">
+                        <i class="fa-solid fa-download"></i> تنزيل الآن (رابط مباشر)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // جلب البيانات من localStorage أو استخدام بيانات افتراضية
+        const DEFAULT_ITEMS = [
+            {
+                id: 1,
+                title: "Minecraft - Minecraft Bedrock Mod",
+                category: "minecraft",
+                version: "v1.21.0",
+                developer: "Mojang / ALIOPZTE",
+                rating: "4.9",
+                downloads: "25.4 k",
+                url: "https://example.com",
+                image: "https://via.placeholder.com/150/10b981/ffffff?text=Minecraft",
+                desc: "أحدث إصدار مع إضافة تظليل جرافيكس عالي المودات والسكربتات الشغالة بدون مشاكل."
+            },
+            {
+                id: 2,
+                title: "Roblox Script Hub",
+                category: "roblox",
+                version: "v2.5",
+                developer: "Roblox Devs",
+                rating: "4.7",
+                downloads: "18.2 k",
+                url: "https://example.com",
+                image: "https://via.placeholder.com/150/ef4444/ffffff?text=Roblox",
+                desc: "سكربت مابّات واوتو فارم قوي جداً يدعم التحديثات الجديدة ومحمي بالكامل."
+            }
+        ];
+
         function getStoredData() {
-            const data = localStorage.getItem('hub_items');
-            return data ? JSON.parse(data) : [
-                {
-                    title: "مودات ماين كرافت الجاهزة",
-                    category: "minecraft",
-                    type: "link",
-                    url: "https://example.com",
-                    image: "https://via.placeholder.com/300x160/10b981/ffffff?text=Minecraft",
-                    desc: "حزمة مودات مميزة وشغالة 100%"
-                },
-                {
-                    title: "سكربت روبلكس المطور",
-                    category: "roblox",
-                    type: "link",
-                    url: "https://example.com",
-                    image: "https://via.placeholder.com/300x160/ef4444/ffffff?text=Roblox",
-                    desc: "أحدث سكربت مع دعم جميع التحديثات"
-                }
-            ];
+            const data = localStorage.getItem('aliopzte_store_items');
+            return data ? JSON.parse(data) : DEFAULT_ITEMS;
         }
 
         let currentCategory = 'all';
 
         function renderCards() {
             const items = getStoredData();
-            const container = document.getElementById('cardsContainer');
+            const container = document.getElementById('appsContainer');
             container.innerHTML = '';
 
-            const filteredItems = items.filter(item => {
-                return currentCategory === 'all' || item.category === currentCategory;
-            });
+            const filteredItems = items.filter(item => currentCategory === 'all' || item.category === currentCategory);
 
             if (filteredItems.length === 0) {
-                container.innerHTML = '<p class="no-data">لا يوجد محتوى في هذا القسم حالياً.</p>';
+                container.innerHTML = '<div class="no-items">لا تتوفر عناصر في هذا القسم حالياً.</div>';
                 return;
             }
 
             filteredItems.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'card';
-                
-                let actionButton = '';
-                if (item.category === 'videos') {
-                    actionButton = `<a href="${item.url}" target="_blank" class="btn btn-video"><i class="fa-solid fa-play"></i> مشاهدة الفيديو</a>`;
-                } else {
-                    actionButton = `<a href="${item.url}" target="_blank" class="btn btn-download"><i class="fa-solid fa-download"></i> تحميل / انتقال</a>`;
-                }
+                card.className = 'app-card';
+                card.onclick = () => openModal(item);
 
                 card.innerHTML = `
-                    <img src="${item.image || 'https://via.placeholder.com/300x160'}" alt="${item.title}">
-                    <div class="card-body">
+                    <div class="card-top">
+                        <img src="${item.image}" alt="${item.title}">
+                        <div class="card-info">
+                            <h3>${item.title}</h3>
+                            <span class="app-version">${item.version || 'الإصدار الأخير'}</span>
+                            <div class="card-meta">
+                                <span><i class="fa-solid fa-star star"></i> ${item.rating || '4.8'}</span>
+                                <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k+'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
                         <span class="badge ${item.category}">${getCategoryName(item.category)}</span>
-                        <h3>${item.title}</h3>
-                        <p>${item.desc || 'لا يوجد وصف متاح'}</p>
-                        ${actionButton}
+                        <button class="btn-card-dl"><i class="fa-solid fa-download"></i> تنزيل</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -110,28 +161,58 @@
             }
         }
 
-        function filterCategory(cat) {
+        function filterCategory(cat, btn) {
             currentCategory = cat;
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             renderCards();
         }
 
         function searchItems() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.card');
+            const cards = document.querySelectorAll('.app-card');
             cards.forEach(card => {
                 const title = card.querySelector('h3').innerText.toLowerCase();
-                const desc = card.querySelector('p').innerText.toLowerCase();
-                if (title.includes(query) || desc.includes(query)) {
-                    card.style.display = 'block';
+                if (title.includes(query)) {
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
         }
 
-        // تشغيل العرض عند التحميل
+        // تفاصيل الـ Modal
+        function openModal(item) {
+            document.getElementById('modalImg').src = item.image;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalDev').innerText = 'المطور: ' + (item.developer || 'ALIOPZTE Studio');
+            document.getElementById('modalRating').innerText = item.rating || '4.8';
+            document.getElementById('modalDownloads').innerText = item.downloads || '5k+';
+            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف تفصيلي متاحة لهذا العنصر.';
+            document.getElementById('modalDownloadLink').href = item.url;
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+        function openAdminWithPassword() {
+            const pass = prompt("أدخل كلمة السر للوصول إلى لوحة التحكم:");
+            if (pass === "Aliyaser2012") {
+                window.location.href = "admin.html";
+            } else if (pass !== null) {
+                alert("كلمة السر خاطئة! ليس لديك صلاحية الدخول.");
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
         renderCards();
     </script>
 </body>

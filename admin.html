@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم التلقائية - ALIOPZTE Store</title>
+    <title>الداشبورد الأسطوري - ALIOPZTE Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -11,7 +11,7 @@
 
     <script>
         if (sessionStorage.getItem('aliopzte_auth') !== 'true') {
-            const pass = prompt("من فضلك أدخل كلمة السر للدخول للوحة التحكم:");
+            const pass = prompt("أدخل كلمة السر للوصول للداشبورد:");
             if (pass === "Aliyaser2012") {
                 sessionStorage.setItem('aliopzte_auth', 'true');
             } else {
@@ -24,20 +24,30 @@
     <header class="main-header">
         <div class="header-container">
             <div class="brand">
-                <i class="fa-solid fa-sliders logo-icon"></i>
-                <span class="logo-text">لوحة التحكم التلقائية | <span>ALIOPZTE</span></span>
+                <i class="fa-solid fa-gauge-high logo-icon"></i>
+                <span class="logo-text">داشبورد | <span>ALIOPZTE</span></span>
             </div>
             <a href="index.html" class="btn-admin"><i class="fa-solid fa-store"></i> العودة للمتجر</a>
         </div>
     </header>
 
     <main class="container admin-grid">
+        <!-- قسم النشر والستايل -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-plus-circle"></i> إضافة منشور جديد مع رفع صورة ملف</h2>
+            <h2><i class="fa-solid fa-palette"></i> تخصيص شكل وثيم المتجر</h2>
+            <div class="theme-selector">
+                <button onclick="changeTheme('theme-neon')" class="theme-btn neon">النيون المظلم</button>
+                <button onclick="changeTheme('theme-cyber')" class="theme-btn cyber">السايبر بنك</button>
+                <button onclick="changeTheme('theme-emerald')" class="theme-btn emerald">الزمرد الفاخر</button>
+            </div>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+
+            <h2><i class="fa-solid fa-plus-circle"></i> إضافة تطبيق / لعبة جديدة (صورة ملف)</h2>
             
-            <div class="form-group" style="background: #1e293b; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                <label style="color: #38bdf8;"><i class="fa-solid fa-key"></i> مفتاح GitHub Token (يُحفظ في جهازك):</label>
-                <input type="password" id="ghToken" placeholder="ضع مفتاح GitHub Token الخاص بك هنا">
+            <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                <label style="color: var(--accent-blue);"><i class="fa-solid fa-key"></i> مفتاح GitHub Token:</label>
+                <input type="password" id="ghToken" placeholder="ضع مفتاح Token هنا">
                 <button type="button" onclick="saveToken()" class="btn-card-dl" style="margin-top: 5px;">حفظ المفتاح</button>
             </div>
 
@@ -73,23 +83,30 @@
                     <input type="url" id="url" required placeholder="https://download-link.com">
                 </div>
 
-                <!-- اختيار صورة كملف من الجهاز -->
                 <div class="form-group">
-                    <label><i class="fa-solid fa-image"></i> اختر صورة الغلاف (ملف من جهازك):</label>
+                    <label><i class="fa-solid fa-file-image"></i> اختر صورة الغلاف (ملف من جهازك):</label>
                     <input type="file" id="imageFile" accept="image/*" required onchange="handleImageUpload(event)">
                     <input type="hidden" id="imageBase64">
                     <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
-                        <img id="imagePreview" src="" alt="معاينة الصورة" style="max-width: 120px; max-height: 120px; border-radius: 10px; border: 1px solid #334155;">
+                        <img id="imagePreview" src="" alt="معاينة الصورة" style="max-width: 100px; max-height: 100px; border-radius: 10px;">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>الوصف:</label>
-                    <textarea id="desc" rows="3" placeholder="اكتب شرحاً وتفاصيل كاملة..."></textarea>
+                    <label>الوصف الشامل:</label>
+                    <textarea id="desc" rows="3" placeholder="شرح وتفاصيل اللعبة أو الملف..."></textarea>
                 </div>
 
-                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي بالصورة</button>
+                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع</button>
             </form>
+        </section>
+
+        <!-- قسم إدارة المنشورات والحذف المباشر -->
+        <section class="admin-card">
+            <h2><i class="fa-solid fa-list-check"></i> إدارة المنشورات (إمكانية الحذف المباشر)</h2>
+            <div id="adminItemsList" class="admin-items-list">
+                <p>جاري تحميل المنشورات للحذف والتعديل...</p>
+            </div>
         </section>
     </main>
 
@@ -98,36 +115,93 @@
         const REPO_NAME = "ALIOPZTE-";
         const FILE_PATH = "data.json";
 
+        let currentOnlineItems = [];
+
         document.addEventListener("DOMContentLoaded", () => {
             const savedToken = localStorage.getItem("github_token");
             if (savedToken) {
                 document.getElementById("ghToken").value = savedToken;
             }
+            const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
+            document.body.className = savedTheme;
+            
+            fetchAdminItems();
         });
+
+        function changeTheme(themeName) {
+            document.body.className = themeName;
+            localStorage.setItem('aliopzte_theme', themeName);
+            alert("تم تغيير شكل وستايل الموقع بنجاح!");
+        }
 
         function saveToken() {
             const token = document.getElementById("ghToken").value.trim();
             if (token) {
                 localStorage.setItem("github_token", token);
                 alert("تم حفظ مفتاح الربط بنجاح!");
-            } else {
-                alert("يرجى إدخال مفتاح الـ Token أولاً!");
             }
         }
 
-        // قراءة الملف وتحويله لـ Base64
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    const base64String = evt.target.result;
-                    document.getElementById('imageBase64').value = base64String;
-                    document.getElementById('imagePreview').src = base64String;
+                    document.getElementById('imageBase64').value = evt.target.result;
+                    document.getElementById('imagePreview').src = evt.target.result;
                     document.getElementById('imagePreviewContainer').style.display = 'block';
                 };
                 reader.readAsDataURL(file);
             }
+        }
+
+        async function fetchAdminItems() {
+            try {
+                const res = await fetch('data.json?t=' + new Date().getTime());
+                currentOnlineItems = await res.json();
+                renderAdminList();
+            } catch (e) {
+                document.getElementById('adminItemsList').innerHTML = '<p>لا توجد عناصر أو حدث خطأ في جلب البيانات.</p>';
+            }
+        }
+
+        function renderAdminList() {
+            const listDiv = document.getElementById('adminItemsList');
+            listDiv.innerHTML = '';
+
+            if (currentOnlineItems.length === 0) {
+                listDiv.innerHTML = '<p>لا توجد منشورات متوفرة لحذفها.</p>';
+                return;
+            }
+
+            currentOnlineItems.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="item-meta">
+                        <img src="${item.image}" alt="thumb">
+                        <div>
+                            <h4>${item.title}</h4>
+                            <span class="sub">${item.category} | ${item.version || 'v1.0'}</span>
+                        </div>
+                    </div>
+                    <button onclick="deleteOnlineItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
+                `;
+                listDiv.appendChild(row);
+            });
+        }
+
+        async function deleteOnlineItem(itemId) {
+            if (!confirm("هل أنت تأكد من حذف هذا المنشور نهائياً من الموقع؟")) return;
+
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) {
+                alert("ضع مفتاح Token أولاً لحذف المنشور!");
+                return;
+            }
+
+            const updatedItems = currentOnlineItems.filter(item => item.id !== itemId);
+            await updateGithubFile(token, updatedItems, "حذف منشور من الداشبورد");
         }
 
         async function autoSaveToGithub(e) {
@@ -135,7 +209,7 @@
 
             const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
             if (!token) {
-                alert("يرجى وضع مفتاح GitHub Token والضغط على (حفظ المفتاح) أولاً لتفعيل النشر التلقائي!");
+                alert("يرجى وضع مفتاح GitHub Token أولاً!");
                 return;
             }
 
@@ -145,9 +219,29 @@
                 return;
             }
 
+            const newItem = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                category: document.getElementById('category').value,
+                version: document.getElementById('version').value || 'v1.0',
+                developer: document.getElementById('developer').value || 'ALIOPZTE',
+                rating: "4.9",
+                downloads: "1 k",
+                url: document.getElementById('url').value,
+                image: imgData,
+                desc: document.getElementById('desc').value
+            };
+
+            const updatedItems = [newItem, ...currentOnlineItems];
+            await updateGithubFile(token, updatedItems, `إضافة منشور: ${newItem.title}`);
+            document.getElementById('addForm').reset();
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+        }
+
+        async function updateGithubFile(token, newDataArray, commitMsg) {
             const btn = document.getElementById("saveBtn");
             btn.disabled = true;
-            btn.innerText = "جاري جلب الملفات وتحويل الصورة إلى سيرفر GitHub...";
+            btn.innerText = "جاري الحفظ والتحديث على السيرفر...";
 
             try {
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
@@ -155,32 +249,13 @@
                     headers: { 'Authorization': `token ${token}` }
                 });
 
-                let currentData = [];
                 let sha = "";
-
                 if (getRes.ok) {
                     const fileInfo = await getRes.json();
                     sha = fileInfo.sha;
-                    const decodedData = decodeURIComponent(escape(atob(fileInfo.content)));
-                    currentData = JSON.parse(decodedData);
                 }
 
-                const newItem = {
-                    id: Date.now(),
-                    title: document.getElementById('title').value,
-                    category: document.getElementById('category').value,
-                    version: document.getElementById('version').value || 'v1.0',
-                    developer: document.getElementById('developer').value || 'ALIOPZTE',
-                    rating: "4.8",
-                    downloads: "1 k",
-                    url: document.getElementById('url').value,
-                    image: imgData, // الصورة كملف مخزنة
-                    desc: document.getElementById('desc').value
-                };
-
-                currentData.unshift(newItem);
-
-                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
+                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(newDataArray, null, 2))));
 
                 const putRes = await fetch(getUrl, {
                     method: 'PUT',
@@ -189,27 +264,25 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `نشر جديد مع صورة ملف: ${newItem.title}`,
+                        message: commitMsg,
                         content: updatedContent,
                         sha: sha
                     })
                 });
 
                 if (putRes.ok) {
-                    alert("تم النشر بنجاح مع رفع صورة الملف مباشرة!");
-                    document.getElementById('addForm').reset();
-                    document.getElementById('imageBase64').value = '';
-                    document.getElementById('imagePreviewContainer').style.display = 'none';
+                    alert("تمت العملية والتحديث بنجاح ورؤيتها مباشرة للجميع!");
+                    currentOnlineItems = newDataArray;
+                    renderAdminList();
                 } else {
                     const err = await putRes.json();
-                    alert("حدث خطأ أثناء التحديث: " + (err.message || "تأكد من صحة الـ Token"));
+                    alert("حدث خطأ: " + (err.message || "تأكد من صحة الـ Token"));
                 }
-
             } catch (err) {
                 alert("فشل الاتصال: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي بالصورة';
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع';
             }
         }
     </script>

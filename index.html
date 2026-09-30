@@ -9,7 +9,6 @@
 </head>
 <body>
 
-    <!-- الشريط العلوي الرئيسي (Uptodown Style) -->
     <header class="main-header">
         <div class="header-container">
             <div class="brand">
@@ -27,7 +26,6 @@
             </button>
         </div>
 
-        <!-- شريط الأقسام (Categories Bar) -->
         <nav class="categories-bar">
             <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
             <button class="cat-btn" onclick="filterCategory('minecraft', this)"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
@@ -37,7 +35,6 @@
         </nav>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main class="container">
         <div class="section-title">
             <h2 id="currentCategoryTitle">أحدث الإصدارات والمستندات</h2>
@@ -48,7 +45,7 @@
         </div>
     </main>
 
-    <!-- شباك عرض تفاصيل التطبيق (Modal) على طريقة Uptodown -->
+    <!-- شباك التفاصيل -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -56,7 +53,7 @@
                 <img id="modalImg" src="" alt="icon">
                 <div class="modal-title-info">
                     <h2 id="modalTitle">اسم التطبيق</h2>
-                    <p class="developer" id="modalDev">المطور: ALIOPZTE Studio</p>
+                    <p class="developer" id="modalDev">المطور: ALIOPZTE</p>
                     <div class="stats-row">
                         <span><i class="fa-solid fa-star star"></i> <strong id="modalRating">4.8</strong></span>
                         <span><i class="fa-solid fa-download"></i> <strong id="modalDownloads">10k+</strong> تنزيل</span>
@@ -71,7 +68,7 @@
                 
                 <div class="download-action">
                     <a id="modalDownloadLink" href="#" target="_blank" class="btn-download-big">
-                        <i class="fa-solid fa-download"></i> تنزيل الآن (رابط مباشر)
+                        <i class="fa-solid fa-download"></i> تنزيل الآن
                     </a>
                 </div>
             </div>
@@ -79,46 +76,25 @@
     </div>
 
     <script>
-        const DEFAULT_ITEMS = [
-            {
-                id: 1,
-                title: "Minecraft - Minecraft Bedrock Mod",
-                category: "minecraft",
-                version: "v1.21.0",
-                developer: "Mojang / ALIOPZTE",
-                rating: "4.9",
-                downloads: "25.4 k",
-                url: "https://example.com",
-                image: "https://via.placeholder.com/150/10b981/ffffff?text=Minecraft",
-                desc: "أحدث إصدار مع إضافة تظليل جرافيكس عالي المودات والسكربتات الشغالة بدون مشاكل."
-            },
-            {
-                id: 2,
-                title: "Roblox Script Hub",
-                category: "roblox",
-                version: "v2.5",
-                developer: "Roblox Devs",
-                rating: "4.7",
-                downloads: "18.2 k",
-                url: "https://example.com",
-                image: "https://via.placeholder.com/150/ef4444/ffffff?text=Roblox",
-                desc: "سكربت مابّات واوتو فارم قوي جداً يدعم التحديثات الجديدة ومحمي بالكامل."
-            }
-        ];
-
-        function getStoredData() {
-            const data = localStorage.getItem('aliopzte_store_items');
-            return data ? JSON.parse(data) : DEFAULT_ITEMS;
-        }
-
+        let allItems = [];
         let currentCategory = 'all';
 
+        // جلب البيانات من ملف data.json على السيرفر
+        async function loadOnlineData() {
+            try {
+                const response = await fetch('data.json');
+                allItems = await response.json();
+                renderCards();
+            } catch (error) {
+                console.error("خطأ في جلب البيانات:", error);
+            }
+        }
+
         function renderCards() {
-            const items = getStoredData();
             const container = document.getElementById('appsContainer');
             container.innerHTML = '';
 
-            const filteredItems = items.filter(item => currentCategory === 'all' || item.category === currentCategory);
+            const filteredItems = allItems.filter(item => currentCategory === 'all' || item.category === currentCategory);
 
             if (filteredItems.length === 0) {
                 container.innerHTML = '<div class="no-items">لا تتوفر عناصر في هذا القسم حالياً.</div>';
@@ -135,9 +111,9 @@
                         <img src="${item.image}" alt="${item.title}">
                         <div class="card-info">
                             <h3>${item.title}</h3>
-                            <span class="app-version">${item.version || 'الإصدار الأخير'}</span>
+                            <span class="app-version">${item.version || 'v1.0'}</span>
                             <div class="card-meta">
-                                <span><i class="fa-solid fa-star star"></i> ${item.rating || '4.8'}</span>
+                                <span><i class="fa-solid fa-star star"></i> ${item.rating || '4.5'}</span>
                                 <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k+'}</span>
                             </div>
                         </div>
@@ -181,14 +157,13 @@
             });
         }
 
-        // تفاصيل الـ Modal
         function openModal(item) {
             document.getElementById('modalImg').src = item.image;
             document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalDev').innerText = 'المطور: ' + (item.developer || 'ALIOPZTE Studio');
-            document.getElementById('modalRating').innerText = item.rating || '4.8';
-            document.getElementById('modalDownloads').innerText = item.downloads || '5k+';
-            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف تفصيلي متاحة لهذا العنصر.';
+            document.getElementById('modalDev').innerText = 'المطور: ' + (item.developer || 'ALIOPZTE');
+            document.getElementById('modalRating').innerText = item.rating || '4.5';
+            document.getElementById('modalDownloads').innerText = item.downloads || '1k+';
+            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف متاحة لهذا العنصر.';
             document.getElementById('modalDownloadLink').href = item.url;
             document.getElementById('detailsModal').style.display = 'flex';
         }
@@ -202,18 +177,12 @@
             if (pass === "Aliyaser2012") {
                 window.location.href = "admin.html";
             } else if (pass !== null) {
-                alert("كلمة السر خاطئة! ليس لديك صلاحية الدخول.");
+                alert("كلمة السر خاطئة!");
             }
         }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('detailsModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        renderCards();
+        // تشغيل التحميل عند فتح الصفحة
+        loadOnlineData();
     </script>
 </body>
 </html>

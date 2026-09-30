@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - ALIOPZTE Store</title>
+    <title>لوحة التحكم التلقائية - ALIOPZTE Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="admin-body">
 
     <script>
-        // التحقق من الإذن قبل إظهار الصفحة
         if (sessionStorage.getItem('aliopzte_auth') !== 'true') {
             const pass = prompt("من فضلك أدخل كلمة السر للدخول للوحة التحكم:");
             if (pass === "Aliyaser2012") {
@@ -26,17 +25,23 @@
         <div class="header-container">
             <div class="brand">
                 <i class="fa-solid fa-sliders logo-icon"></i>
-                <span class="logo-text">لوحة التحكم | <span>ALIOPZTE</span></span>
+                <span class="logo-text">لوحة التحكم التلقائية | <span>ALIOPZTE</span></span>
             </div>
             <a href="index.html" class="btn-admin"><i class="fa-solid fa-store"></i> العودة للمتجر</a>
         </div>
     </header>
 
     <main class="container admin-grid">
-        <!-- نموذج الإضافة -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-plus-circle"></i> إضافة تطبيق / لعبة جديدة</h2>
-            <form id="addForm" onsubmit="addItem(event)">
+            <h2><i class="fa-solid fa-plus-circle"></i> إضافة منشور تلقائياً لموقعك</h2>
+            
+            <div class="form-group" style="background: #1e293b; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                <label style="color: #38bdf8;"><i class="fa-solid fa-key"></i> مفتاح GitHub Token (يُحفظ في جهازك):</label>
+                <input type="password" id="ghToken" placeholder="أنشئ Token وضع الكود هنا ليتم الحفظ أوتوماتيكياً">
+                <button type="button" onclick="saveToken()" class="btn-card-dl" style="margin-top: 5px;">حفظ المفتاح</button>
+            </div>
+
+            <form id="addForm" onsubmit="autoSaveToGithub(event)">
                 <div class="form-group">
                     <label>عنوان المنشور / اللعبة:</label>
                     <input type="text" id="title" required placeholder="مثال: Minecraft Bedrock Edition">
@@ -59,122 +64,131 @@
                     </div>
                     <div class="form-group">
                         <label>اسم المطور:</label>
-                        <input type="text" id="developer" placeholder="ALIOPZTE Studio">
+                        <input type="text" id="developer" placeholder="ALIOPZTE">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>رابط التحميل / الميديا فاير / الفيديو:</label>
+                    <label>رابط التحميل المباشر / الفيديو:</label>
                     <input type="url" id="url" required placeholder="https://download-link.com">
                 </div>
 
                 <div class="form-group">
-                    <label>صورة الغلاف (اختر ملف من جهازك):</label>
-                    <input type="file" id="imageFile" accept="image/*" onchange="previewImageFile(event)">
-                    <input type="hidden" id="imageBase64">
+                    <label>رابط الصورة:</label>
+                    <input type="url" id="image" required placeholder="https://... رابط صورة">
                 </div>
 
                 <div class="form-group">
-                    <label>الوصف الشامل:</label>
-                    <textarea id="desc" rows="4" placeholder="اكتب شرحاً وتفاصيل كاملة..."></textarea>
+                    <label>الوصف:</label>
+                    <textarea id="desc" rows="3" placeholder="اكتب شرحاً وتفاصيل كاملة..."></textarea>
                 </div>
 
-                <button type="submit" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر في المتجر</button>
+                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع أوتوماتيكياً</button>
             </form>
-        </section>
-
-        <!-- قائمة إدارة المحتوى والحذف -->
-        <section class="admin-card">
-            <h2><i class="fa-solid fa-boxes-packing"></i> المنشورات الحالية (إدارة وحذف)</h2>
-            <div id="adminItemsList" class="admin-items-list">
-                <!-- سيتم عرض العناصر هنا مع أزرار الحذف -->
-            </div>
         </section>
     </main>
 
     <script>
-        function getStoredData() {
-            const data = localStorage.getItem('aliopzte_store_items');
-            return data ? JSON.parse(data) : [];
-        }
+        // --- ضع اسم حسابك واسم المستودع هنا ---
+        const GITHUB_USERNAME = "markbrabos010-lab";
+        const REPO_NAME = "ALIOPZTE-";
+        const FILE_PATH = "data.json";
 
-        // تحويل صورة الملف إلى صيغة Base64 لتخزينها
-        function previewImageFile(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('imageBase64').value = evt.target.result;
-                };
-                reader.readAsDataURL(file);
+        // تحميل الـ Token إذا كان محفوظاً سابقاً
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedToken = localStorage.getItem("github_token");
+            if (savedToken) {
+                document.getElementById("ghToken").value = savedToken;
+            }
+        });
+
+        function saveToken() {
+            const token = document.getElementById("ghToken").value.trim();
+            if (token) {
+                localStorage.setItem("github_token", token);
+                alert("تم حفظ مفتاح الربط بنجاح!");
+            } else {
+                alert("يرجى إدخال مفتاح الـ Token أولاً!");
             }
         }
 
-        function addItem(e) {
+        async function autoSaveToGithub(e) {
             e.preventDefault();
-            const items = getStoredData();
 
-            const imgBase64 = document.getElementById('imageBase64').value;
-            const defaultImg = 'https://via.placeholder.com/150/0284c7/ffffff?text=ALIOPZTE';
-
-            const newItem = {
-                id: Date.now(),
-                title: document.getElementById('title').value,
-                category: document.getElementById('category').value,
-                version: document.getElementById('version').value || 'v1.0',
-                developer: document.getElementById('developer').value || 'ALIOPZTE',
-                rating: (Math.random() * (5.0 - 4.2) + 4.2).toFixed(1),
-                downloads: Math.floor(Math.random() * 50 + 1) + ' k',
-                url: document.getElementById('url').value,
-                image: imgBase64 || defaultImg,
-                desc: document.getElementById('desc').value
-            };
-
-            items.unshift(newItem);
-            localStorage.setItem('aliopzte_store_items', JSON.stringify(items));
-            alert('تم نشر العنصر بنجاح في متجر ALIOPZTE Store!');
-            document.getElementById('addForm').reset();
-            document.getElementById('imageBase64').value = '';
-            loadAdminItems();
-        }
-
-        function deleteItem(id) {
-            if (confirm('هل أنت تأكد من إزالة هذا العنصر من المتجر؟')) {
-                let items = getStoredData();
-                items = items.filter(item => item.id !== id);
-                localStorage.setItem('aliopzte_store_items', JSON.stringify(items));
-                loadAdminItems();
-            }
-        }
-
-        function loadAdminItems() {
-            const items = getStoredData();
-            const listDiv = document.getElementById('adminItemsList');
-            listDiv.innerHTML = '';
-
-            if (items.length === 0) {
-                listDiv.innerHTML = '<p class="no-items">لا توجد منشورات حتى الآن.</p>';
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) {
+                alert("يرجى وضع مفتاح GitHub Token والضغط على (حفظ المفتاح) أولاً لتفعيل النشر التلقائي!");
                 return;
             }
 
-            items.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'admin-item-row';
-                row.innerHTML = `
-                    <div class="item-meta">
-                        <img src="${item.image}" alt="thumb">
-                        <div>
-                            <h4>${item.title}</h4>
-                            <span class="sub">${item.category} | ${item.version}</span>
-                        </div>
-                    </div>
-                    <button onclick="deleteItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
-                `;
-                listDiv.appendChild(row);
-            });
-        }
+            const btn = document.getElementById("saveBtn");
+            btn.disabled = true;
+            btn.innerText = "جاري النشر والتحديث تلقائياً...";
 
-        loadAdminItems();
+            try {
+                // 1. جلب الملف الحالي ومفتاح SHA الخاص به من GitHub
+                const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
+                const getRes = await fetch(getUrl, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+
+                let currentData = [];
+                let sha = "";
+
+                if (getRes.ok) {
+                    const fileInfo = await getRes.json();
+                    sha = fileInfo.sha;
+                    const decodedData = decodeURIComponent(escape(atob(fileInfo.content)));
+                    currentData = JSON.parse(decodedData);
+                }
+
+                // 2. إضافة المنشور الجديد
+                const newItem = {
+                    id: Date.now(),
+                    title: document.getElementById('title').value,
+                    category: document.getElementById('category').value,
+                    version: document.getElementById('version').value || 'v1.0',
+                    developer: document.getElementById('developer').value || 'ALIOPZTE',
+                    rating: "4.8",
+                    downloads: "1 k",
+                    url: document.getElementById('url').value,
+                    image: document.getElementById('image').value,
+                    desc: document.getElementById('desc').value
+                };
+
+                currentData.unshift(newItem);
+
+                // 3. إرسال البيانات المحدثة أوتوماتيكياً لـ GitHub
+                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2))));
+
+                const putRes = await fetch(getUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `إضافة منشور تلقائي: ${newItem.title}`,
+                        content: updatedContent,
+                        sha: sha
+                    })
+                });
+
+                if (putRes.ok) {
+                    alert("تم نشر المنشور أوتوماتيكياً وظهر للجميع بنجاح!");
+                    document.getElementById('addForm').reset();
+                } else {
+                    const err = await putRes.json();
+                    alert("حدث خطأ أثناء التحديث: " + (err.message || "تأكد من صحة الـ Token"));
+                }
+
+            } catch (err) {
+                alert("فشل الاتصال: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع أوتوماتيكياً';
+            }
+        }
     </script>
 </body>
 </html>

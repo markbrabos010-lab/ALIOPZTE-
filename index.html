@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="theme-neon">
+<body class="theme-neon" id="siteBody">
 
     <header class="main-header">
         <div class="header-container">
@@ -20,6 +20,11 @@
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات، السكربتات...">
             </div>
+
+            <!-- زر ديسكورد الدعم والطلبات -->
+            <a href="https://discord.gg/VvyXGFQjz" target="_blank" class="btn-discord">
+                <i class="fa-brands fa-discord"></i> سيرفر الطلبات والدعم
+            </a>
 
             <!-- أداة تغيير الشكل للزائر -->
             <div class="theme-quick-picker">
@@ -34,15 +39,15 @@
             </button>
         </div>
 
-        <!-- شريط الأقسام المطور -->
+        <!-- شريط الأقسام (زر "الكل" أصبح يساراً) -->
         <nav class="categories-bar">
-            <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
             <button class="cat-btn" onclick="filterCategory('minecraft', this)"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
             <button class="cat-btn" onclick="filterCategory('roblox', this)"><i class="fa-solid fa-robot"></i> روبلكس</button>
             <button class="cat-btn" onclick="filterCategory('mods', this)"><i class="fa-solid fa-puzzle-piece"></i> مودات</button>
             <button class="cat-btn" onclick="filterCategory('scripts', this)"><i class="fa-solid fa-code"></i> سكربتات</button>
             <button class="cat-btn" onclick="filterCategory('other-games', this)"><i class="fa-solid fa-gamepad"></i> ألعاب أخرى</button>
             <button class="cat-btn" onclick="filterCategory('videos', this)"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
+            <button class="cat-btn cat-all-left active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
         </nav>
     </header>
 
@@ -89,9 +94,9 @@
 
     <script>
         let allItems = [];
+        let globalBg = "";
         let currentCategory = 'all';
 
-        // تطبيق الثيم المحفوظ في الجهاز
         function applySavedTheme() {
             const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
             document.body.className = savedTheme;
@@ -105,7 +110,19 @@
         async function loadOnlineData() {
             try {
                 const response = await fetch('data.json?t=' + new Date().getTime());
-                allItems = await response.json();
+                const data = await response.json();
+                
+                if (Array.isArray(data)) {
+                    allItems = data;
+                } else {
+                    allItems = data.items || [];
+                    globalBg = data.customBg || "";
+                    if (globalBg) {
+                        document.body.style.backgroundImage = `url('${globalBg}')`;
+                        document.body.style.backgroundSize = "cover";
+                        document.body.style.backgroundAttachment = "fixed";
+                    }
+                }
                 renderCards();
             } catch (error) {
                 console.error("خطأ في تحميل البيانات:", error);

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALIOPZTE Store - المتجر الأسطوري</title>
+    <title>ALIOPZTE Store - متجر الألعاب والمودات والسكربتات</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="theme-neon">
 
     <header class="main-header">
         <div class="header-container">
@@ -18,7 +18,15 @@
             
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات...">
+                <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات، السكربتات...">
+            </div>
+
+            <!-- أداة تغيير الشكل للزائر -->
+            <div class="theme-quick-picker">
+                <button onclick="changeTheme('theme-neon')" title="نيون أزرق" class="dot-btn neon-dot"></button>
+                <button onclick="changeTheme('theme-cyber')" title="سايبر بنك" class="dot-btn cyber-dot"></button>
+                <button onclick="changeTheme('theme-emerald')" title="زمردي" class="dot-btn emerald-dot"></button>
+                <button onclick="changeTheme('theme-purple')" title="أرجواني" class="dot-btn purple-dot"></button>
             </div>
 
             <button class="btn-admin" onclick="openAdminWithPassword()">
@@ -26,10 +34,13 @@
             </button>
         </div>
 
+        <!-- شريط الأقسام المطور -->
         <nav class="categories-bar">
             <button class="cat-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
             <button class="cat-btn" onclick="filterCategory('minecraft', this)"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
             <button class="cat-btn" onclick="filterCategory('roblox', this)"><i class="fa-solid fa-robot"></i> روبلكس</button>
+            <button class="cat-btn" onclick="filterCategory('mods', this)"><i class="fa-solid fa-puzzle-piece"></i> مودات</button>
+            <button class="cat-btn" onclick="filterCategory('scripts', this)"><i class="fa-solid fa-code"></i> سكربتات</button>
             <button class="cat-btn" onclick="filterCategory('other-games', this)"><i class="fa-solid fa-gamepad"></i> ألعاب أخرى</button>
             <button class="cat-btn" onclick="filterCategory('videos', this)"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
         </nav>
@@ -37,23 +48,23 @@
 
     <main class="container">
         <div class="section-title">
-            <h2 id="currentCategoryTitle"><i class="fa-solid fa-fire-flame-curved"></i> أحدث الإصدارات والتنزيلات</h2>
+            <h2 id="currentCategoryTitle"><i class="fa-solid fa-fire-flame-curved"></i> أحدث الإصدارات والمحتوى</h2>
             <span class="refresh-indicator" id="refreshTimer"><i class="fa-solid fa-arrows-rotate fa-spin"></i> تحديث تلقائي فعال</span>
         </div>
 
         <div class="apps-grid" id="appsContainer">
-            <!-- تحميل المنشورات هنا -->
+            <!-- يتم تحميل عناصر المتجر هنا -->
         </div>
     </main>
 
-    <!-- Modal التفاصيل -->
+    <!-- نافذة تفاصيل الملف -->
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal()">&times;</span>
             <div class="modal-header">
                 <img id="modalImg" src="" alt="icon">
                 <div class="modal-title-info">
-                    <h2 id="modalTitle">اسم التطبيق</h2>
+                    <h2 id="modalTitle">اسم الملف</h2>
                     <p class="developer" id="modalDev">المطور: ALIOPZTE Studio</p>
                     <div class="stats-row">
                         <span><i class="fa-solid fa-star star"></i> <strong id="modalRating">4.9</strong></span>
@@ -64,12 +75,12 @@
             </div>
 
             <div class="modal-body">
-                <h3>تفاصيل الشرح والمعلومات</h3>
+                <h3>الشرح والتفاصيل</h3>
                 <p id="modalDesc">الوصف...</p>
                 
                 <div class="download-action">
                     <a id="modalDownloadLink" href="#" target="_blank" class="btn-download-big">
-                        <i class="fa-solid fa-cloud-arrow-down"></i> تنزيل الآن (رابط مباشر)
+                        <i class="fa-solid fa-cloud-arrow-down"></i> تنزيل / فتح الرابط
                     </a>
                 </div>
             </div>
@@ -80,18 +91,24 @@
         let allItems = [];
         let currentCategory = 'all';
 
-        // تطبيق الثيم المحفوظ
-        const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
-        document.body.className = savedTheme;
+        // تطبيق الثيم المحفوظ في الجهاز
+        function applySavedTheme() {
+            const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
+            document.body.className = savedTheme;
+        }
+
+        function changeTheme(themeName) {
+            document.body.className = themeName;
+            localStorage.setItem('aliopzte_theme', themeName);
+        }
 
         async function loadOnlineData() {
             try {
-                // منع التخزين المؤقت لجلب أحدث البيانات
                 const response = await fetch('data.json?t=' + new Date().getTime());
                 allItems = await response.json();
                 renderCards();
             } catch (error) {
-                console.error("خطأ في جلب البيانات:", error);
+                console.error("خطأ في تحميل البيانات:", error);
             }
         }
 
@@ -136,6 +153,8 @@
             switch(cat) {
                 case 'minecraft': return 'ماين كرافت';
                 case 'roblox': return 'روبلكس';
+                case 'mods': return 'مودات';
+                case 'scripts': return 'سكربتات';
                 case 'other-games': return 'ألعاب أخرى';
                 case 'videos': return 'فيديو';
                 default: return 'عام';
@@ -182,11 +201,11 @@
             }
         }
 
-        // إشعار وإعادة تحميل تلقائي كل دقيقتين (120,000 مللي ثانية)
         setInterval(() => {
             loadOnlineData();
         }, 120000);
 
+        applySavedTheme();
         loadOnlineData();
     </script>
 </body>

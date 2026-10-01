@@ -32,9 +32,19 @@
     </header>
 
     <main class="container admin-grid">
-        <!-- قسم النشر وتخصيص الثيم -->
+        <!-- قسم النشر والتعديل وتغيير خلفية الموقع -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-palette"></i> اختيار شكل وثيم الموقع</h2>
+            <h2><i class="fa-solid fa-image"></i> تعيين خلفية عامة للموقع (يشوفها الكل)</h2>
+            <div class="form-group">
+                <label>اختر صورة خلفية من جهازك:</label>
+                <input type="file" id="bgFile" accept="image/*" onchange="handleBgUpload(event)">
+                <input type="hidden" id="bgBase64">
+                <button type="button" onclick="saveGlobalBackground()" class="btn-submit" style="margin-top: 8px; background: #8b5cf6; color:#fff;"><i class="fa-solid fa-paint-roller"></i> حفظ وخلق الخلفية لكل الزوار</button>
+            </div>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
+
+            <h2><i class="fa-solid fa-palette"></i> اختيار ثيم المتجر</h2>
             <div class="theme-selector">
                 <button onclick="changeTheme('theme-neon')" class="theme-btn neon">النيون الأزرق</button>
                 <button onclick="changeTheme('theme-cyber')" class="theme-btn cyber">السايبر بنك</button>
@@ -44,7 +54,7 @@
 
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
 
-            <h2><i class="fa-solid fa-plus-circle"></i> إضافة لعبة / مود / سكربت جديد</h2>
+            <h2 id="formHeaderTitle"><i class="fa-solid fa-plus-circle"></i> إضافة / تعديل لعبة أو مود</h2>
             
             <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
                 <label style="color: var(--accent-blue);"><i class="fa-solid fa-key"></i> مفتاح GitHub Token:</label>
@@ -53,9 +63,11 @@
             </div>
 
             <form id="addForm" onsubmit="autoSaveToGithub(event)">
+                <input type="hidden" id="editingItemId" value="">
+
                 <div class="form-group">
                     <label>عنوان المنشور:</label>
-                    <input type="text" id="title" required placeholder="مثال: Roblox Auto Farm Script أو Mod Menu">
+                    <input type="text" id="title" required placeholder="مثال: Roblox Auto Farm Script">
                 </div>
 
                 <div class="form-group">
@@ -88,7 +100,7 @@
 
                 <div class="form-group">
                     <label><i class="fa-solid fa-file-image"></i> اختر صورة الغلاف (ملف من جهازك):</label>
-                    <input type="file" id="imageFile" accept="image/*" required onchange="handleImageUpload(event)">
+                    <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(event)">
                     <input type="hidden" id="imageBase64">
                     <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
                         <img id="imagePreview" src="" alt="معاينة الصورة" style="max-width: 100px; max-height: 100px; border-radius: 10px;">
@@ -97,16 +109,17 @@
 
                 <div class="form-group">
                     <label>الوصف الشامل:</label>
-                    <textarea id="desc" rows="3" placeholder="شرح طريقة الاستخدام أو مميزات السكربت والمود..."></textarea>
+                    <textarea id="desc" rows="3" placeholder="شرح طريقة الاستخدام..."></textarea>
                 </div>
 
-                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي</button>
+                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر التغييرات</button>
+                <button type="button" id="cancelEditBtn" onclick="cancelEditing()" class="btn-submit" style="display:none; background:#64748b; margin-top:5px;">إلغاء التعديل</button>
             </form>
         </section>
 
-        <!-- قسم الإدارة والحذف -->
+        <!-- قسم الإدارة، التعديل والحذف -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-list-check"></i> إدارة العناصر والحذف المباشر</h2>
+            <h2><i class="fa-solid fa-list-check"></i> إدارة المحتوى (تعديل وحذف)</h2>
             <div id="adminItemsList" class="admin-items-list">
                 <p>جاري تحميل البيانات...</p>
             </div>
@@ -119,6 +132,7 @@
         const FILE_PATH = "data.json";
 
         let currentOnlineItems = [];
+        let currentCustomBg = "";
 
         document.addEventListener("DOMContentLoaded", () => {
             const savedToken = localStorage.getItem("github_token");
@@ -157,10 +171,39 @@
             }
         }
 
+        function handleBgUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('bgBase64').value = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function saveGlobalBackground() {
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
+
+            const bgData = document.getElementById('bgBase64').value;
+            if (!bgData) { alert("اختر صورة خلفية أولاً!"); return; }
+
+            currentCustomBg = bgData;
+            await updateGithubFile(token, currentOnlineItems, "تعديل خلفية الموقع الشاملة");
+        }
+
         async function fetchAdminItems() {
             try {
                 const res = await fetch('data.json?t=' + new Date().getTime());
-                currentOnlineItems = await res.json();
+                const data = await res.json();
+                
+                if (Array.isArray(data)) {
+                    currentOnlineItems = data;
+                } else {
+                    currentOnlineItems = data.items || [];
+                    currentCustomBg = data.customBg || "";
+                }
                 renderAdminList();
             } catch (e) {
                 document.getElementById('adminItemsList').innerHTML = '<p>لا توجد عناصر حالياً.</p>';
@@ -187,20 +230,49 @@
                             <span class="sub">${item.category} | ${item.version || 'v1.0'}</span>
                         </div>
                     </div>
-                    <button onclick="deleteOnlineItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
+                    <div>
+                        <button onclick="startEditItem(${item.id})" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> تعديل</button>
+                        <button onclick="deleteOnlineItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
+                    </div>
                 `;
                 listDiv.appendChild(row);
             });
+        }
+
+        function startEditItem(itemId) {
+            const item = currentOnlineItems.find(i => i.id === itemId);
+            if (!item) return;
+
+            document.getElementById('editingItemId').value = item.id;
+            document.getElementById('title').value = item.title;
+            document.getElementById('category').value = item.category;
+            document.getElementById('version').value = item.version || '';
+            document.getElementById('developer').value = item.developer || '';
+            document.getElementById('url').value = item.url;
+            document.getElementById('desc').value = item.desc || '';
+            document.getElementById('imageBase64').value = item.image;
+            document.getElementById('imagePreview').src = item.image;
+            document.getElementById('imagePreviewContainer').style.display = 'block';
+
+            document.getElementById('formHeaderTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تعديل المنشور الحالي';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEditing() {
+            document.getElementById('editingItemId').value = '';
+            document.getElementById('addForm').reset();
+            document.getElementById('imageBase64').value = '';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            document.getElementById('formHeaderTitle').innerHTML = '<i class="fa-solid fa-plus-circle"></i> إضافة لعبة أو مود جديد';
+            document.getElementById('cancelEditBtn').style.display = 'none';
         }
 
         async function deleteOnlineItem(itemId) {
             if (!confirm("هل أنت تأكد من حذف هذا العنصر؟")) return;
 
             const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) {
-                alert("يرجى وضع مفتاح Token أولاً!");
-                return;
-            }
+            if (!token) { alert("يرجى وضع مفتاح Token أولاً!"); return; }
 
             const updatedItems = currentOnlineItems.filter(item => item.id !== itemId);
             await updateGithubFile(token, updatedItems, "حذف عنصر من المتجر");
@@ -210,34 +282,49 @@
             e.preventDefault();
 
             const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) {
-                alert("يرجى وضع مفتاح GitHub Token أولاً!");
-                return;
-            }
+            if (!token) { alert("يرجى وضع مفتاح GitHub Token أولاً!"); return; }
 
             const imgData = document.getElementById('imageBase64').value;
-            if (!imgData) {
-                alert("اختر صورة ملف أولاً!");
-                return;
+            if (!imgData) { alert("اختر صورة ملف أولاً!"); return; }
+
+            const editingId = document.getElementById('editingItemId').value;
+
+            if (editingId) {
+                // تعديل منشور موجود
+                const index = currentOnlineItems.findIndex(i => i.id == editingId);
+                if (index !== -1) {
+                    currentOnlineItems[index] = {
+                        id: Number(editingId),
+                        title: document.getElementById('title').value,
+                        category: document.getElementById('category').value,
+                        version: document.getElementById('version').value || 'v1.0',
+                        developer: document.getElementById('developer').value || 'ALIOPZTE',
+                        rating: currentOnlineItems[index].rating || "4.9",
+                        downloads: currentOnlineItems[index].downloads || "1 k",
+                        url: document.getElementById('url').value,
+                        image: imgData,
+                        desc: document.getElementById('desc').value
+                    };
+                }
+            } else {
+                // إضافة منشور جديد
+                const newItem = {
+                    id: Date.now(),
+                    title: document.getElementById('title').value,
+                    category: document.getElementById('category').value,
+                    version: document.getElementById('version').value || 'v1.0',
+                    developer: document.getElementById('developer').value || 'ALIOPZTE',
+                    rating: "4.9",
+                    downloads: "1 k",
+                    url: document.getElementById('url').value,
+                    image: imgData,
+                    desc: document.getElementById('desc').value
+                };
+                currentOnlineItems.unshift(newItem);
             }
 
-            const newItem = {
-                id: Date.now(),
-                title: document.getElementById('title').value,
-                category: document.getElementById('category').value,
-                version: document.getElementById('version').value || 'v1.0',
-                developer: document.getElementById('developer').value || 'ALIOPZTE',
-                rating: "4.9",
-                downloads: "1 k",
-                url: document.getElementById('url').value,
-                image: imgData,
-                desc: document.getElementById('desc').value
-            };
-
-            const updatedItems = [newItem, ...currentOnlineItems];
-            await updateGithubFile(token, updatedItems, `إضافة عنصر جديد: ${newItem.title}`);
-            document.getElementById('addForm').reset();
-            document.getElementById('imagePreviewContainer').style.display = 'none';
+            await updateGithubFile(token, currentOnlineItems, "تحديث ونشر المحتوى");
+            cancelEditing();
         }
 
         async function updateGithubFile(token, newDataArray, commitMsg) {
@@ -257,7 +344,12 @@
                     sha = fileInfo.sha;
                 }
 
-                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(newDataArray, null, 2))));
+                const fullPayload = {
+                    customBg: currentCustomBg,
+                    items: newDataArray
+                };
+
+                const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(fullPayload, null, 2))));
 
                 const putRes = await fetch(getUrl, {
                     method: 'PUT',
@@ -273,7 +365,7 @@
                 });
 
                 if (putRes.ok) {
-                    alert("تم الحفظ والنشر بنجاح!");
+                    alert("تم الحفظ والنشر بنجاح للجميع!");
                     currentOnlineItems = newDataArray;
                     renderAdminList();
                 } else {
@@ -284,7 +376,7 @@
                 alert("فشل الاتصال: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي';
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر التغييرات';
             }
         }
     </script>

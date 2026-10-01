@@ -1,7 +1,7 @@
 /* الثيمات المتعددة */
 body.theme-neon {
     --bg-main: #0a0f1d;
-    --bg-card: rgba(18, 26, 47, 0.85);
+    --bg-card: rgba(18, 26, 47, 0.88);
     --bg-header: #0d1527;
     --accent-blue: #00f0ff;
     --accent-green: #10b981;
@@ -12,7 +12,7 @@ body.theme-neon {
 
 body.theme-cyber {
     --bg-main: #12091f;
-    --bg-card: rgba(30, 15, 50, 0.85);
+    --bg-card: rgba(30, 15, 50, 0.88);
     --bg-header: #1a0b2e;
     --accent-blue: #ff007f;
     --accent-green: #00ffcc;
@@ -23,7 +23,7 @@ body.theme-cyber {
 
 body.theme-emerald {
     --bg-main: #061412;
-    --bg-card: rgba(12, 38, 35, 0.85);
+    --bg-card: rgba(12, 38, 35, 0.88);
     --bg-header: #0a211e;
     --accent-blue: #10b981;
     --accent-green: #34d399;
@@ -34,7 +34,7 @@ body.theme-emerald {
 
 body.theme-purple {
     --bg-main: #140c1d;
-    --bg-card: rgba(35, 18, 51, 0.85);
+    --bg-card: rgba(35, 18, 51, 0.88);
     --bg-header: #1c0f2b;
     --accent-blue: #a855f7;
     --accent-green: #ec4899;
@@ -53,11 +53,26 @@ body { background-color: var(--bg-main); color: var(--text-primary); direction: 
 .logo-text { font-size: 1.5rem; font-weight: 800; }
 .logo-text span { color: var(--accent-blue); }
 
-.search-box { position: relative; flex: 1; max-width: 400px; }
+.search-box { position: relative; flex: 1; max-width: 350px; }
 .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); }
 .search-box input { width: 100%; padding: 10px 45px 10px 15px; background-color: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 25px; color: #fff; outline: none; }
 
-/* أزرار تغيير الثيم السريعة للهيدر */
+/* زر الديسكورد */
+.btn-discord {
+    background: #5865F2;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+}
+.btn-discord:hover { background: #4752C4; transform: translateY(-2px); }
+
 .theme-quick-picker { display: flex; gap: 8px; align-items: center; }
 .dot-btn { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: transform 0.2s; }
 .dot-btn:hover { transform: scale(1.2); }
@@ -73,12 +88,15 @@ body { background-color: var(--bg-main); color: var(--text-primary); direction: 
 .cat-btn { background-color: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: 0.3s; }
 .cat-btn.active, .cat-btn:hover { background-color: var(--accent-blue); color: #000; font-weight: bold; }
 
+/* زر "الكل" على اليسار */
+.cat-all-left { margin-right: auto; }
+
 .container { max-width: 1200px; margin: 25px auto; padding: 0 20px; }
 .section-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .refresh-indicator { font-size: 0.8rem; color: var(--accent-blue); }
 
 .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-.app-card { background: var(--bg-card); border-radius: 14px; padding: 15px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; }
+.app-card { background: var(--bg-card); border-radius: 14px; padding: 15px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; justify-content: space-between; backdrop-filter: blur(5px); }
 .app-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,240,255,0.15); }
 
 .card-top { display: flex; gap: 15px; }
@@ -90,7 +108,6 @@ body { background-color: var(--bg-main); color: var(--text-primary); direction: 
 
 .card-bottom { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
 
-/* ألوان شارات الأقسام */
 .badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
 .badge.minecraft { background: #064e3b; color: #34d399; }
 .badge.roblox { background: #7f1d1d; color: #fca5a5; }
@@ -112,7 +129,7 @@ body { background-color: var(--bg-main); color: var(--text-primary); direction: 
 
 .btn-download-big { display: block; background: var(--accent-green); color: #000; text-align: center; padding: 14px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; text-decoration: none; margin-top: 20px; }
 
-/* Admin Grid & Theme Selector */
+/* Admin Grid */
 .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
 @media (max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
 .admin-card { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
@@ -133,4 +150,5 @@ body { background-color: var(--bg-main); color: var(--text-primary); direction: 
 .admin-item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 10px; }
 .item-meta { display: flex; align-items: center; gap: 12px; }
 .item-meta img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+.btn-edit { background: #eab308; color: #000; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 5px; }
 .btn-delete { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }

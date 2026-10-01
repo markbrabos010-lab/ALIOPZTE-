@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الداشبورد الأسطوري - ALIOPZTE Store</title>
+    <title>الداشبورد - ALIOPZTE Store</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="admin-body">
+<body class="admin-body theme-neon">
 
     <script>
         if (sessionStorage.getItem('aliopzte_auth') !== 'true') {
@@ -32,18 +32,19 @@
     </header>
 
     <main class="container admin-grid">
-        <!-- قسم النشر والستايل -->
+        <!-- قسم النشر وتخصيص الثيم -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-palette"></i> تخصيص شكل وثيم المتجر</h2>
+            <h2><i class="fa-solid fa-palette"></i> اختيار شكل وثيم الموقع</h2>
             <div class="theme-selector">
-                <button onclick="changeTheme('theme-neon')" class="theme-btn neon">النيون المظلم</button>
+                <button onclick="changeTheme('theme-neon')" class="theme-btn neon">النيون الأزرق</button>
                 <button onclick="changeTheme('theme-cyber')" class="theme-btn cyber">السايبر بنك</button>
-                <button onclick="changeTheme('theme-emerald')" class="theme-btn emerald">الزمرد الفاخر</button>
+                <button onclick="changeTheme('theme-emerald')" class="theme-btn emerald">الزمردي</button>
+                <button onclick="changeTheme('theme-purple')" class="theme-btn purple">الأرجواني</button>
             </div>
 
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color);">
 
-            <h2><i class="fa-solid fa-plus-circle"></i> إضافة تطبيق / لعبة جديدة (صورة ملف)</h2>
+            <h2><i class="fa-solid fa-plus-circle"></i> إضافة لعبة / مود / سكربت جديد</h2>
             
             <div class="form-group" style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
                 <label style="color: var(--accent-blue);"><i class="fa-solid fa-key"></i> مفتاح GitHub Token:</label>
@@ -53,8 +54,8 @@
 
             <form id="addForm" onsubmit="autoSaveToGithub(event)">
                 <div class="form-group">
-                    <label>عنوان المنشور / اللعبة:</label>
-                    <input type="text" id="title" required placeholder="مثال: Minecraft Bedrock Edition">
+                    <label>عنوان المنشور:</label>
+                    <input type="text" id="title" required placeholder="مثال: Roblox Auto Farm Script أو Mod Menu">
                 </div>
 
                 <div class="form-group">
@@ -62,6 +63,8 @@
                     <select id="category" required>
                         <option value="minecraft">ماين كرافت</option>
                         <option value="roblox">روبلكس</option>
+                        <option value="mods">مودات (Mods)</option>
+                        <option value="scripts">سكربتات (Scripts)</option>
                         <option value="other-games">ألعاب أخرى</option>
                         <option value="videos">فيديوهات</option>
                     </select>
@@ -70,7 +73,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>رقم الإصدار:</label>
-                        <input type="text" id="version" placeholder="v1.2.0">
+                        <input type="text" id="version" placeholder="v1.0">
                     </div>
                     <div class="form-group">
                         <label>اسم المطور:</label>
@@ -79,7 +82,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>رابط التحميل المباشر / الفيديو:</label>
+                    <label>رابط التحميل المباشر / السكربت:</label>
                     <input type="url" id="url" required placeholder="https://download-link.com">
                 </div>
 
@@ -94,18 +97,18 @@
 
                 <div class="form-group">
                     <label>الوصف الشامل:</label>
-                    <textarea id="desc" rows="3" placeholder="شرح وتفاصيل اللعبة أو الملف..."></textarea>
+                    <textarea id="desc" rows="3" placeholder="شرح طريقة الاستخدام أو مميزات السكربت والمود..."></textarea>
                 </div>
 
-                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع</button>
+                <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي</button>
             </form>
         </section>
 
-        <!-- قسم إدارة المنشورات والحذف المباشر -->
+        <!-- قسم الإدارة والحذف -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-list-check"></i> إدارة المنشورات (إمكانية الحذف المباشر)</h2>
+            <h2><i class="fa-solid fa-list-check"></i> إدارة العناصر والحذف المباشر</h2>
             <div id="adminItemsList" class="admin-items-list">
-                <p>جاري تحميل المنشورات للحذف والتعديل...</p>
+                <p>جاري تحميل البيانات...</p>
             </div>
         </section>
     </main>
@@ -131,7 +134,6 @@
         function changeTheme(themeName) {
             document.body.className = themeName;
             localStorage.setItem('aliopzte_theme', themeName);
-            alert("تم تغيير شكل وستايل الموقع بنجاح!");
         }
 
         function saveToken() {
@@ -161,7 +163,7 @@
                 currentOnlineItems = await res.json();
                 renderAdminList();
             } catch (e) {
-                document.getElementById('adminItemsList').innerHTML = '<p>لا توجد عناصر أو حدث خطأ في جلب البيانات.</p>';
+                document.getElementById('adminItemsList').innerHTML = '<p>لا توجد عناصر حالياً.</p>';
             }
         }
 
@@ -170,7 +172,7 @@
             listDiv.innerHTML = '';
 
             if (currentOnlineItems.length === 0) {
-                listDiv.innerHTML = '<p>لا توجد منشورات متوفرة لحذفها.</p>';
+                listDiv.innerHTML = '<p>لا توجد منشورات متوفرة.</p>';
                 return;
             }
 
@@ -192,16 +194,16 @@
         }
 
         async function deleteOnlineItem(itemId) {
-            if (!confirm("هل أنت تأكد من حذف هذا المنشور نهائياً من الموقع؟")) return;
+            if (!confirm("هل أنت تأكد من حذف هذا العنصر؟")) return;
 
             const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
             if (!token) {
-                alert("ضع مفتاح Token أولاً لحذف المنشور!");
+                alert("يرجى وضع مفتاح Token أولاً!");
                 return;
             }
 
             const updatedItems = currentOnlineItems.filter(item => item.id !== itemId);
-            await updateGithubFile(token, updatedItems, "حذف منشور من الداشبورد");
+            await updateGithubFile(token, updatedItems, "حذف عنصر من المتجر");
         }
 
         async function autoSaveToGithub(e) {
@@ -215,7 +217,7 @@
 
             const imgData = document.getElementById('imageBase64').value;
             if (!imgData) {
-                alert("يرجى اختيار صورة ملف أولاً!");
+                alert("اختر صورة ملف أولاً!");
                 return;
             }
 
@@ -233,7 +235,7 @@
             };
 
             const updatedItems = [newItem, ...currentOnlineItems];
-            await updateGithubFile(token, updatedItems, `إضافة منشور: ${newItem.title}`);
+            await updateGithubFile(token, updatedItems, `إضافة عنصر جديد: ${newItem.title}`);
             document.getElementById('addForm').reset();
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
@@ -241,7 +243,7 @@
         async function updateGithubFile(token, newDataArray, commitMsg) {
             const btn = document.getElementById("saveBtn");
             btn.disabled = true;
-            btn.innerText = "جاري الحفظ والتحديث على السيرفر...";
+            btn.innerText = "جاري الحفظ والتحديث...";
 
             try {
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
@@ -271,18 +273,18 @@
                 });
 
                 if (putRes.ok) {
-                    alert("تمت العملية والتحديث بنجاح ورؤيتها مباشرة للجميع!");
+                    alert("تم الحفظ والنشر بنجاح!");
                     currentOnlineItems = newDataArray;
                     renderAdminList();
                 } else {
                     const err = await putRes.json();
-                    alert("حدث خطأ: " + (err.message || "تأكد من صحة الـ Token"));
+                    alert("خطأ: " + (err.message || "تأكد من الـ Token"));
                 }
             } catch (err) {
                 alert("فشل الاتصال: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر فوراً للجميع';
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> نشر أوتوماتيكي';
             }
         }
     </script>

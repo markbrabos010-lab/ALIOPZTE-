@@ -2,7 +2,7 @@
    ALIOPZTE Store - Style Sheet
    ========================================================= */
 
-/* 1. الثيمات والمتغيرات (Themes Variables) */
+/* 1. الثيمات والمتغيرات */
 body.theme-neon {
     --bg-main: #0a0f1d;
     --bg-card: rgba(18, 26, 47, 0.88);
@@ -47,7 +47,7 @@ body.theme-purple {
     --text-secondary: #d8b4fe;
 }
 
-/* 2. الإعدادات العامة (Global Styles) */
+/* 2. الإعدادات العامة */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -63,7 +63,7 @@ body {
     min-height: 100vh;
 }
 
-/* 3. الهيدر والشريط العلوي (Header & Navigation) */
+/* 3. الهيدر والشريط العلوي */
 .main-header {
     background-color: var(--bg-header);
     border-bottom: 1px solid var(--border-color);
@@ -80,7 +80,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     flex-wrap: wrap;
 }
 
@@ -108,7 +108,7 @@ body {
 .search-box {
     position: relative;
     flex: 1;
-    max-width: 320px;
+    max-width: 280px;
 }
 
 .search-icon {
@@ -130,22 +130,40 @@ body {
     transition: border-color 0.3s;
 }
 
-.search-box input:focus {
-    border-color: var(--accent-blue);
-}
-
-/* 4. زر الديسكورد الثابت تماماً لكل الثيمات */
-.btn-discord {
-    background-color: #5865F2 !important;
+/* 4. أزرار التواصل الاجتماعي الثابتة بكل الثيمات */
+.btn-youtube {
+    background-color: #FF0000 !important;
     color: #ffffff !important;
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: 20px;
     text-decoration: none;
     font-weight: bold;
     font-size: 0.85rem;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+}
+
+.btn-youtube:hover {
+    background-color: #cc0000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 0, 0, 0.5);
+}
+
+.btn-discord {
+    background-color: #5865F2 !important;
+    color: #ffffff !important;
+    padding: 8px 14px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
@@ -157,11 +175,6 @@ body {
     box-shadow: 0 6px 16px rgba(88, 101, 242, 0.5);
 }
 
-.btn-discord i {
-    font-size: 1.1rem;
-}
-
-/* محول الثيم المباشر بالسيرفر السريع */
 .theme-quick-picker {
     display: flex;
     gap: 8px;
@@ -203,7 +216,7 @@ body {
     color: #000;
 }
 
-/* 5. شريط الأقسام (Categories Bar) */
+/* 5. شريط الأقسام */
 .categories-bar {
     max-width: 1200px;
     margin: 0 auto;
@@ -230,12 +243,12 @@ body {
     font-weight: bold;
 }
 
-/* زر "الكل" على يسار الأقسام */
+/* زر "الكل" على أقصى يسار الأقسام */
 .cat-all-left {
     margin-right: auto;
 }
 
-/* 6. الشبكة والبطاقات (Main Content & Grid) */
+/* 6. المحتوى والبطاقات */
 .container {
     max-width: 1200px;
     margin: 25px auto;
@@ -322,7 +335,7 @@ body {
     align-items: center;
 }
 
-/* شارات الأقسام (Badges) */
+/* شارات الأقسام */
 .badge {
     font-size: 0.7rem;
     padding: 3px 8px;
@@ -347,7 +360,7 @@ body {
     cursor: pointer;
 }
 
-/* 7. النافذة المنبثقة (Modal) */
+/* 7. النافذة المنبثقة */
 .modal {
     display: none;
     position: fixed;
@@ -416,7 +429,7 @@ body {
     margin-top: 20px;
 }
 
-/* 8. الداشبورد ولوحة التحكم (Admin Grid & Form) */
+/* 8. الداشبورد ولوحة التحكم */
 .admin-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

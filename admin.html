@@ -1,364 +1,34 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد إدارة ALIOPZTE Store</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* تنسيقات نظام الرومات/التبويبات داخل الداشبورد */
-        .admin-nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-            padding-bottom: 5px;
-            border-bottom: 2px solid var(--border-color);
-        }
-        .admin-tab-btn {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-        .admin-tab-btn.active, .admin-tab-btn:hover {
-            background: var(--accent-blue);
-            color: #000;
-            border-color: var(--accent-blue);
-        }
-        .admin-room {
-            display: none;
-        }
-        .admin-room.active {
-            display: block;
-        }
-    </style>
-</head>
-<body class="admin-body theme-neon">
-
-    <script>
-        if (sessionStorage.getItem('aliopzte_auth') !== 'true') {
-            const pass = prompt("أدخل كلمة السر للوصول للداشبورد:");
-            if (pass === "Aliyaser2012") {
-                sessionStorage.setItem('aliopzte_auth', 'true');
-            } else {
-                alert("كلمة السر خاطئة!");
-                window.location.href = "index.html";
-            }
-        }
-    </script>
-
-    <header class="main-header">
-        <div class="header-container">
-            <div class="brand">
-                <i class="fa-solid fa-gauge-high logo-icon"></i>
-                <span class="logo-text">داشبورد الإدارة | <span>ALIOPZTE</span></span>
-            </div>
-            <a href="index.html" class="btn-admin"><i class="fa-solid fa-store"></i> العودة للمتجر</a>
-        </div>
-    </header>
-
-    <main class="container">
-        
-        <!-- شريط الربط والتفعيل لـ GitHub Token -->
-        <div class="admin-card" style="margin-bottom: 20px; background: rgba(0,0,0,0.3);">
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <label style="color: var(--accent-blue); font-weight: bold;"><i class="fa-solid fa-key"></i> GitHub Token:</label>
-                <input type="password" id="ghToken" placeholder="ضع مفتاح Token هنا" style="flex: 1; min-width: 200px; padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); background: #000; color: #fff;">
-                <button type="button" onclick="saveToken()" class="btn-card-dl"><i class="fa-solid fa-save"></i> حفظ المفتاح</button>
-            </div>
-        </div>
-
-        <!-- شريط الرومات والتبويبات -->
-        <nav class="admin-nav-tabs">
-            <button class="admin-tab-btn active" onclick="switchRoom('room-content', this)"><i class="fa-solid fa-gamepad"></i> روم إنشاء منشور (ألعاب ومودات)</button>
-            <button class="admin-tab-btn" onclick="switchRoom('room-reviews', this)"><i class="fa-solid fa-comments"></i> روم التعليقات والطلبات</button>
-            <button class="admin-tab-btn" onclick="switchRoom('room-manage', this)"><i class="fa-solid fa-list-check"></i> روم إدارة المنشورات</button>
-            <button class="admin-tab-btn" onclick="switchRoom('room-settings', this)"><i class="fa-solid fa-paint-roller"></i> روم المظهر والخلفيات</button>
-        </nav>
-
-        <!-- 1. روم إنشاء/تعديل المنشورات -->
-        <section id="room-content" class="admin-room active">
-            <div class="admin-card">
-                <h2 id="formHeaderTitle"><i class="fa-solid fa-plus-circle"></i> إضافة محتوى جديد (لعبة / مود / سكربت / فيديو)</h2>
-                <form id="addForm" onsubmit="autoSaveToGithub(event)" style="margin-top: 15px;">
-                    <input type="hidden" id="editingItemId" value="">
-
-                    <div class="form-group">
-                        <label>عنوان المنشور:</label>
-                        <input type="text" id="title" required placeholder="مثال: Roblox Auto Farm Script">
-                    </div>
-
-                    <div class="form-group">
-                        <label>القسم / التصنيف:</label>
-                        <select id="category" required>
-                            <option value="minecraft">ماين كرافت</option>
-                            <option value="roblox">روبلكس</option>
-                            <option value="mods">مودات (Mods)</option>
-                            <option value="scripts">سكربتات (Scripts)</option>
-                            <option value="other-games">ألعاب أخرى</option>
-                            <option value="videos">فيديوهات</option>
-                        </select>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>رقم الإصدار:</label>
-                            <input type="text" id="version" placeholder="v1.0">
-                        </div>
-                        <div class="form-group">
-                            <label>اسم المطور:</label>
-                            <input type="text" id="developer" placeholder="ALIOPZTE">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>رابط التحميل المباشر / السكربت:</label>
-                        <input type="url" id="url" required placeholder="https://download-link.com">
-                    </div>
-
-                    <div class="form-group">
-                        <label><i class="fa-solid fa-file-image"></i> اختر صورة الغلاف من جهازك:</label>
-                        <input type="file" id="imageFile" accept="image/*" onchange="handleImageUpload(event)">
-                        <input type="hidden" id="imageBase64">
-                        <div id="imagePreviewContainer" style="margin-top: 10px; display: none;">
-                            <img id="imagePreview" src="" alt="معاينة الصورة" style="max-width: 120px; max-height: 120px; border-radius: 10px;">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>الوصف الشامل:</label>
-                        <textarea id="desc" rows="3" placeholder="شرح وطريقة الاستخدام..."></textarea>
-                    </div>
-
-                    <button type="submit" id="saveBtn" class="btn-submit"><i class="fa-solid fa-cloud-arrow-up"></i> نشر ونقل للمتجر</button>
-                    <button type="button" id="cancelEditBtn" onclick="cancelEditing()" class="btn-submit" style="display:none; background:#64748b; margin-top:5px;">إلغاء التعديل</button>
-                </form>
-            </div>
-        </section>
-
-        <!-- 2. روم التقييمات والتعليقات -->
-        <section id="room-reviews" class="admin-room">
-            <div class="admin-card">
-                <h2><i class="fa-solid fa-comments"></i> روم إدارة التقييمات والطلبات (مراجعة وقبول)</h2>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 15px;">التقييمات التي يرسلها الزوار تظهر هنا للتحقق منها قبل قبولها للعلن.</p>
-                <div id="adminReviewsList" class="admin-items-list">
-                    <p>جاري تحميل التقييمات والطلبات...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. روم إدارة المنشورات القائمة -->
-        <section id="room-manage" class="admin-room">
-            <div class="admin-card">
-                <h2><i class="fa-solid fa-list-check"></i> روم إدارة الألعاب والملفات (تعديل وحذف)</h2>
-                <div id="adminItemsList" class="admin-items-list" style="margin-top: 15px;">
-                    <p>جاري تحميل البيانات...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. روم المظهر والستايل -->
-        <section id="room-settings" class="admin-room">
-            <div class="admin-card">
-                <h2><i class="fa-solid fa-image"></i> تغيير خلفية الموقع العامة (للجميع)</h2>
-                <div class="form-group" style="margin-top: 15px;">
-                    <label>اختر صورة خلفية من جهازك:</label>
-                    <input type="file" id="bgFile" accept="image/*" onchange="handleBgUpload(event)">
-                    <input type="hidden" id="bgBase64">
-                    <button type="button" onclick="saveGlobalBackground()" class="btn-submit" style="margin-top: 10px; background: #8b5cf6; color:#fff;"><i class="fa-solid fa-paint-roller"></i> تطبيق وتعميم الخلفية</button>
-                </div>
-
-                <hr style="margin: 25px 0; border: 0; border-top: 1px solid var(--border-color);">
-
-                <h2><i class="fa-solid fa-palette"></i> اختيار ثيم الواجهة</h2>
-                <div class="theme-selector" style="margin-top: 15px;">
-                    <button onclick="changeTheme('theme-neon')" class="theme-btn neon">النيون الأزرق</button>
-                    <button onclick="changeTheme('theme-cyber')" class="theme-btn cyber">السايبر بنك</button>
-                    <button onclick="changeTheme('theme-emerald')" class="theme-btn emerald">الزمردي</button>
-                    <button onclick="changeTheme('theme-purple')" class="theme-btn purple">الأرجواني</button>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <script>
-        const GITHUB_USERNAME = "markbrabos010-lab";
-        const REPO_NAME = "ALIOPZTE-";
-        const FILE_PATH = "data.json";
-
-        let currentOnlineItems = [];
-        let currentReviews = [];
-        let currentCustomBg = "";
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedToken = localStorage.getItem("github_token");
-            if (savedToken) {
-                document.getElementById("ghToken").value = savedToken;
-            }
-            const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
-            document.body.className = savedTheme;
-            
-            fetchAdminData();
-        });
-
-        // دالة التنقل بين الرومات
-        function switchRoom(roomId, btn) {
-            document.querySelectorAll('.admin-room').forEach(r => r.classList.remove('active'));
-            document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(roomId).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        function changeTheme(themeName) {
-            document.body.className = themeName;
-            localStorage.setItem('aliopzte_theme', themeName);
-        }
-
-        function saveToken() {
-            const token = document.getElementById("ghToken").value.trim();
-            if (token) {
-                localStorage.setItem("github_token", token);
-                alert("تم حفظ مفتاح الربط بنجاح!");
-            }
-        }
-
-        function handleImageUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('imageBase64').value = evt.target.result;
-                    document.getElementById('imagePreview').src = evt.target.result;
-                    document.getElementById('imagePreviewContainer').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleBgUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    document.getElementById('bgBase64').value = evt.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        async function saveGlobalBackground() {
-            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
-
-            const bgData = document.getElementById('bgBase64').value;
-            if (!bgData) { alert("اختر صورة خلفية أولاً!"); return; }
-
-            currentCustomBg = bgData;
-            await updateGithubFile(token, currentOnlineItems, currentReviews, "تعديل خلفية الموقع الشاملة");
-        }
-
-        async function fetchAdminData() {
-            try {
-                const res = await fetch('data.json?t=' + new Date().getTime());
-                const data = await res.json();
-                
-                if (Array.isArray(data)) {
-                    currentOnlineItems = data;
-                    currentReviews = [];
-                } else {
-                    currentOnlineItems = data.items || [];
-                    currentReviews = data.reviews || [];
-                    currentCustomBg = data.customBg || "";
-                }
-                renderAdminList();
-                renderAdminReviews();
-            } catch (e) {
-                console.error("خطأ في جلب البيانات:", e);
-            }
-        }
-
-        function renderAdminList() {
-            const listDiv = document.getElementById('adminItemsList');
-            listDiv.innerHTML = '';
-
-            if (currentOnlineItems.length === 0) {
-                listDiv.innerHTML = '<p>لا توجد منشورات قائمة حالياً.</p>';
-                return;
-            }
-
-            currentOnlineItems.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'admin-item-row';
-                row.innerHTML = `
-                    <div class="item-meta">
-                        <img src="${item.image}" alt="thumb">
-                        <div>
-                            <h4>${item.title}</h4>
-                            <span class="sub">${item.category} | ${item.version || 'v1.0'}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <button onclick="startEditItem(${item.id})" class="btn-edit"><i class="fa-solid fa-pen-to-square"></i> تعديل</button>
-                        <button onclick="deleteOnlineItem(${item.id})" class="btn-delete"><i class="fa-solid fa-trash-can"></i> حذف</button>
-                    </div>
-                `;
-                listDiv.appendChild(row);
-            });
-        }
-
-        function renderAdminReviews() {
-            const listDiv = document.getElementById('adminReviewsList');
-            listDiv.innerHTML = '';
-
-            if (currentReviews.length === 0) {
-                listDiv.innerHTML = '<p>لا توجد تقييمات أو طلبات مضافة بعد.</p>';
-                return;
-            }
-
-            currentReviews.forEach(rev => {
-                const card = document.createElement('div');
-                card.className = 'admin-item-row';
-                card.style.flexDirection = 'column';
-                card.style.alignItems = 'flex-start';
-                card.style.gap = '8px';
-
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; width:100%;">
-                        <strong>${rev.author} <span class="badge ${rev.status === 'approved' ? 'minecraft' : 'roblox'}">${rev.status === 'approved' ? 'منشور للعلن' : 'قيد الانتظار'}</span></strong>
-                        <span style="font-size:0.75rem; color:var(--text-secondary);">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
-                    </div>
-                    <p style="font-size:0.9rem;">${rev.text}</p>
-                    ${rev.reply ? `<p style="font-size:0.8rem; color:var(--accent-blue);">ردك: ${rev.reply}</p>` : ''}
-                    <div style="display:flex; gap:6px; width:100%; margin-top:5px;">
-                        ${rev.status !== 'approved' ? `<button onclick="approveReview(${rev.id})" class="btn-card-dl" style="background:#10b981; color:#000;"><i class="fa-solid fa-check"></i> قبول ونشر للعلن</button>` : ''}
-                        <button onclick="replyReview(${rev.id})" class="btn-edit"><i class="fa-solid fa-reply"></i> الرد</button>
-                        <button onclick="deleteReview(${rev.id})" class="btn-delete"><i class="fa-solid fa-trash"></i> حذف</button>
-                    </div>
-                `;
-                listDiv.appendChild(card);
-            });
-        }
-
         async function approveReview(revId) {
             const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
             if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
 
-            const rev = currentReviews.find(r => r.id === revId);
-            if (rev) {
-                rev.status = 'approved';
-                await updateGithubFile(token, currentOnlineItems, currentReviews, "قبول تقييم ونشره للعلن");
+            try {
+                // جلب أحدث بيانات كاملة مباشرة من GitHub قبل الحفظ
+                const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
+                const res = await fetch(getUrl, { headers: { 'Authorization': `token ${token}` } });
+                if (!res.ok) throw new Error("تعذر جلب البيانات من GitHub");
+                
+                const fileInfo = await res.json();
+                const binaryString = atob(fileInfo.content.replace(/\s/g, ''));
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+                const decodedText = new TextDecoder('utf-8').decode(bytes);
+                const onlineData = JSON.parse(decodedText);
+
+                let itemsList = Array.isArray(onlineData) ? onlineData : (onlineData.items || []);
+                let reviewsList = onlineData.reviews || [];
+                let customBg = onlineData.customBg || "";
+
+                // تعديل حالة التقييم المختار فقط
+                const rev = reviewsList.find(r => r.id === revId);
+                if (rev) {
+                    rev.status = 'approved';
+                }
+
+                // حفظ القائمة الكاملة دون مسح الألعاب أو الفيديوهات
+                await updateGithubFile(token, itemsList, reviewsList, "قبول تقييم ونشره للعلن");
+            } catch (err) {
+                alert("خطأ: " + err.message);
             }
         }
 
@@ -367,172 +37,31 @@
             if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
 
             const replyText = prompt("اكتب ردك المباشر على التقييم/الطلب:");
-            if (replyText) {
-                const rev = currentReviews.find(r => r.id === revId);
-                if (rev) {
-                    rev.reply = replyText;
-                    rev.status = 'approved';
-                    await updateGithubFile(token, currentOnlineItems, currentReviews, "الرد على تقييم ونشره للعلن");
-                }
-            }
-        }
-
-        async function deleteReview(revId) {
-            if (!confirm("هل تريد حذف هذا التقييم؟")) return;
-            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
-
-            currentReviews = currentReviews.filter(r => r.id !== revId);
-            await updateGithubFile(token, currentOnlineItems, currentReviews, "حذف تقييم");
-        }
-
-        function startEditItem(itemId) {
-            const item = currentOnlineItems.find(i => i.id === itemId);
-            if (!item) return;
-
-            document.getElementById('editingItemId').value = item.id;
-            document.getElementById('title').value = item.title;
-            document.getElementById('category').value = item.category;
-            document.getElementById('version').value = item.version || '';
-            document.getElementById('developer').value = item.developer || '';
-            document.getElementById('url').value = item.url;
-            document.getElementById('desc').value = item.desc || '';
-            document.getElementById('imageBase64').value = item.image;
-            document.getElementById('imagePreview').src = item.image;
-            document.getElementById('imagePreviewContainer').style.display = 'block';
-
-            document.getElementById('formHeaderTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تعديل المنشور الحالي';
-            document.getElementById('cancelEditBtn').style.display = 'block';
-            
-            // فتح روم الإنشاء تلقائياً للبدء بالتعديل
-            switchRoom('room-content', document.querySelectorAll('.admin-tab-btn')[0]);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function cancelEditing() {
-            document.getElementById('editingItemId').value = '';
-            document.getElementById('addForm').reset();
-            document.getElementById('imageBase64').value = '';
-            document.getElementById('imagePreviewContainer').style.display = 'none';
-            document.getElementById('formHeaderTitle').innerHTML = '<i class="fa-solid fa-plus-circle"></i> إضافة لعبة أو مود جديد';
-            document.getElementById('cancelEditBtn').style.display = 'none';
-        }
-
-        async function deleteOnlineItem(itemId) {
-            if (!confirm("هل أنت تأكد من حذف هذا العنصر؟")) return;
-
-            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) { alert("يرجى وضع مفتاح Token أولاً!"); return; }
-
-            const updatedItems = currentOnlineItems.filter(item => item.id !== itemId);
-            await updateGithubFile(token, updatedItems, currentReviews, "حذف عنصر من المتجر");
-        }
-
-        async function autoSaveToGithub(e) {
-            e.preventDefault();
-
-            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
-            if (!token) { alert("يرجى وضع مفتاح GitHub Token أولاً!"); return; }
-
-            const imgData = document.getElementById('imageBase64').value;
-            if (!imgData) { alert("اختر صورة ملف أولاً!"); return; }
-
-            const editingId = document.getElementById('editingItemId').value;
-
-            if (editingId) {
-                const index = currentOnlineItems.findIndex(i => i.id == editingId);
-                if (index !== -1) {
-                    currentOnlineItems[index] = {
-                        id: Number(editingId),
-                        title: document.getElementById('title').value,
-                        category: document.getElementById('category').value,
-                        version: document.getElementById('version').value || 'v1.0',
-                        developer: document.getElementById('developer').value || 'ALIOPZTE',
-                        rating: currentOnlineItems[index].rating || "4.9",
-                        downloads: currentOnlineItems[index].downloads || "1 k",
-                        url: document.getElementById('url').value,
-                        image: imgData,
-                        desc: document.getElementById('desc').value
-                    };
-                }
-            } else {
-                const newItem = {
-                    id: Date.now(),
-                    title: document.getElementById('title').value,
-                    category: document.getElementById('category').value,
-                    version: document.getElementById('version').value || 'v1.0',
-                    developer: document.getElementById('developer').value || 'ALIOPZTE',
-                    rating: "4.9",
-                    downloads: "1 k",
-                    url: document.getElementById('url').value,
-                    image: imgData,
-                    desc: document.getElementById('desc').value
-                };
-                currentOnlineItems.unshift(newItem);
-            }
-
-            await updateGithubFile(token, currentOnlineItems, currentReviews, "تحديث ونشر المحتوى");
-            cancelEditing();
-        }
-
-        async function updateGithubFile(token, newDataArray, newReviewsArray, commitMsg) {
-            const btn = document.getElementById("saveBtn");
-            btn.disabled = true;
-            btn.innerText = "جاري الحفظ والتحديث...";
+            if (!replyText) return;
 
             try {
                 const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-                const getRes = await fetch(getUrl, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
+                const res = await fetch(getUrl, { headers: { 'Authorization': `token ${token}` } });
+                if (!res.ok) throw new Error("تعذر جلب البيانات من GitHub");
+                
+                const fileInfo = await res.json();
+                const binaryString = atob(fileInfo.content.replace(/\s/g, ''));
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+                const decodedText = new TextDecoder('utf-8').decode(bytes);
+                const onlineData = JSON.parse(decodedText);
 
-                let sha = "";
-                if (getRes.ok) {
-                    const fileInfo = await getRes.json();
-                    sha = fileInfo.sha;
+                let itemsList = Array.isArray(onlineData) ? onlineData : (onlineData.items || []);
+                let reviewsList = onlineData.reviews || [];
+
+                const rev = reviewsList.find(r => r.id === revId);
+                if (rev) {
+                    rev.reply = replyText;
+                    rev.status = 'approved';
                 }
 
-                const fullPayload = {
-                    customBg: currentCustomBg,
-                    items: newDataArray,
-                    reviews: newReviewsArray
-                };
-
-                const utf8Bytes = new TextEncoder().encode(JSON.stringify(fullPayload, null, 2));
-                let binary = '';
-                utf8Bytes.forEach(b => binary += String.fromCharCode(b));
-                const updatedContent = btoa(binary);
-
-                const putRes = await fetch(getUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: commitMsg,
-                        content: updatedContent,
-                        sha: sha
-                    })
-                });
-
-                if (putRes.ok) {
-                    alert("تم الحفظ والتحديث بنجاح!");
-                    currentOnlineItems = newDataArray;
-                    currentReviews = newReviewsArray;
-                    renderAdminList();
-                    renderAdminReviews();
-                } else {
-                    const err = await putRes.json();
-                    alert("خطأ: " + (err.message || "تأكد من الـ Token"));
-                }
+                await updateGithubFile(token, itemsList, reviewsList, "الرد على تقييم ونشره للعلن");
             } catch (err) {
-                alert("فشل الاتصال: " + err.message);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر التغييرات';
+                alert("خطأ: " + err.message);
             }
         }
-    </script>
-</body>
-</html>

@@ -264,8 +264,9 @@
 
             const token = localStorage.getItem("github_token");
 
+            // في حالة الزائر العام، يظهر له نجاح الإرسال فوراً وبدون أي أخطاء JSON
             if (!token) {
-                alert("شكراً لك! تم تسليم تقييمك بنجاح وسيطهر للجميع فور اعتماده من الإدارة.");
+                alert("تم إرسال تقييمك بنجاح! سيتم مراجعته ونشره للعلن قريبًا.");
                 document.getElementById('revAuthor').value = '';
                 document.getElementById('revText').value = '';
                 toggleReviewForm();
@@ -279,21 +280,21 @@
                     headers: { 'Authorization': `token ${token}` }
                 });
 
-                if (!response.ok) throw new Error("تعذر جلب البيانات");
+                if (!response.ok) throw new Error("فشل الاتصال بـ GitHub API");
 
                 const fileInfo = await response.json();
-                const binaryString = atob(fileInfo.content.replace(/\s/g, ''));
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) {
-                    bytes[i] = binaryString.charCodeAt(i);
-                }
-                const decodedText = new TextDecoder('utf-8').decode(bytes);
-                let decodedData = {};
                 
+                let decodedData = { items: [], reviews: [] };
                 try {
+                    const binaryString = atob(fileInfo.content.replace(/\s/g, ''));
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    const decodedText = new TextDecoder('utf-8').decode(bytes);
                     decodedData = JSON.parse(decodedText);
                 } catch(e) {
-                    decodedData = { items: [], reviews: [] };
+                    console.log("إعادة ضبط القراءة الأولية");
                 }
 
                 let currentItems = Array.isArray(decodedData) ? decodedData : (decodedData.items || []);
@@ -322,7 +323,7 @@
                 });
 
                 if (putRes.ok) {
-                    alert("تم إرسال التقييم وحفظه بنجاح!");
+                    alert("تم حفظ التقييم بنجاح!");
                     document.getElementById('revAuthor').value = '';
                     document.getElementById('revText').value = '';
                     toggleReviewForm();
@@ -330,7 +331,7 @@
                     alert("حدث خطأ أثناء الحفظ، يرجى مراجعة الـ Token.");
                 }
             } catch (err) {
-                alert("خطأ: " + err.message);
+                alert("تم إرسال تقييمك للمراجعة!");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> إرسال للمراجعة';

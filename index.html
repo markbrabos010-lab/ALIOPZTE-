@@ -44,7 +44,7 @@
             </button>
         </div>
 
-        <!-- شريط الأقسام (زر "الكل" على اليسار) -->
+        <!-- شريط الأقسام -->
         <nav class="categories-bar">
             <button class="cat-btn" onclick="filterCategory('minecraft', this)"><i class="fa-solid fa-cubes"></i> ماين كرافت</button>
             <button class="cat-btn" onclick="filterCategory('roblox', this)"><i class="fa-solid fa-robot"></i> روبلكس</button>
@@ -65,6 +65,41 @@
         <div class="apps-grid" id="appsContainer">
             <!-- يتم تحميل عناصر المتجر هنا -->
         </div>
+
+        <!-- قسم التقييمات والطلبات العامة المعتمدة -->
+        <section class="reviews-section" style="margin-top: 50px;">
+            <div class="section-title">
+                <h2><i class="fa-solid fa-comments"></i> آراء وتقييمات الزوار (المتحقق منها)</h2>
+                <button class="btn-card-dl" onclick="toggleReviewForm()"><i class="fa-solid fa-pen"></i> أضف تقييمك أو طلبك</button>
+            </div>
+
+            <!-- نموذج إضافة تقييم -->
+            <div id="reviewFormContainer" class="admin-card" style="display: none; margin-bottom: 20px;">
+                <h3>أرسل تقييمك أو طلبك للموقع</h3>
+                <form onsubmit="submitUserReview(event)" style="margin-top: 10px;">
+                    <div class="form-group">
+                        <label>الاسم أو اللقب:</label>
+                        <input type="text" id="revAuthor" required placeholder="مثال: علي">
+                    </div>
+                    <div class="form-group">
+                        <label>نوع الرسالة:</label>
+                        <select id="revType">
+                            <option value="review">تقييم للموقع</option>
+                            <option value="request">طلب لعبة / مود / سكربت</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>الرسالة / التقييم:</label>
+                        <textarea id="revText" rows="3" required placeholder="اكتب تقييمك أو طلبك هنا..."></textarea>
+                    </div>
+                    <button type="submit" id="sendRevBtn" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> إرسال للمراجعة</button>
+                </form>
+            </div>
+
+            <div class="reviews-grid" id="publicReviewsContainer">
+                <p>جاري تحميل التقييمات للعلن...</p>
+            </div>
+        </section>
     </main>
 
     <!-- نافذة تفاصيل الملف -->
@@ -98,7 +133,12 @@
     </div>
 
     <script>
+        const GITHUB_USERNAME = "markbrabos010-lab";
+        const REPO_NAME = "ALIOPZTE-";
+        const FILE_PATH = "data.json";
+
         let allItems = [];
+        let allReviews = [];
         let globalBg = "";
         let currentCategory = 'all';
 
@@ -119,8 +159,10 @@
                 
                 if (Array.isArray(data)) {
                     allItems = data;
+                    allReviews = [];
                 } else {
                     allItems = data.items || [];
+                    allReviews = data.reviews || [];
                     globalBg = data.customBg || "";
                     if (globalBg) {
                         document.body.style.backgroundImage = `url('${globalBg}')`;
@@ -129,6 +171,7 @@
                     }
                 }
                 renderCards();
+                renderPublicReviews();
             } catch (error) {
                 console.error("خطأ في تحميل البيانات:", error);
             }
@@ -171,64 +214,32 @@
             });
         }
 
-        function getCategoryName(cat) {
-            switch(cat) {
-                case 'minecraft': return 'ماين كرافت';
-                case 'roblox': return 'روبلكس';
-                case 'mods': return 'مودات';
-                case 'scripts': return 'سكربتات';
-                case 'other-games': return 'ألعاب أخرى';
-                case 'videos': return 'فيديو';
-                default: return 'عام';
+        function renderPublicReviews() {
+            const container = document.getElementById('publicReviewsContainer');
+            container.innerHTML = '';
+
+            // تصفية العرض للتقييمات المقبولة والمعتمدة للعلن فقط
+            const approvedReviews = allReviews.filter(r => r.status === 'approved');
+
+            if (approvedReviews.length === 0) {
+                container.innerHTML = '<p class="no-items">لا توجد تقييمات منشورة للعلن حالياً.</p>';
+                return;
             }
-        }
 
-        function filterCategory(cat, btn) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderCards();
-        }
-
-        function searchItems() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.app-card');
-            cards.forEach(card => {
-                const title = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = title.includes(query) ? 'flex' : 'none';
+            approvedReviews.forEach(rev => {
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                card.innerHTML = `
+                    <div class="review-header">
+                        <strong><i class="fa-solid fa-user-circle"></i> ${rev.author}</strong>
+                        <span class="review-type-tag ${rev.type}">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
+                    </div>
+                    <p class="review-body">${rev.text}</p>
+                    ${rev.reply ? `<div class="admin-reply"><i class="fa-solid fa-reply"></i> <strong>رد ALIOPZTE:</strong> ${rev.reply}</div>` : ''}
+                `;
+                container.appendChild(card);
             });
         }
 
-        function openModal(item) {
-            document.getElementById('modalImg').src = item.image;
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalDev').innerText = 'المطور: ' + (item.developer || 'ALIOPZTE');
-            document.getElementById('modalRating').innerText = item.rating || '4.9';
-            document.getElementById('modalDownloads').innerText = item.downloads || '1k+';
-            document.getElementById('modalDesc').innerText = item.desc || 'لا يوجد وصف متاح.';
-            document.getElementById('modalDownloadLink').href = item.url;
-            document.getElementById('detailsModal').style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('detailsModal').style.display = 'none';
-        }
-
-        function openAdminWithPassword() {
-            const pass = prompt("أدخل كلمة السر للوصول للداشبورد:");
-            if (pass === "Aliyaser2012") {
-                window.location.href = "admin.html";
-            } else if (pass !== null) {
-                alert("كلمة السر خاطئة!");
-            }
-        }
-
-        setInterval(() => {
-            loadOnlineData();
-        }, 120000);
-
-        applySavedTheme();
-        loadOnlineData();
-    </script>
-</body>
-</html>
+        function toggleReviewForm() {
+            const form = document.getElementById('reviewFormContainer');

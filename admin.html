@@ -117,9 +117,14 @@
             </form>
         </section>
 
-        <!-- قسم الإدارة، التعديل والحذف -->
+        <!-- قسم الإدارة والمراجعات والتحقق من التقييمات -->
         <section class="admin-card">
-            <h2><i class="fa-solid fa-list-check"></i> إدارة المحتوى (تعديل وحذف)</h2>
+            <h2><i class="fa-solid fa-check-double"></i> التقييمات المعلقة (للتحقق والنشر للعلن)</h2>
+            <div id="adminReviewsList" class="admin-items-list" style="margin-bottom: 30px;">
+                <p>جاري تحميل التقييمات للتحقق...</p>
+            </div>
+
+            <h2><i class="fa-solid fa-list-check"></i> إدارة المنشورات (تعديل وحذف)</h2>
             <div id="adminItemsList" class="admin-items-list">
                 <p>جاري تحميل البيانات...</p>
             </div>
@@ -132,6 +137,7 @@
         const FILE_PATH = "data.json";
 
         let currentOnlineItems = [];
+        let currentReviews = [];
         let currentCustomBg = "";
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -190,7 +196,7 @@
             if (!bgData) { alert("اختر صورة خلفية أولاً!"); return; }
 
             currentCustomBg = bgData;
-            await updateGithubFile(token, currentOnlineItems, "تعديل خلفية الموقع الشاملة");
+            await updateGithubFile(token, currentOnlineItems, currentReviews, "تعديل خلفية الموقع الشاملة");
         }
 
         async function fetchAdminItems() {
@@ -200,11 +206,14 @@
                 
                 if (Array.isArray(data)) {
                     currentOnlineItems = data;
+                    currentReviews = [];
                 } else {
                     currentOnlineItems = data.items || [];
+                    currentReviews = data.reviews || [];
                     currentCustomBg = data.customBg || "";
                 }
                 renderAdminList();
+                renderAdminReviews();
             } catch (e) {
                 document.getElementById('adminItemsList').innerHTML = '<p>لا توجد عناصر حالياً.</p>';
             }
@@ -237,6 +246,74 @@
                 `;
                 listDiv.appendChild(row);
             });
+        }
+
+        function renderAdminReviews() {
+            const listDiv = document.getElementById('adminReviewsList');
+            listDiv.innerHTML = '';
+
+            if (currentReviews.length === 0) {
+                listDiv.innerHTML = '<p>لا توجد تقييمات معلقة للمراجعة.</p>';
+                return;
+            }
+
+            currentReviews.forEach(rev => {
+                const card = document.createElement('div');
+                card.className = 'admin-item-row';
+                card.style.flexDirection = 'column';
+                card.style.alignItems = 'flex-start';
+                card.style.gap = '8px';
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; width:100%;">
+                        <strong>${rev.author} <span class="badge ${rev.status === 'approved' ? 'minecraft' : 'roblox'}">${rev.status === 'approved' ? 'منشور للعلن' : 'قيد الانتظار'}</span></strong>
+                        <span style="font-size:0.75rem; color:var(--text-secondary);">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
+                    </div>
+                    <p style="font-size:0.9rem;">${rev.text}</p>
+                    ${rev.reply ? `<p style="font-size:0.8rem; color:var(--accent-blue);">ردك: ${rev.reply}</p>` : ''}
+                    <div style="display:flex; gap:6px; width:100%; margin-top:5px;">
+                        ${rev.status !== 'approved' ? `<button onclick="approveReview(${rev.id})" class="btn-card-dl" style="background:#10b981; color:#000;"><i class="fa-solid fa-check"></i> قبول ونشر للعلن</button>` : ''}
+                        <button onclick="replyReview(${rev.id})" class="btn-edit"><i class="fa-solid fa-reply"></i> الرد</button>
+                        <button onclick="deleteReview(${rev.id})" class="btn-delete"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>
+                `;
+                listDiv.appendChild(card);
+            });
+        }
+
+        async function approveReview(revId) {
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
+
+            const rev = currentReviews.find(r => r.id === revId);
+            if (rev) {
+                rev.status = 'approved';
+                await updateGithubFile(token, currentOnlineItems, currentReviews, "قبول تقييم ونشره للعلن");
+            }
+        }
+
+        async function replyReview(revId) {
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
+
+            const replyText = prompt("اكتب ردك المباشر على التقييم/الطلب:");
+            if (replyText) {
+                const rev = currentReviews.find(r => r.id === revId);
+                if (rev) {
+                    rev.reply = replyText;
+                    rev.status = 'approved'; // نشر أوتوماتيكي عند الرد
+                    await updateGithubFile(token, currentOnlineItems, currentReviews, "الرد على تقييم ونشره للعلن");
+                }
+            }
+        }
+
+        async function deleteReview(revId) {
+            if (!confirm("هل تريد حذف هذا التقييم؟")) return;
+            const token = localStorage.getItem("github_token") || document.getElementById("ghToken").value.trim();
+            if (!token) { alert("ضع مفتاح Token أولاً!"); return; }
+
+            currentReviews = currentReviews.filter(r => r.id !== revId);
+            await updateGithubFile(token, currentOnlineItems, currentReviews, "حذف تقييم");
         }
 
         function startEditItem(itemId) {
@@ -275,7 +352,7 @@
             if (!token) { alert("يرجى وضع مفتاح Token أولاً!"); return; }
 
             const updatedItems = currentOnlineItems.filter(item => item.id !== itemId);
-            await updateGithubFile(token, updatedItems, "حذف عنصر من المتجر");
+            await updateGithubFile(token, updatedItems, currentReviews, "حذف عنصر من المتجر");
         }
 
         async function autoSaveToGithub(e) {
@@ -321,11 +398,11 @@
                 currentOnlineItems.unshift(newItem);
             }
 
-            await updateGithubFile(token, currentOnlineItems, "تحديث ونشر المحتوى");
+            await updateGithubFile(token, currentOnlineItems, currentReviews, "تحديث ونشر المحتوى");
             cancelEditing();
         }
 
-        async function updateGithubFile(token, newDataArray, commitMsg) {
+        async function updateGithubFile(token, newDataArray, newReviewsArray, commitMsg) {
             const btn = document.getElementById("saveBtn");
             btn.disabled = true;
             btn.innerText = "جاري الحفظ والتحديث...";
@@ -344,7 +421,8 @@
 
                 const fullPayload = {
                     customBg: currentCustomBg,
-                    items: newDataArray
+                    items: newDataArray,
+                    reviews: newReviewsArray
                 };
 
                 const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(fullPayload, null, 2))));
@@ -363,9 +441,11 @@
                 });
 
                 if (putRes.ok) {
-                    alert("تم الحفظ والنشر بنجاح للجميع!");
+                    alert("تم الحفظ والتحديث بنجاح!");
                     currentOnlineItems = newDataArray;
+                    currentReviews = newReviewsArray;
                     renderAdminList();
+                    renderAdminReviews();
                 } else {
                     const err = await putRes.json();
                     alert("خطأ: " + (err.message || "تأكد من الـ Token"));

@@ -5,47 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALIOPZTE Store | المتجر الرسمي</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبة الأيقونات المحدثة والمباشرة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* إصلاح حماية الصور والخلفية لمنع التمدد والخروج عن الإطار */
         body {
-            background-repeat: no-repeat !important;
-            background-position: center center !important;
-            background-size: cover !important;
-            background-attachment: fixed !important;
+            background-color: #0b0f19;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
         }
 
+        /* تحسين الهيدر وأزرار التواصل */
+        .main-header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 12px 20px;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-channel {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.88rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .btn-channel.youtube {
+            background: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-channel.discord {
+            background: #5865F2;
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+        }
+
+        .btn-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.88rem;
+            text-decoration: none;
+            background: #0284c7;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.3);
+        }
+
+        /* كروت الألعاب والمحتوى */
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .item-card {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: rgba(56, 189, 248, 0.4);
         }
 
         .card-thumb {
             width: 100%;
             height: 180px;
             position: relative;
-            overflow: hidden;
             background: #000;
         }
 
         .card-thumb img {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: cover !important;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
+        }
+
+        .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .card-details {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .card-title {
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin: 0 0 15px 0;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-card-dl {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        .btn-card-dl:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
         }
 
         .reviews-section {
@@ -54,7 +194,6 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             padding: 20px;
-            backdrop-filter: blur(10px);
         }
 
         .review-form {
@@ -65,63 +204,16 @@
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .review-form input, .review-form textarea, .review-form select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 10px;
             border-radius: 8px;
             border: 1px solid #334155;
-            background: rgba(15, 23, 42, 0.8);
+            background: #0f172a;
             color: #fff;
-            font-family: inherit;
             box-sizing: border-box;
-        }
-
-        .review-form textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .review-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .review-author {
-            font-weight: bold;
-            color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .review-badge {
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 6px;
-            background: rgba(56, 189, 248, 0.15);
-            color: #38bdf8;
-        }
-
-        .review-reply {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(56, 189, 248, 0.08);
-            border-right: 3px solid #38bdf8;
-            border-radius: 6px;
-            font-size: 0.88rem;
         }
     </style>
 </head>
@@ -130,25 +222,25 @@
     <header class="main-header">
         <div class="header-container">
             <div class="brand">
-                <i class="fa-solid fa-store logo-icon"></i>
-                <span class="logo-text">ALIOPZTE <span>Store</span></span>
+                <i class="fa-solid fa-store logo-icon" style="color: #38bdf8; font-size: 1.4rem;"></i>
+                <span class="logo-text" style="font-size: 1.2rem; font-weight: bold;">ALIOPZTE <span style="color: #38bdf8;">Store</span></span>
             </div>
             
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات، السكربتات...">
+                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات..." style="padding: 8px 14px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #fff;">
             </div>
 
             <div class="header-actions">
-                <a href="https://youtube.com" target="_blank" class="btn-channel"><i class="fa-brands fa-youtube"></i> القناة</a>
+                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-channel youtube"><i class="fa-brands fa-youtube"></i> القناة</a>
+                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-channel discord"><i class="fa-brands fa-discord"></i> الديسكورد</a>
                 <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i> الداشبورد</a>
             </div>
         </div>
     </header>
 
-    <div class="container">
+    <div class="container" style="max-width: 1200px; margin: 20px auto; padding: 0 15px;">
         <!-- شريط التصنيفات -->
-        <nav class="categories-bar">
+        <nav class="categories-bar" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px;">
             <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
             <button class="cat-btn" onclick="selectCategory('minecraft', this)"><i class="fa-solid fa-cube"></i> ماين كرافت</button>
             <button class="cat-btn" onclick="selectCategory('roblox', this)"><i class="fa-solid fa-gamepad"></i> روبلكس</button>
@@ -161,7 +253,7 @@
         <!-- قسم المنتجات والمحتوى -->
         <section class="content-section">
             <div class="section-header">
-                <h2><i class="fa-solid fa-fire"></i> أحدث الإصدارات والمحتوى</h2>
+                <h2><i class="fa-solid fa-fire" style="color: #f97316;"></i> أحدث الإصدارات والمحتوى</h2>
             </div>
             <div id="itemsGrid" class="items-grid">
                 <p style="text-align:center; width:100%; grid-column: 1/-1; padding:20px;">جاري تحميل المحتوى...</p>
@@ -171,12 +263,12 @@
         <!-- قسم التقييمات والطلبات -->
         <section class="reviews-section">
             <div class="section-header">
-                <h2><i class="fa-solid fa-comments"></i> آراء وتقييمات الزوار (المتحقق منها)</h2>
+                <h2><i class="fa-solid fa-comments" style="color: #38bdf8;"></i> آراء وتقييمات الزوار (المتحقق منها)</h2>
             </div>
 
             <!-- نموذج إضافة تقييم أو طلب -->
             <form class="review-form" onsubmit="submitUserReview(event)">
-                <h3 style="margin-bottom: 5px; font-size: 1rem; color: #38bdf8;"><i class="fa-solid fa-pen"></i> أضف تقييمك أو طلبك</h3>
+                <h3 style="margin: 0 0 10px 0; font-size: 1rem; color: #38bdf8;"><i class="fa-solid fa-pen"></i> أضف تقييمك أو طلبك</h3>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <input type="text" id="reviewAuthor" placeholder="اسمك (اختياري)" style="flex: 1; min-width: 150px;">
                     <select id="reviewType" style="width: auto; min-width: 120px;">
@@ -185,7 +277,7 @@
                     </select>
                 </div>
                 <textarea id="reviewText" required placeholder="اكتب تقييمك أو طلبك هنا..."></textarea>
-                <button type="submit" class="btn-submit" style="background: #0284c7; color: #fff; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer;">
+                <button type="submit" style="background: #0284c7; color: #fff; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <i class="fa-solid fa-paper-plane"></i> أرسل التقييم / الطلب
                 </button>
             </form>
@@ -220,8 +312,13 @@
                 } else {
                     itemsList = data.items || [];
                     reviewsList = data.reviews || [];
-                    if (data.customBg && data.customBg.trim() !== '') {
+                    
+                    if (data.customBg && typeof data.customBg === 'string' && data.customBg.startsWith('http')) {
                         document.body.style.backgroundImage = `url('${data.customBg}')`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundAttachment = 'fixed';
+                    } else {
+                        document.body.style.backgroundImage = 'none';
                     }
                 }
 
@@ -258,17 +355,17 @@
                 card.innerHTML = `
                     <div class="card-thumb">
                         <img src="${item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${item.title}">
-                        <span class="badge ${item.category}">${getCategoryLabel(item.category)}</span>
+                        <span class="badge">${getCategoryLabel(item.category)}</span>
                     </div>
-                    <div class="card-details" style="padding: 15px; display: flex; flex-direction: column; flex: 1;">
-                        <h3 class="card-title" style="margin-bottom: 8px; font-size: 1.1rem; color: #fff;">${item.title}</h3>
-                        <p class="card-desc" style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 12px; flex: 1;">${item.desc || ''}</p>
-                        <div class="card-meta" style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 12px;">
+                    <div class="card-details">
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-desc">${item.desc || ''}</p>
+                        <div class="card-meta">
                             <span><i class="fa-solid fa-code-branch"></i> ${item.version || 'v1.0'}</span>
                             <span><i class="fa-solid fa-star" style="color:#f59e0b;"></i> ${item.rating || '4.9'}</span>
                             <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k'}</span>
                         </div>
-                        <a href="${item.url}" target="_blank" class="btn-card-dl" style="text-align:center; padding: 8px; background: #38bdf8; color: #000; border-radius: 8px; font-weight: bold; text-decoration: none;"><i class="fa-solid fa-download"></i> تنزيل</a>
+                        <a href="${item.url}" target="_blank" class="btn-card-dl"><i class="fa-solid fa-download"></i> تنزيل</a>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -288,14 +385,18 @@
 
             approvedReviews.forEach(rev => {
                 const card = document.createElement('div');
-                card.className = 'review-card';
+                card.style.background = 'rgba(255, 255, 255, 0.03)';
+                card.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+                card.style.borderRadius = '12px';
+                card.style.padding = '15px';
+                card.style.marginBottom = '12px';
                 card.innerHTML = `
-                    <div class="review-header">
-                        <span class="review-author"><i class="fa-solid fa-user-circle"></i> ${rev.author || 'زائر'}</span>
-                        <span class="review-badge">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <span style="font-weight:bold; color:#38bdf8;"><i class="fa-solid fa-user-circle"></i> ${rev.author || 'زائر'}</span>
+                        <span style="font-size:0.75rem; padding:2px 8px; border-radius:6px; background:rgba(56,189,248,0.15); color:#38bdf8;">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
                     </div>
-                    <p style="margin: 5px 0; font-size: 0.95rem; color: #fff;">${rev.text}</p>
-                    ${rev.reply ? `<div class="review-reply"><strong><i class="fa-solid fa-reply"></i> رد الإدارة:</strong> ${rev.reply}</div>` : ''}
+                    <p style="margin:5px 0; font-size:0.95rem; color:#fff;">${rev.text}</p>
+                    ${rev.reply ? `<div style="margin-top:10px; padding:10px; background:rgba(56,189,248,0.08); border-right:3px solid #38bdf8; border-radius:6px; font-size:0.88rem;"><strong><i class="fa-solid fa-reply"></i> رد الإدارة:</strong> ${rev.reply}</div>` : ''}
                 `;
                 listDiv.appendChild(card);
             });

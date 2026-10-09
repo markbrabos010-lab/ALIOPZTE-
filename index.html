@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALIOPZTE Store | عالم الألعاب والمودات</title>
-    <!-- خط تجوال العربي من Google Fonts -->
+    <!-- خط تجوال من Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -12,16 +12,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        /* الثيمات والألوان المتغيرة */
         :root {
             --bg-dark: #070a12;
-            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-bg: rgba(15, 23, 42, 0.8);
             --accent-cyan: #00f2fe;
             --accent-blue: #4facfe;
             --accent-purple: #7f00ff;
-            --accent-pink: #ff007f;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-glow: rgba(0, 242, 254, 0.2);
+        }
+
+        body.theme-cyber {
+            --bg-dark: #0f051d;
+            --card-bg: rgba(28, 10, 48, 0.85);
+            --accent-cyan: #ff007f;
+            --accent-blue: #7f00ff;
+            --accent-purple: #00f2fe;
+            --border-glow: rgba(255, 0, 127, 0.3);
+        }
+
+        body.theme-emerald {
+            --bg-dark: #022c22;
+            --card-bg: rgba(6, 78, 59, 0.75);
+            --accent-cyan: #10b981;
+            --accent-blue: #34d399;
+            --accent-purple: #059669;
+            --border-glow: rgba(16, 185, 129, 0.3);
+        }
+
+        body.theme-purple {
+            --bg-dark: #1e1b4b;
+            --card-bg: rgba(49, 46, 129, 0.8);
+            --accent-cyan: #c084fc;
+            --accent-blue: #818cf8;
+            --accent-purple: #e879f9;
+            --border-glow: rgba(192, 132, 252, 0.3);
         }
 
         * {
@@ -34,12 +61,13 @@
             background-color: var(--bg-dark);
             background-image: 
                 radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.1) 0%, transparent 45%);
+                radial-gradient(circle at 85% 85%, var(--border-glow) 0%, transparent 45%);
             background-attachment: fixed;
             color: var(--text-main);
             font-family: 'Tajawal', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+            transition: background-color 0.4s ease;
         }
 
         /* الهيدر العلوي */
@@ -50,7 +78,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 14px 24px;
+            padding: 14px 20px;
         }
 
         .header-container {
@@ -59,43 +87,38 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
         }
 
         .brand-icon {
             font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.5));
+            color: var(--accent-cyan);
+            filter: drop-shadow(0 0 8px var(--accent-cyan));
         }
 
         .brand-text {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
-            letter-spacing: 0.5px;
             color: #fff;
         }
 
         .brand-text span {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent-cyan);
         }
 
         /* صندوق البحث */
         .search-box {
             position: relative;
             flex: 1;
-            max-width: 420px;
+            max-width: 380px;
         }
 
         .search-box input {
@@ -113,8 +136,7 @@
         .search-box input:focus {
             outline: none;
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
-            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 0 15px var(--border-glow);
         }
 
         .search-box i {
@@ -123,10 +145,38 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 1rem;
         }
 
-        /* أزرار الهيدر */
+        /* محول الألوان والثيمات */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s ease;
+        }
+
+        .theme-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .theme-dot.neon { background: #00f2fe; }
+        .theme-dot.cyber { background: #ff007f; }
+        .theme-dot.emerald { background: #10b981; }
+        .theme-dot.purple { background: #c084fc; }
+
+        /* أزرار التواصل والتنقل */
         .header-actions {
             display: flex;
             align-items: center;
@@ -137,135 +187,54 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 9px 16px;
+            padding: 8px 14px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease;
-            border: 1px solid transparent;
         }
 
         .btn-social.youtube {
-            background: rgba(255, 0, 0, 0.15);
-            border-color: rgba(255, 0, 0, 0.4);
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.4);
             color: #ff4d4d;
         }
 
         .btn-social.youtube:hover {
             background: #ff0000;
             color: #fff;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            transform: translateY(-2px);
         }
 
         .btn-social.discord {
-            background: rgba(88, 101, 242, 0.15);
-            border-color: rgba(88, 101, 242, 0.4);
+            background: rgba(88, 101, 242, 0.2);
+            border: 1px solid rgba(88, 101, 242, 0.4);
             color: #7289da;
         }
 
         .btn-social.discord:hover {
             background: #5865F2;
             color: #fff;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
-            transform: translateY(-2px);
         }
 
         .btn-admin {
             background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
             color: #fff;
             border-radius: 10px;
-            padding: 9px 16px;
+            padding: 8px 14px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(127, 0, 255, 0.3);
+            gap: 6px;
         }
 
-        .btn-admin:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
-        }
-
-        /* حاوية الصفحة */
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 24px 20px;
-        }
-
-        /* قسم الهيرو الترحيبي */
-        .hero-banner {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
-            border: 1px solid rgba(0, 242, 254, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 242, 254, 0.05) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .hero-text h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #fff, var(--accent-cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-text p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-badge {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 18px;
-            border-radius: 14px;
-            text-align: center;
-        }
-
-        .stat-badge span {
-            display: block;
-            font-size: 1.2rem;
-            font-weight: 900;
-            color: var(--accent-cyan);
-        }
-
-        .stat-badge label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
         }
 
         /* شريط التصنيفات */
@@ -274,12 +243,8 @@
             gap: 12px;
             overflow-x: auto;
             padding-bottom: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             scrollbar-width: none;
-        }
-
-        .categories-bar::-webkit-scrollbar {
-            display: none;
         }
 
         .cat-btn {
@@ -300,9 +265,8 @@
         }
 
         .cat-btn:hover {
-            background: rgba(30, 41, 59, 0.9);
             color: #fff;
-            border-color: rgba(0, 242, 254, 0.4);
+            border-color: var(--accent-cyan);
         }
 
         .cat-btn.active {
@@ -310,26 +274,10 @@
             color: #000;
             border-color: transparent;
             font-weight: 900;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 18px var(--border-glow);
         }
 
-        /* عنوان القسم */
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .section-header h2 {
-            font-size: 1.3rem;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* شبكة الكروت */
+        /* الكروت */
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -343,15 +291,14 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(12px);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            cursor: pointer;
+            transition: all 0.35s ease;
         }
 
         .item-card:hover {
             transform: translateY(-8px);
-            border-color: rgba(0, 242, 254, 0.5);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--border-glow);
         }
 
         .card-thumb {
@@ -386,7 +333,6 @@
             background: rgba(7, 10, 18, 0.85);
             backdrop-filter: blur(6px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .card-details {
@@ -401,7 +347,6 @@
             font-weight: 800;
             color: #fff;
             margin-bottom: 8px;
-            line-height: 1.3;
         }
 
         .card-desc {
@@ -409,6 +354,10 @@
             color: var(--text-muted);
             margin-bottom: 16px;
             flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
             line-height: 1.5;
         }
 
@@ -423,13 +372,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .card-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-card-dl {
+        .btn-card-view {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -441,49 +384,116 @@
             border-radius: 12px;
             font-weight: 900;
             font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
             border: none;
             cursor: pointer;
         }
 
-        .btn-card-dl:hover {
-            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
-            transform: scale(1.02);
-            filter: brightness(1.1);
+        /* نافذة الوصف التفصيلية المنبثقة (Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* فوتر */
-        .main-footer {
-            margin-top: 60px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #0f172a;
+            border: 1px solid var(--accent-cyan);
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
             padding: 24px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            background: rgba(7, 10, 18, 0.9);
+            box-shadow: 0 0 40px var(--border-glow);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .modal-desc {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-line;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 14px;
+            border-radius: 10px;
+            border-right: 3px solid var(--accent-cyan);
+        }
+
+        .modal-dl-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-decoration: none;
         }
 
         @media (max-width: 768px) {
-            .hero-banner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .header-container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .search-box {
-                max-width: 100%;
-            }
-            .header-actions {
-                justify-content: space-between;
-            }
+            .header-container { flex-direction: column; align-items: stretch; }
+            .search-box { max-width: 100%; }
         }
     </style>
 </head>
-<body>
+<body class="theme-neon">
 
     <!-- الهيدر العلوي -->
     <header class="main-header">
@@ -495,7 +505,15 @@
             
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن ألعاب، مودات، سكربتات، فيديوهات...">
+                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن ألعاب، مودات، سكربتات...">
+            </div>
+
+            <!-- أزرار تبديل الألوان والثيمات -->
+            <div class="theme-switcher" title="اختر الثيم المفضل">
+                <div class="theme-dot neon" onclick="setTheme('theme-neon')"></div>
+                <div class="theme-dot cyber" onclick="setTheme('theme-cyber')"></div>
+                <div class="theme-dot emerald" onclick="setTheme('theme-emerald')"></div>
+                <div class="theme-dot purple" onclick="setTheme('theme-purple')"></div>
             </div>
 
             <div class="header-actions">
@@ -513,25 +531,6 @@
     </header>
 
     <div class="container">
-        
-        <!-- بنر ترحيبي الهيرو -->
-        <div class="hero-banner">
-            <div class="hero-text">
-                <h1>مرحباً بك في ALIOPZTE Store 🚀</h1>
-                <p>منصتك الأولى لتحميل أحدث الألعاب، المودات الحصرية، والسكربتات المحدثة باستمرار.</p>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-badge">
-                    <span>+100%</span>
-                    <label>آمن ومجاني</label>
-                </div>
-                <div class="stat-badge">
-                    <span>v1.5</span>
-                    <label>إصدار المتجر</label>
-                </div>
-            </div>
-        </div>
-
         <!-- شريط التصنيفات -->
         <nav class="categories-bar">
             <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
@@ -545,27 +544,38 @@
 
         <!-- قسم المحتوى -->
         <section class="content-section">
-            <div class="section-header">
-                <h2><i class="fa-solid fa-fire" style="color: #00f2fe;"></i> أحدث المحتويات والإصدارات</h2>
-            </div>
             <div id="itemsGrid" class="items-grid">
                 <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى من السيرفر...</p>
             </div>
         </section>
     </div>
 
-    <!-- الفوتر -->
-    <footer class="main-footer">
-        <p>© 2026 جميع الحقوق محفوظة لـ <strong>ALIOPZTE Store</strong> | تصميم وبرمجة خاصة</p>
-    </footer>
+    <!-- النافذة المنبثقة للوصف والتفاصيل Modal -->
+    <div id="itemModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
+            <img id="mImg" src="" alt="" class="modal-img">
+            <h2 id="mTitle" class="modal-title"></h2>
+            <div id="mMeta" style="display:flex; gap:15px; color:var(--accent-cyan); font-weight:bold; font-size:0.85rem; margin-bottom:15px;"></div>
+            <p id="mDesc" class="modal-desc"></p>
+            <a id="mDlBtn" href="" target="_blank" class="modal-dl-btn"><i class="fa-solid fa-download"></i> تنزيل / مشاهدة الآن</a>
+        </div>
+    </div>
 
     <script>
         let allItems = [];
         let currentCategory = 'all';
 
         document.addEventListener("DOMContentLoaded", () => {
+            const savedTheme = localStorage.getItem('aliopzte_theme') || 'theme-neon';
+            document.body.className = savedTheme;
             loadStoreData();
         });
+
+        function setTheme(themeName) {
+            document.body.className = themeName;
+            localStorage.setItem('aliopzte_theme', themeName);
+        }
 
         async function loadStoreData() {
             try {
@@ -573,16 +583,7 @@
                 if (!res.ok) throw new Error("تعذر جلب ملف البيانات");
                 
                 const data = await res.json();
-                
-                let itemsList = [];
-
-                if (Array.isArray(data)) {
-                    itemsList = data;
-                } else {
-                    itemsList = data.items || [];
-                }
-
-                allItems = itemsList;
+                allItems = Array.isArray(data) ? data : (data.items || []);
                 renderItems(allItems);
             } catch (err) {
                 console.error("خطأ في تحميل البيانات:", err);
@@ -611,6 +612,8 @@
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'item-card';
+                card.onclick = () => openModal(item);
+
                 card.innerHTML = `
                     <div class="card-thumb">
                         <img src="${item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${item.title}">
@@ -618,19 +621,42 @@
                     </div>
                     <div class="card-details">
                         <h3 class="card-title">${item.title}</h3>
-                        <p class="card-desc">${item.desc || 'لا يوجد وصف متاح.'}</p>
+                        <p class="card-desc">${item.desc || 'اضغط لمشاهدة التفاصيل والوصف...'}</p>
                         <div class="card-meta">
                             <span><i class="fa-solid fa-code-branch" style="color:var(--accent-cyan);"></i> ${item.version || 'v1.0'}</span>
                             <span><i class="fa-solid fa-star" style="color:#f59e0b;"></i> ${item.rating || '4.9'}</span>
-                            <span><i class="fa-solid fa-download" style="color:var(--accent-blue);"></i> ${item.downloads || '1k'}</span>
+                            <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k'}</span>
                         </div>
-                        <a href="${item.url}" target="_blank" class="btn-card-dl">
-                            <i class="fa-solid fa-download"></i> تنزيل الآن
-                        </a>
+                        <button class="btn-card-view">
+                            <i class="fa-solid fa-eye"></i> عرض التفاصيل والتحميل
+                        </button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        function openModal(item) {
+            document.getElementById('mImg').src = item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png';
+            document.getElementById('mTitle').innerText = item.title;
+            document.getElementById('mDesc').innerText = item.desc && item.desc.trim() !== '' ? item.desc : 'لا يوجد وصف إضافي لهذا العنصر.';
+            document.getElementById('mDlBtn').href = item.url;
+            document.getElementById('mMeta').innerHTML = `
+                <span><i class="fa-solid fa-tag"></i> ${getCategoryLabel(item.category)}</span>
+                <span><i class="fa-solid fa-code-branch"></i> ${item.version || 'v1.0'}</span>
+                <span><i class="fa-solid fa-user"></i> ${item.developer || 'ALIOPZTE'}</span>
+            `;
+            document.getElementById('itemModal').classList.add('active');
+        }
+
+        function closeModal(e) {
+            if (e.target.id === 'itemModal') {
+                document.getElementById('itemModal').classList.remove('active');
+            }
+        }
+
+        function closeModalDirect() {
+            document.getElementById('itemModal').classList.remove('active');
         }
 
         function selectCategory(cat, btn) {

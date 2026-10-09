@@ -3,114 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ALIOPZTE Store | المتجر الرسمي</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- مكتبة الأيقونات المحدثة والمباشرة -->
+    <title>ALIOPZTE Store | عالم الألعاب والمودات</title>
+    <!-- خط تجوال العربي من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        body {
-            background-color: #0b0f19;
-            color: #f8fafc;
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
+        :root {
+            --bg-dark: #070a12;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --accent-cyan: #00f2fe;
+            --accent-blue: #4facfe;
+            --accent-purple: #7f00ff;
+            --accent-pink: #ff007f;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glow: rgba(0, 242, 254, 0.2);
         }
 
-        /* تحسين الهيدر وأزرار التواصل */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.1) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* الهيدر العلوي */
         .main-header {
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(7, 10, 18, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             position: sticky;
             top: 0;
             z-index: 1000;
-            padding: 12px 20px;
+            padding: 14px 24px;
         }
 
         .header-container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 20px;
             flex-wrap: wrap;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.5));
+        }
+
+        .brand-text {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .brand-text span {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* صندوق البحث */
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 420px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 42px 10px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(15, 23, 42, 0.8);
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* أزرار الهيدر */
         .header-actions {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .btn-channel {
+        .btn-social {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 14px;
+            padding: 9px 16px;
             border-radius: 10px;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 0.88rem;
             text-decoration: none;
-            transition: all 0.3s ease;
             color: #fff;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
-        .btn-channel.youtube {
+        .btn-social.youtube {
+            background: rgba(255, 0, 0, 0.15);
+            border-color: rgba(255, 0, 0, 0.4);
+            color: #ff4d4d;
+        }
+
+        .btn-social.youtube:hover {
             background: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            transform: translateY(-2px);
         }
 
-        .btn-channel.discord {
+        .btn-social.discord {
+            background: rgba(88, 101, 242, 0.15);
+            border-color: rgba(88, 101, 242, 0.4);
+            color: #7289da;
+        }
+
+        .btn-social.discord:hover {
             background: #5865F2;
-            box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.5);
+            transform: translateY(-2px);
         }
 
         .btn-admin {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 16px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 0.88rem;
-            text-decoration: none;
-            background: #0284c7;
-            color: #fff;
-            box-shadow: 0 0 10px rgba(2, 132, 199, 0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(127, 0, 255, 0.3);
         }
 
-        /* كروت الألعاب والمحتوى */
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+        }
+
+        /* حاوية الصفحة */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        /* قسم الهيرو الترحيبي */
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-text h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-badge {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 18px;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .stat-badge span {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+        }
+
+        .stat-badge label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* شريط التصنيفات */
+        .categories-bar {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            scrollbar-width: none;
+        }
+
+        .categories-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cat-btn {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .cat-btn:hover {
+            background: rgba(30, 41, 59, 0.9);
+            color: #fff;
+            border-color: rgba(0, 242, 254, 0.4);
+        }
+
+        .cat-btn.active {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border-color: transparent;
+            font-weight: 900;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        /* عنوان القسم */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* شبكة الكروت */
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
+            gap: 22px;
         }
 
         .item-card {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(12px);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-8px);
+            border-color: rgba(0, 242, 254, 0.5);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 242, 254, 0.15);
         }
 
         .card-thumb {
             width: 100%;
-            height: 180px;
+            height: 185px;
             position: relative;
             background: #000;
+            overflow: hidden;
         }
 
         .card-thumb img {
@@ -118,51 +367,66 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.5s ease;
         }
 
-        .badge {
+        .item-card:hover .card-thumb img {
+            transform: scale(1.08);
+        }
+
+        .badge-tag {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 4px 10px;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
             border-radius: 8px;
             font-size: 0.75rem;
-            font-weight: bold;
+            font-weight: 800;
             color: #fff;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(4px);
+            background: rgba(7, 10, 18, 0.85);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .card-details {
-            padding: 16px;
+            padding: 18px;
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .card-title {
-            margin: 0 0 8px 0;
             font-size: 1.1rem;
+            font-weight: 800;
             color: #fff;
+            margin-bottom: 8px;
+            line-height: 1.3;
         }
 
         .card-desc {
             font-size: 0.85rem;
-            color: #94a3b8;
-            margin: 0 0 15px 0;
+            color: var(--text-muted);
+            margin-bottom: 16px;
             flex: 1;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .card-meta {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             font-size: 0.8rem;
             color: #cbd5e1;
-            margin-bottom: 15px;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .btn-card-dl {
@@ -171,48 +435,105 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            padding: 10px;
-            background: linear-gradient(135deg, #0284c7, #38bdf8);
-            color: #fff;
-            border-radius: 10px;
-            font-weight: bold;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            color: #000;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 0.95rem;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
             border: none;
-            box-sizing: border-box;
+            cursor: pointer;
         }
 
         .btn-card-dl:hover {
-            opacity: 0.9;
+            box-shadow: 0 6px 25px rgba(0, 242, 254, 0.5);
             transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* فوتر */
+        .main-footer {
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            background: rgba(7, 10, 18, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                max-width: 100%;
+            }
+            .header-actions {
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
-<body class="theme-neon">
+<body>
 
+    <!-- الهيدر العلوي -->
     <header class="main-header">
         <div class="header-container">
-            <div class="brand">
-                <i class="fa-solid fa-store logo-icon" style="color: #38bdf8; font-size: 1.4rem;"></i>
-                <span class="logo-text" style="font-size: 1.2rem; font-weight: bold;">ALIOPZTE <span style="color: #38bdf8;">Store</span></span>
-            </div>
+            <a href="index.html" class="brand">
+                <i class="fa-solid fa-gamepad brand-icon"></i>
+                <div class="brand-text">ALIOPZTE <span>STORE</span></div>
+            </a>
             
             <div class="search-box">
-                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن التطبيقات، الألعاب، المودات..." style="padding: 8px 14px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #fff;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن ألعاب، مودات، سكربتات، فيديوهات...">
             </div>
 
             <div class="header-actions">
-                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-channel youtube"><i class="fa-brands fa-youtube"></i> القناة</a>
-                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-channel discord"><i class="fa-brands fa-discord"></i> الديسكورد</a>
-                <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i> الداشبورد</a>
+                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube">
+                    <i class="fa-brands fa-youtube"></i> القناة
+                </a>
+                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord">
+                    <i class="fa-brands fa-discord"></i> الديسكورد
+                </a>
+                <a href="admin.html" class="btn-admin">
+                    <i class="fa-solid fa-gauge-high"></i> الداشبورد
+                </a>
             </div>
         </div>
     </header>
 
-    <div class="container" style="max-width: 1200px; margin: 20px auto; padding: 0 15px;">
+    <div class="container">
+        
+        <!-- بنر ترحيبي الهيرو -->
+        <div class="hero-banner">
+            <div class="hero-text">
+                <h1>مرحباً بك في ALIOPZTE Store 🚀</h1>
+                <p>منصتك الأولى لتحميل أحدث الألعاب، المودات الحصرية، والسكربتات المحدثة باستمرار.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-badge">
+                    <span>+100%</span>
+                    <label>آمن ومجاني</label>
+                </div>
+                <div class="stat-badge">
+                    <span>v1.5</span>
+                    <label>إصدار المتجر</label>
+                </div>
+            </div>
+        </div>
+
         <!-- شريط التصنيفات -->
-        <nav class="categories-bar" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px;">
+        <nav class="categories-bar">
             <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
             <button class="cat-btn" onclick="selectCategory('minecraft', this)"><i class="fa-solid fa-cube"></i> ماين كرافت</button>
             <button class="cat-btn" onclick="selectCategory('roblox', this)"><i class="fa-solid fa-gamepad"></i> روبلكس</button>
@@ -222,16 +543,21 @@
             <button class="cat-btn" onclick="selectCategory('videos', this)"><i class="fa-solid fa-play"></i> فيديوهات</button>
         </nav>
 
-        <!-- قسم المنتجات والمحتوى -->
+        <!-- قسم المحتوى -->
         <section class="content-section">
             <div class="section-header">
-                <h2><i class="fa-solid fa-fire" style="color: #f97316;"></i> أحدث الإصدارات والمحتوى</h2>
+                <h2><i class="fa-solid fa-fire" style="color: #00f2fe;"></i> أحدث المحتويات والإصدارات</h2>
             </div>
             <div id="itemsGrid" class="items-grid">
-                <p style="text-align:center; width:100%; grid-column: 1/-1; padding:20px;">جاري تحميل المحتوى...</p>
+                <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى من السيرفر...</p>
             </div>
         </section>
     </div>
+
+    <!-- الفوتر -->
+    <footer class="main-footer">
+        <p>© 2026 جميع الحقوق محفوظة لـ <strong>ALIOPZTE Store</strong> | تصميم وبرمجة خاصة</p>
+    </footer>
 
     <script>
         let allItems = [];
@@ -254,21 +580,13 @@
                     itemsList = data;
                 } else {
                     itemsList = data.items || [];
-                    
-                    if (data.customBg && typeof data.customBg === 'string' && data.customBg.startsWith('http')) {
-                        document.body.style.backgroundImage = `url('${data.customBg}')`;
-                        document.body.style.backgroundSize = 'cover';
-                        document.body.style.backgroundAttachment = 'fixed';
-                    } else {
-                        document.body.style.backgroundImage = 'none';
-                    }
                 }
 
                 allItems = itemsList;
                 renderItems(allItems);
             } catch (err) {
                 console.error("خطأ في تحميل البيانات:", err);
-                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#ef4444;">تعذر تحميل المنتجات، يرجى إعادة المحاولة لاحقاً.</p>';
+                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#ef4444; padding:30px;">تعذر تحميل المنتجات، يرجى المحاولة لاحقاً.</p>';
             }
         }
 
@@ -286,7 +604,7 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 30px; color: #94a3b8;">لا تتوفر عناصر في هذا القسم حالياً.</p>';
+                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 40px; color: var(--text-muted);">لا تتوفر عناصر في هذا القسم حالياً.</p>';
                 return;
             }
 
@@ -296,17 +614,19 @@
                 card.innerHTML = `
                     <div class="card-thumb">
                         <img src="${item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${item.title}">
-                        <span class="badge">${getCategoryLabel(item.category)}</span>
+                        <span class="badge-tag">${getCategoryLabel(item.category)}</span>
                     </div>
                     <div class="card-details">
                         <h3 class="card-title">${item.title}</h3>
-                        <p class="card-desc">${item.desc || ''}</p>
+                        <p class="card-desc">${item.desc || 'لا يوجد وصف متاح.'}</p>
                         <div class="card-meta">
-                            <span><i class="fa-solid fa-code-branch"></i> ${item.version || 'v1.0'}</span>
+                            <span><i class="fa-solid fa-code-branch" style="color:var(--accent-cyan);"></i> ${item.version || 'v1.0'}</span>
                             <span><i class="fa-solid fa-star" style="color:#f59e0b;"></i> ${item.rating || '4.9'}</span>
-                            <span><i class="fa-solid fa-download"></i> ${item.downloads || '1k'}</span>
+                            <span><i class="fa-solid fa-download" style="color:var(--accent-blue);"></i> ${item.downloads || '1k'}</span>
                         </div>
-                        <a href="${item.url}" target="_blank" class="btn-card-dl"><i class="fa-solid fa-download"></i> تنزيل</a>
+                        <a href="${item.url}" target="_blank" class="btn-card-dl">
+                            <i class="fa-solid fa-download"></i> تنزيل الآن
+                        </a>
                     </div>
                 `;
                 grid.appendChild(card);

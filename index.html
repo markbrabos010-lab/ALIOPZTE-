@@ -39,7 +39,7 @@
             min-height: 100vh;
         }
 
-        /* تأثيرات وإضاءات ألوان الـ RGB المتحركة */
+        /* تأثيرات ألوان الـ RGB المتحركة */
         @keyframes rgbGlowText {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -73,7 +73,7 @@
         }
 
         .header-container {
-            max-width: 1280px;
+            max-width: 1380px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -101,7 +101,6 @@
             color: #fff;
         }
 
-        /* شارة عداد الزوار التلقائي أونلاين */
         .visitor-counter-badge {
             display: inline-flex;
             align-items: center;
@@ -116,11 +115,8 @@
             animation: rgbBorderGlow 4s infinite linear;
         }
 
-        .visitor-counter-badge i {
-            color: #00f2fe;
-        }
+        .visitor-counter-badge i { color: #00f2fe; }
 
-        /* صندوق البحث */
         .search-box {
             position: relative;
             flex: 1;
@@ -152,7 +148,6 @@
             color: var(--text-muted);
         }
 
-        /* أزرار التواصل */
         .header-actions {
             display: flex;
             align-items: center;
@@ -213,9 +208,117 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1380px;
             margin: 0 auto;
             padding: 24px 20px;
+        }
+
+        /* تقسيم الواجهة: المحتوى الرئيسي يميناً والشراكات يساراً */
+        .main-layout {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* شريط الشراكات الجانبي (على اليسار) */
+        .partners-sidebar {
+            width: 290px;
+            background: rgba(13, 18, 30, 0.88);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 18px;
+            padding: 18px;
+            position: sticky;
+            top: 90px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .partners-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .partners-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 75vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .partner-card {
+            background: rgba(5, 7, 14, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .partner-card:hover {
+            border-color: #00f2fe;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .partner-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #00f2fe;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        .partner-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .partner-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-partner-yt {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            color: #ff4d4d;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-partner-yt:hover {
+            background: #ff0000;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
         }
 
         /* شريط التصنيفات RGB */
@@ -245,10 +348,7 @@
             transition: all 0.3s ease;
         }
 
-        .cat-btn:hover {
-            color: #fff;
-            border-color: #00f2fe;
-        }
+        .cat-btn:hover { color: #fff; border-color: #00f2fe; }
 
         .cat-btn.active {
             background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
@@ -263,7 +363,7 @@
         /* كروت العرض RGB */
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
             gap: 22px;
         }
 
@@ -276,7 +376,6 @@
             flex-direction: column;
             cursor: pointer;
             transition: all 0.35s ease;
-            position: relative;
         }
 
         .item-card:hover {
@@ -286,7 +385,7 @@
 
         .card-thumb {
             width: 100%;
-            height: 185px;
+            height: 180px;
             position: relative;
             background: #000;
             overflow: hidden;
@@ -300,9 +399,7 @@
             transition: transform 0.5s ease;
         }
 
-        .item-card:hover .card-thumb img {
-            transform: scale(1.08);
-        }
+        .item-card:hover .card-thumb img { transform: scale(1.08); }
 
         .badge-tag {
             position: absolute;
@@ -373,7 +470,7 @@
             cursor: pointer;
         }
 
-        /* نافذة الوصف التفصيلية المنبثقة Modal */
+        /* Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -389,9 +486,7 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-box {
             background: #0d121e;
@@ -468,6 +563,11 @@
             text-decoration: none;
         }
 
+        @media (max-width: 992px) {
+            .main-layout { flex-direction: column; }
+            .partners-sidebar { width: 100%; position: static; }
+        }
+
         @media (max-width: 768px) {
             .header-container { flex-direction: column; align-items: stretch; }
             .search-box { max-width: 100%; }
@@ -484,7 +584,7 @@
                 <div class="brand-text">ALIOPZTE <span class="rgb-text">STORE</span></div>
             </a>
 
-            <!-- عداد الزوار السحابي الأونلاين -->
+            <!-- عداد الزوار السحابي -->
             <div class="visitor-counter-badge" title="إجمالي زوار المتجر الحقيقي">
                 <i class="fa-solid fa-users"></i>
                 <span>الزوار: <strong id="visitorCount" class="rgb-text">جاري التحميل...</strong></span>
@@ -510,23 +610,41 @@
     </header>
 
     <div class="container">
-        <!-- شريط التصنيفات -->
-        <nav class="categories-bar">
-            <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
-            <button class="cat-btn" onclick="selectCategory('minecraft', this)"><i class="fa-solid fa-cube"></i> ماين كرافت</button>
-            <button class="cat-btn" onclick="selectCategory('roblox', this)"><i class="fa-solid fa-gamepad"></i> روبلكس</button>
-            <button class="cat-btn" onclick="selectCategory('mods', this)"><i class="fa-solid fa-puzzle-piece"></i> مودات</button>
-            <button class="cat-btn" onclick="selectCategory('scripts', this)"><i class="fa-solid fa-code"></i> سكربتات</button>
-            <button class="cat-btn" onclick="selectCategory('other-games', this)"><i class="fa-solid fa-ghost"></i> ألعاب أخرى</button>
-            <button class="cat-btn" onclick="selectCategory('videos', this)"><i class="fa-solid fa-play"></i> فيديوهات</button>
-        </nav>
+        <div class="main-layout">
+            
+            <!-- المحتوى الرئيسي (التصنيفات والمنتجات) -->
+            <main class="main-content">
+                <!-- شريط التصنيفات -->
+                <nav class="categories-bar">
+                    <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
+                    <button class="cat-btn" onclick="selectCategory('minecraft', this)"><i class="fa-solid fa-cube"></i> ماين كرافت</button>
+                    <button class="cat-btn" onclick="selectCategory('roblox', this)"><i class="fa-solid fa-gamepad"></i> روبلكس</button>
+                    <button class="cat-btn" onclick="selectCategory('mods', this)"><i class="fa-solid fa-puzzle-piece"></i> مودات</button>
+                    <button class="cat-btn" onclick="selectCategory('scripts', this)"><i class="fa-solid fa-code"></i> سكربتات</button>
+                    <button class="cat-btn" onclick="selectCategory('other-games', this)"><i class="fa-solid fa-ghost"></i> ألعاب أخرى</button>
+                    <button class="cat-btn" onclick="selectCategory('videos', this)"><i class="fa-solid fa-play"></i> فيديوهات</button>
+                </nav>
 
-        <!-- قسم المحتوى -->
-        <section class="content-section">
-            <div id="itemsGrid" class="items-grid">
-                <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى من السيرفر...</p>
-            </div>
-        </section>
+                <!-- قسم المحتوى -->
+                <section class="content-section">
+                    <div id="itemsGrid" class="items-grid">
+                        <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى من السيرفر...</p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- شريط الشراكات الجانبي على اليسار -->
+            <aside class="partners-sidebar">
+                <div class="partners-header">
+                    <i class="fa-solid fa-handshake rgb-text"></i>
+                    <span>روم الشراكات</span>
+                </div>
+                <div id="partnersGrid" class="partners-list">
+                    <p style="text-align:center; color: var(--text-muted); font-size:0.85rem; padding: 15px;">جاري تحميل الشركاء...</p>
+                </div>
+            </aside>
+
+        </div>
     </div>
 
     <!-- النافذة المنبثقة للوصف والتفاصيل Modal -->
@@ -543,6 +661,7 @@
 
     <script>
         let allItems = [];
+        let allPartners = [];
         let currentCategory = 'all';
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -550,7 +669,6 @@
             initCloudCounter();
         });
 
-        // دالة زيادة وقراءة العداد أونلاين من السيرفر المركزي
         async function initCloudCounter() {
             const countElem = document.getElementById('visitorCount');
             try {
@@ -562,16 +680,13 @@
                         return;
                     }
                 }
-            } catch (err) {
-                console.log("السيرفر السحابي جاري جلب قيمته احتياطياً...");
-            }
+            } catch (err) {}
 
-            // نظام احتياطي مباشر بدون مفاتيح
             try {
                 const res = await fetch('https://api.counterapi.dev/v1/aliopzte_store_global/store_visits/up');
                 if (res.ok) {
                     const data = await res.json();
-                    countElem.innerText = data.count || '1';
+                    countElem.innerText = data.count || '150';
                 } else {
                     countElem.innerText = '150';
                 }
@@ -586,12 +701,47 @@
                 if (!res.ok) throw new Error("تعذر جلب ملف البيانات");
                 
                 const data = await res.json();
-                allItems = Array.isArray(data) ? data : (data.items || []);
+                if (Array.isArray(data)) {
+                    allItems = data;
+                    allPartners = [];
+                } else {
+                    allItems = data.items || [];
+                    allPartners = data.partners || [];
+                }
+
                 renderItems(allItems);
+                renderPartners(allPartners);
             } catch (err) {
                 console.error("خطأ في تحميل البيانات:", err);
                 document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#ef4444; padding:30px;">تعذر تحميل المنتجات، يرجى المحاولة لاحقاً.</p>';
             }
+        }
+
+        function renderPartners(partners) {
+            const grid = document.getElementById('partnersGrid');
+            grid.innerHTML = '';
+
+            if (!partners || partners.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color: var(--text-muted); font-size:0.85rem; padding: 15px;">لا يوجد شركاء حالياً.</p>';
+                return;
+            }
+
+            partners.forEach(partner => {
+                const card = document.createElement('div');
+                card.className = 'partner-card';
+                card.innerHTML = `
+                    <img src="${partner.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${partner.name}" class="partner-avatar">
+                    <div class="partner-info">
+                        <div class="partner-name">${partner.name}</div>
+                        ${partner.youtubeUrl ? `
+                            <a href="${partner.youtubeUrl}" target="_blank" class="btn-partner-yt">
+                                <i class="fa-brands fa-youtube"></i> يوتيوب
+                            </a>
+                        ` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
         function renderItems(items) {

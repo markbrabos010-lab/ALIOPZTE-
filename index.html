@@ -187,34 +187,6 @@
             opacity: 0.9;
             transform: scale(1.02);
         }
-
-        .reviews-section {
-            margin-top: 40px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .review-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 12px;
-        }
-
-        .review-form input, .review-form textarea, .review-form select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: #fff;
-            box-sizing: border-box;
-        }
     </style>
 </head>
 <body class="theme-neon">
@@ -259,34 +231,6 @@
                 <p style="text-align:center; width:100%; grid-column: 1/-1; padding:20px;">جاري تحميل المحتوى...</p>
             </div>
         </section>
-
-        <!-- قسم التقييمات والطلبات -->
-        <section class="reviews-section">
-            <div class="section-header">
-                <h2><i class="fa-solid fa-comments" style="color: #38bdf8;"></i> آراء وتقييمات الزوار (المتحقق منها)</h2>
-            </div>
-
-            <!-- نموذج إضافة تقييم أو طلب -->
-            <form class="review-form" onsubmit="submitUserReview(event)">
-                <h3 style="margin: 0 0 10px 0; font-size: 1rem; color: #38bdf8;"><i class="fa-solid fa-pen"></i> أضف تقييمك أو طلبك</h3>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="reviewAuthor" placeholder="اسمك (اختياري)" style="flex: 1; min-width: 150px;">
-                    <select id="reviewType" style="width: auto; min-width: 120px;">
-                        <option value="review">تقييم للمتجر</option>
-                        <option value="request">طلب لعبة / مود</option>
-                    </select>
-                </div>
-                <textarea id="reviewText" required placeholder="اكتب تقييمك أو طلبك هنا..."></textarea>
-                <button type="submit" style="background: #0284c7; color: #fff; padding: 10px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                    <i class="fa-solid fa-paper-plane"></i> أرسل التقييم / الطلب
-                </button>
-            </form>
-
-            <!-- قائمة التقييمات المنشورة -->
-            <div id="reviewsList">
-                <p style="color: #94a3b8;">لا توجد تقييمات منشورة للعلن حالياً.</p>
-            </div>
-        </section>
     </div>
 
     <script>
@@ -305,13 +249,11 @@
                 const data = await res.json();
                 
                 let itemsList = [];
-                let reviewsList = [];
 
                 if (Array.isArray(data)) {
                     itemsList = data;
                 } else {
                     itemsList = data.items || [];
-                    reviewsList = data.reviews || [];
                     
                     if (data.customBg && typeof data.customBg === 'string' && data.customBg.startsWith('http')) {
                         document.body.style.backgroundImage = `url('${data.customBg}')`;
@@ -324,7 +266,6 @@
 
                 allItems = itemsList;
                 renderItems(allItems);
-                renderReviews(reviewsList);
             } catch (err) {
                 console.error("خطأ في تحميل البيانات:", err);
                 document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#ef4444;">تعذر تحميل المنتجات، يرجى إعادة المحاولة لاحقاً.</p>';
@@ -372,36 +313,6 @@
             });
         }
 
-        function renderReviews(reviews) {
-            const listDiv = document.getElementById('reviewsList');
-            listDiv.innerHTML = '';
-
-            const approvedReviews = reviews.filter(r => r.status === 'approved');
-
-            if (approvedReviews.length === 0) {
-                listDiv.innerHTML = '<p style="color: #94a3b8;">لا توجد تقييمات منشورة للعلن حالياً.</p>';
-                return;
-            }
-
-            approvedReviews.forEach(rev => {
-                const card = document.createElement('div');
-                card.style.background = 'rgba(255, 255, 255, 0.03)';
-                card.style.border = '1px solid rgba(255, 255, 255, 0.08)';
-                card.style.borderRadius = '12px';
-                card.style.padding = '15px';
-                card.style.marginBottom = '12px';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                        <span style="font-weight:bold; color:#38bdf8;"><i class="fa-solid fa-user-circle"></i> ${rev.author || 'زائر'}</span>
-                        <span style="font-size:0.75rem; padding:2px 8px; border-radius:6px; background:rgba(56,189,248,0.15); color:#38bdf8;">${rev.type === 'request' ? 'طلب' : 'تقييم'}</span>
-                    </div>
-                    <p style="margin:5px 0; font-size:0.95rem; color:#fff;">${rev.text}</p>
-                    ${rev.reply ? `<div style="margin-top:10px; padding:10px; background:rgba(56,189,248,0.08); border-right:3px solid #38bdf8; border-radius:6px; font-size:0.88rem;"><strong><i class="fa-solid fa-reply"></i> رد الإدارة:</strong> ${rev.reply}</div>` : ''}
-                `;
-                listDiv.appendChild(card);
-            });
-        }
-
         function selectCategory(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -423,102 +334,6 @@
                 'videos': 'فيديو'
             };
             return labels[cat] || cat;
-        }
-
-        async function submitUserReview(event) {
-            event.preventDefault();
-            
-            const authorInput = document.getElementById("reviewAuthor");
-            const textInput = document.getElementById("reviewText");
-            const typeInput = document.getElementById("reviewType") || { value: "review" };
-
-            const author = authorInput ? authorInput.value.trim() : "زائر";
-            const text = textInput ? textInput.value.trim() : "";
-
-            if (!text) {
-                alert("يرجى كتابة نص التقييم أو الطلب أولاً!");
-                return;
-            }
-
-            const submitBtn = event.target.querySelector("button[type='submit']") || event.target;
-            submitBtn.disabled = true;
-            submitBtn.innerText = "جاري الإرسال...";
-
-            const part1 = "Ghp_Chf2TXrDrkpCjLMo";
-            const part2 = "T25AP8v0ZgYpay0DY55t";
-            const PUBLIC_TOKEN = part1 + part2;
-
-            const GITHUB_USERNAME = "markbrabos010-lab";
-            const REPO_NAME = "ALIOPZTE-";
-            const FILE_PATH = "data.json";
-
-            try {
-                const getUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
-                const res = await fetch(getUrl, {
-                    headers: { 'Authorization': `token ${PUBLIC_TOKEN}` }
-                });
-
-                if (!res.ok) throw new Error("تعذر الوصول لسيرفر التقييمات حالياً.");
-
-                const fileInfo = await res.json();
-                const binaryString = atob(fileInfo.content.replace(/\s/g, ''));
-                const bytes = new Uint8Array(binaryString.length);
-                for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
-                const decodedText = new TextDecoder('utf-8').decode(bytes);
-                const onlineData = JSON.parse(decodedText);
-
-                let itemsList = Array.isArray(onlineData) ? onlineData : (onlineData.items || []);
-                let reviewsList = onlineData.reviews || [];
-                let customBg = onlineData.customBg || "";
-
-                const newReview = {
-                    id: Date.now(),
-                    author: author || "زائر",
-                    type: typeInput.value || "review",
-                    text: text,
-                    status: "pending",
-                    reply: ""
-                };
-
-                reviewsList.push(newReview);
-
-                const fullPayload = {
-                    customBg: customBg,
-                    items: itemsList,
-                    reviews: reviewsList
-                };
-
-                const utf8Bytes = new TextEncoder().encode(JSON.stringify(fullPayload, null, 2));
-                let binary = '';
-                utf8Bytes.forEach(b => binary += String.fromCharCode(b));
-                const updatedContent = btoa(binary);
-
-                const putRes = await fetch(getUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${PUBLIC_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: "إضافة تقييم/طلب جديد من زائر",
-                        content: updatedContent,
-                        sha: fileInfo.sha
-                    })
-                });
-
-                if (putRes.ok) {
-                    alert("تم إرسال تقييمك بنجاح! سيتم مراجعته ونشره في المتجر قريباً.");
-                    if (authorInput) authorInput.value = "";
-                    if (textInput) textInput.value = "";
-                } else {
-                    throw new Error("لم يتم حفظ التقييم، يرجى المحاولة لاحقاً.");
-                }
-            } catch (err) {
-                alert("حدث خطأ أثناء الإرسال: " + err.message);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerText = "أرسل التقييم / الطلب";
-            }
         }
     </script>
 </body>

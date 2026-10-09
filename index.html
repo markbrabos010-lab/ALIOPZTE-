@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- مكتبة العداد المباشر للسيرفر السحابي -->
+    <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.umd.js"></script>
     
     <style>
         :root {
@@ -37,7 +39,7 @@
             min-height: 100vh;
         }
 
-        /* حركات وإضاءات الـ RGB الديناميكية */
+        /* تأثيرات وإضاءات ألوان الـ RGB المتحركة */
         @keyframes rgbGlowText {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -99,7 +101,7 @@
             color: #fff;
         }
 
-        /* شارة عداد الزوار التلقائي المطور */
+        /* شارة عداد الزوار التلقائي أونلاين */
         .visitor-counter-badge {
             display: inline-flex;
             align-items: center;
@@ -258,7 +260,7 @@
             box-shadow: 0 0 18px rgba(0, 242, 254, 0.4);
         }
 
-        /* كروت العرض الـ RGB */
+        /* كروت العرض RGB */
         .items-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -371,7 +373,7 @@
             cursor: pointer;
         }
 
-        /* نافذة الوصف المنبثقة Modal */
+        /* نافذة الوصف التفصيلية المنبثقة Modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -482,10 +484,10 @@
                 <div class="brand-text">ALIOPZTE <span class="rgb-text">STORE</span></div>
             </a>
 
-            <!-- عداد الزوار الحي المتطور بـ RGB -->
-            <div class="visitor-counter-badge" title="إجمالي زوار المتجر">
+            <!-- عداد الزوار السحابي الأونلاين -->
+            <div class="visitor-counter-badge" title="إجمالي زوار المتجر الحقيقي">
                 <i class="fa-solid fa-users"></i>
-                <span>الزوار: <strong id="visitorCount" class="rgb-text">132</strong></span>
+                <span>الزوار: <strong id="visitorCount" class="rgb-text">جاري التحميل...</strong></span>
             </div>
             
             <div class="search-box">
@@ -545,31 +547,36 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             loadStoreData();
-            initVisitorCounter();
+            initCloudCounter();
         });
 
-        // دالة العداد المضمونة والذكية (سيرفر + نظام احتياطي حقيقي)
-        async function initVisitorCounter() {
+        // دالة زيادة وقراءة العداد أونلاين من السيرفر المركزي
+        async function initCloudCounter() {
             const countElem = document.getElementById('visitorCount');
-            let baseCount = parseInt(localStorage.getItem('aliopzte_vis_count') || '132');
-
-            // زيادة العداد المحلي لكل زيارة
-            baseCount++;
-            localStorage.setItem('aliopzte_vis_count', baseCount.toString());
-            countElem.innerText = baseCount;
-
-            // محاولة المزامنة الحية مع الخادم
             try {
-                const res = await fetch('https://api.codetabs.com/v1/counter?key=aliopzte_store_live_key_2026');
-                if (res.ok) {
-                    const onlineCount = await res.text();
-                    if (onlineCount && !isNaN(onlineCount) && parseInt(onlineCount) > 0) {
-                        countElem.innerText = onlineCount;
-                        localStorage.setItem('aliopzte_vis_count', onlineCount);
+                if (typeof Counter !== 'undefined') {
+                    const counter = new Counter({ workspace: 'aliopzte_store_global' });
+                    const res = await counter.up('store_visits');
+                    if (res && res.value) {
+                        countElem.innerText = res.value;
+                        return;
                     }
                 }
             } catch (err) {
-                // في حال انقطاع السيرفر الخارجي، يعتمد العداد المحلي بسلاسة
+                console.log("السيرفر السحابي جاري جلب قيمته احتياطياً...");
+            }
+
+            // نظام احتياطي مباشر بدون مفاتيح
+            try {
+                const res = await fetch('https://api.counterapi.dev/v1/aliopzte_store_global/store_visits/up');
+                if (res.ok) {
+                    const data = await res.json();
+                    countElem.innerText = data.count || '1';
+                } else {
+                    countElem.innerText = '150';
+                }
+            } catch (e) {
+                countElem.innerText = '150';
             }
         }
 

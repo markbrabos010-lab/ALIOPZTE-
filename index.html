@@ -61,15 +61,14 @@
             animation: rgbGlowText 4s ease infinite;
         }
 
-        /* الهيدر العلوي */
+        /* الهيدر العلوي المحسن */
         .main-header {
-            background: rgba(5, 7, 14, 0.92);
+            background: rgba(5, 7, 14, 0.95);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            position: sticky;
-            top: 0;
+            position: relative;
             z-index: 1000;
-            padding: 14px 20px;
+            padding: 12px 20px;
         }
 
         .header-container {
@@ -78,7 +77,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
@@ -96,7 +95,7 @@
         }
 
         .brand-text {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
             color: #fff;
         }
@@ -105,11 +104,11 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 12px;
             background: rgba(13, 18, 30, 0.95);
             border: 1px solid transparent;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 800;
             color: #fff;
             animation: rgbBorderGlow 4s infinite linear;
@@ -120,7 +119,8 @@
         .search-box {
             position: relative;
             flex: 1;
-            max-width: 300px;
+            min-width: 200px;
+            max-width: 350px;
         }
 
         .search-box input {
@@ -131,7 +131,7 @@
             background: rgba(13, 18, 30, 0.9);
             color: #fff;
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
@@ -151,17 +151,17 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-social {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 9px 16px;
+            gap: 6px;
+            padding: 8px 12px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease;
@@ -197,9 +197,9 @@
             animation: rgbGlowText 4s ease infinite;
             color: #fff;
             border-radius: 10px;
-            padding: 9px 16px;
+            padding: 8px 12px;
             font-weight: 900;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -210,13 +210,12 @@
         .container {
             max-width: 1380px;
             margin: 0 auto;
-            padding: 24px 20px;
+            padding: 20px 15px;
         }
 
-        /* تقسيم الواجهة: المحتوى الرئيسي يميناً والشراكات يساراً */
         .main-layout {
             display: flex;
-            gap: 24px;
+            gap: 20px;
             align-items: flex-start;
         }
 
@@ -225,15 +224,13 @@
             min-width: 0;
         }
 
-        /* شريط الشراكات الجانبي (على اليسار) */
+        /* شريط الشراكات الجانبي */
         .partners-sidebar {
-            width: 290px;
+            width: 270px;
             background: rgba(13, 18, 30, 0.88);
             border: 1px solid rgba(0, 242, 254, 0.25);
             border-radius: 18px;
-            padding: 18px;
-            position: sticky;
-            top: 90px;
+            padding: 16px;
             backdrop-filter: blur(12px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -242,9 +239,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 900;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding-bottom: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             color: #fff;
@@ -253,8 +250,8 @@
         .partners-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 75vh;
+            gap: 10px;
+            max-height: 70vh;
             overflow-y: auto;
             scrollbar-width: thin;
         }
@@ -263,26 +260,24 @@
             background: rgba(5, 7, 14, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 14px;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             transition: all 0.3s ease;
         }
 
         .partner-card:hover {
             border-color: #00f2fe;
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-            transform: translateY(-3px);
         }
 
         .partner-avatar {
-            width: 48px;
-            height: 48px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #00f2fe;
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
         }
 
         .partner-info {
@@ -291,7 +286,7 @@
         }
 
         .partner-name {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 800;
             color: #fff;
             margin-bottom: 4px;
@@ -303,31 +298,24 @@
         .btn-partner-yt {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 5px 10px;
-            border-radius: 8px;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 6px;
             background: rgba(255, 0, 0, 0.2);
             border: 1px solid rgba(255, 0, 0, 0.5);
             color: #ff4d4d;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 700;
             text-decoration: none;
-            transition: all 0.25s ease;
-        }
-
-        .btn-partner-yt:hover {
-            background: #ff0000;
-            color: #fff;
-            box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
         }
 
         /* شريط التصنيفات RGB */
         .categories-bar {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
             padding-bottom: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             scrollbar-width: none;
         }
 
@@ -335,10 +323,10 @@
             background: rgba(13, 18, 30, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-muted);
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 12px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-family: inherit;
             cursor: pointer;
             display: flex;
@@ -357,35 +345,35 @@
             color: #fff;
             border-color: transparent;
             font-weight: 900;
-            box-shadow: 0 0 18px rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
         }
 
         /* كروت العرض RGB */
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
         }
 
         .item-card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             cursor: pointer;
-            transition: all 0.35s ease;
+            transition: all 0.3s ease;
         }
 
         .item-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
             animation: rgbBorderGlow 3s infinite linear;
         }
 
         .card-thumb {
             width: 100%;
-            height: 180px;
+            height: 175px;
             position: relative;
             background: #000;
             overflow: hidden;
@@ -399,15 +387,15 @@
             transition: transform 0.5s ease;
         }
 
-        .item-card:hover .card-thumb img { transform: scale(1.08); }
+        .item-card:hover .card-thumb img { transform: scale(1.06); }
 
         .badge-tag {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 12px;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             font-weight: 800;
             color: #fff;
             background: rgba(5, 7, 14, 0.85);
@@ -416,23 +404,23 @@
         }
 
         .card-details {
-            padding: 18px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             flex: 1;
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: #fff;
             margin-bottom: 8px;
         }
 
         .card-desc {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             flex: 1;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -445,10 +433,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #cbd5e1;
-            margin-bottom: 16px;
-            padding-top: 12px;
+            margin-bottom: 14px;
+            padding-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
@@ -458,14 +446,14 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
             background-size: 200% 200%;
             animation: rgbGlowText 4s ease infinite;
             color: #fff;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border: none;
             cursor: pointer;
         }
@@ -498,21 +486,21 @@
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            padding: 24px;
+            padding: 20px;
         }
 
         .modal-close {
             position: absolute;
-            top: 16px;
-            left: 16px;
+            top: 14px;
+            left: 14px;
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #fff;
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -520,28 +508,28 @@
 
         .modal-img {
             width: 100%;
-            max-height: 280px;
+            max-height: 260px;
             object-fit: cover;
-            border-radius: 14px;
-            margin-bottom: 16px;
+            border-radius: 12px;
+            margin-bottom: 14px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 900;
             margin-bottom: 10px;
             color: #fff;
         }
 
         .modal-desc {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #cbd5e1;
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             white-space: pre-line;
             background: rgba(0, 0, 0, 0.4);
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             border-right: 4px solid #00f2fe;
         }
@@ -550,27 +538,38 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
             background-size: 200% 200%;
             animation: rgbGlowText 3s ease infinite;
             color: #fff;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-decoration: none;
         }
 
+        /* تحسينات الشاشات الصغيرة والهواتف (الوضع الطولي) */
         @media (max-width: 992px) {
             .main-layout { flex-direction: column; }
-            .partners-sidebar { width: 100%; position: static; }
+            .partners-sidebar { width: 100%; }
         }
 
         @media (max-width: 768px) {
-            .header-container { flex-direction: column; align-items: stretch; }
-            .search-box { max-width: 100%; }
+            .main-header { padding: 10px; position: relative; }
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .brand { justify-content: center; }
+            .visitor-counter-badge { justify-content: center; width: 100%; }
+            .search-box { max-width: 100%; width: 100%; }
+            .header-actions { justify-content: center; width: 100%; }
+            .btn-social, .btn-admin { flex: 1; justify-content: center; text-align: center; }
+            .items-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
         }
     </style>
 </head>
@@ -633,7 +632,7 @@
                 </section>
             </main>
 
-            <!-- شريط الشراكات الجانبي على اليسار -->
+            <!-- شريط الشراكات الجانبي -->
             <aside class="partners-sidebar">
                 <div class="partners-header">
                     <i class="fa-solid fa-handshake rgb-text"></i>

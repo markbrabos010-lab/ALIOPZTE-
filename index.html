@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- منع الزوم التلقائي وضبط العرض على قدر شاشة الهاتف تماماً -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ALIOPZTE Store | عالم الـ RGB والألعاب</title>
     <!-- خط تجوال من Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +23,13 @@
             --accent-pink: #ff007f;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
             background-color: var(--bg-dark);
@@ -32,9 +39,10 @@
             background-attachment: fixed;
             color: var(--text-main);
             font-family: 'Tajawal', sans-serif;
-            overflow-x: hidden;
             min-height: 100vh;
         }
+
+        * { box-sizing: border-box; }
 
         @keyframes rgbGlowText {
             0% { background-position: 0% 50%; }
@@ -59,189 +67,179 @@
 
         /* نافذة اختيار الجهاز */
         .device-selector-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(15px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 7, 14, 0.96); backdrop-filter: blur(15px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px;
         }
 
         .device-selector-card {
             background: var(--card-bg);
             border: 2px solid var(--accent-cyan);
             animation: rgbBorderGlow 4s infinite linear;
-            border-radius: 20px; padding: 30px 20px; max-width: 500px; width: 100%;
+            border-radius: 20px; padding: 25px 15px; max-width: 420px; width: 100%;
             text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
         }
 
         .device-options {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;
         }
 
         .device-btn {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px; padding: 18px 10px; color: #fff;
+            border-radius: 12px; padding: 15px 5px; color: #fff;
             cursor: pointer; transition: all 0.3s ease;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
 
-        .device-btn i { font-size: 2rem; color: var(--accent-cyan); }
-        .device-btn span { font-size: 0.95rem; font-weight: 800; }
-
-        .device-btn:hover {
-            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(127, 0, 255, 0.2));
-            border-color: var(--accent-cyan); transform: translateY(-5px);
-        }
+        .device-btn i { font-size: 1.8rem; color: var(--accent-cyan); }
+        .device-btn span { font-size: 0.85rem; font-weight: 800; }
 
         /* الهيدر العلوي */
         .main-header {
             background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 15px;
+            width: 100%;
         }
 
         .header-container {
             max-width: 1380px; margin: 0 auto; display: flex; align-items: center;
-            justify-content: space-between; gap: 12px; flex-wrap: wrap;
+            justify-content: space-between; gap: 10px; flex-wrap: wrap;
         }
 
-        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .brand-icon { font-size: 1.8rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
-        .brand-text { font-size: 1.3rem; font-weight: 900; color: #fff; }
+        .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+        .brand-icon { font-size: 1.6rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
+        .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
         .visitor-counter-badge {
-            display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
-            border-radius: 12px; background: rgba(13, 18, 30, 0.95); font-size: 0.85rem; font-weight: 800;
+            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
+            border-radius: 12px; background: rgba(13, 18, 30, 0.95); font-size: 0.8rem; font-weight: 800;
             color: #fff; animation: rgbBorderGlow 4s infinite linear;
         }
 
-        .search-box { position: relative; flex: 1; min-width: 200px; max-width: 350px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 350px; }
         .search-box input {
-            width: 100%; padding: 10px 42px 10px 16px; border-radius: 12px;
+            width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9);
-            color: #fff; font-family: inherit; font-size: 0.9rem;
+            color: #fff; font-family: inherit; font-size: 0.85rem;
         }
-        .search-box i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
-        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .btn-social {
-            display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
-            border-radius: 10px; font-weight: 700; font-size: 0.82rem; text-decoration: none; color: #fff;
+            display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px;
+            border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff;
         }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
         
         .btn-admin {
             background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff;
-            border-radius: 10px; padding: 8px 12px; font-weight: 900; font-size: 0.82rem; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 6px;
+            border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 4px;
         }
 
         .btn-device-change {
             background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 242, 254, 0.3);
-            color: var(--accent-cyan); padding: 8px 12px; border-radius: 10px; cursor: pointer;
-            font-size: 0.82rem; font-weight: bold; font-family: inherit;
+            color: var(--accent-cyan); padding: 6px 10px; border-radius: 8px; cursor: pointer;
+            font-size: 0.78rem; font-weight: bold; font-family: inherit;
         }
 
-        .container { max-width: 1380px; margin: 0 auto; padding: 20px 15px; }
+        .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
-        /* كارت "عنصر الأسبوع الرائج" */
         .featured-banner {
             background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15));
             border: 2px solid transparent; animation: rgbBorderGlow 4s infinite linear;
-            border-radius: 18px; padding: 20px; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+            border-radius: 16px; padding: 16px; margin-bottom: 16px;
+            display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;
         }
 
         .featured-badge {
             display: inline-block; background: #ff007f; color: #fff;
-            font-size: 0.75rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; margin-bottom: 8px;
+            font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px;
         }
 
-        .featured-title { font-size: 1.4rem; font-weight: 900; color: #fff; }
+        .featured-title { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .main-layout { display: flex; gap: 20px; align-items: flex-start; }
-        .main-content { flex: 1; min-width: 0; }
+        .main-layout { display: flex; gap: 16px; align-items: flex-start; width: 100%; }
+        .main-content { flex: 1; min-width: 0; width: 100%; }
 
         .partners-sidebar {
-            width: 270px; background: rgba(13, 18, 30, 0.88);
-            border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 18px; padding: 16px; backdrop-filter: blur(12px);
+            width: 260px; background: rgba(13, 18, 30, 0.88);
+            border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 16px; padding: 14px; backdrop-filter: blur(12px);
         }
 
         .partners-header {
-            display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 900;
-            margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
+            display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 900;
+            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
         }
 
-        .partners-list { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; }
+        .partners-list { display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
         .partner-card {
             background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px; padding: 10px; display: flex; align-items: center; gap: 10px;
+            border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px;
         }
-        .partner-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
+        .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
         .partner-info { flex: 1; overflow: hidden; }
-        .partner-name { font-size: 0.88rem; font-weight: 800; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .partner-name { font-size: 0.82rem; font-weight: 800; color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-partner-yt {
-            display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 6px;
-            background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; font-size: 0.72rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 6px;
+            background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; font-size: 0.68rem; text-decoration: none;
         }
 
-        .categories-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
+        .categories-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
         .cat-btn {
             background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-muted); padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+            color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
         }
         .cat-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-color: transparent; font-weight: 900; }
 
-        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .item-card {
             background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease;
+            border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease;
         }
-        .item-card:hover { transform: translateY(-5px); animation: rgbBorderGlow 3s infinite linear; }
-        .card-thumb { width: 100%; height: 175px; position: relative; background: #000; overflow: hidden; }
-        .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .badge-tag { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
-        .card-details { padding: 16px; display: flex; flex-direction: column; flex: 1; }
-        .card-title { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
-        .card-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: #cbd5e1; margin-bottom: 14px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
-        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 10px; font-weight: 900; font-size: 0.9rem; border: none; cursor: pointer; }
+        .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
+        .card-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
+        .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+        .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 10px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; }
 
         /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 20px; }
-        .modal-close { position: absolute; top: 14px; left: 14px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
-        .modal-img { width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; margin-bottom: 14px; }
-        .modal-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; color: #fff; }
-        .modal-desc { font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 16px; background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 10px; }
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 16px; }
+        .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+        .modal-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
+        .modal-title { font-size: 1.15rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
+        .modal-desc { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 14px; background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 8px; }
         
-        .rating-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; margin-bottom: 16px; text-align: center; }
-        .stars-container { display: flex; justify-content: center; gap: 8px; font-size: 1.4rem; cursor: pointer; margin-bottom: 8px; }
+        .rating-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 10px; margin-bottom: 12px; text-align: center; }
+        .stars-container { display: flex; justify-content: center; gap: 6px; font-size: 1.2rem; cursor: pointer; margin-bottom: 4px; }
         .stars-container i { color: #475569; }
         .stars-container i.selected { color: #f59e0b; }
-        .countdown-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 10px; font-weight: 900; font-size: 1rem; cursor: pointer; border: none; }
+        .countdown-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.9rem; cursor: pointer; border: none; }
 
-        /* --- تخصيص التخطيط حسب خيار الجهاز المحدد --- */
+        /* --- القواعد الخاصة بالأجهزة --- */
         
-        /* 1. وضع التابلت (Tablet Mode) */
-        body.device-tablet .container { max-width: 100%; padding: 15px; }
+        /* 1. التابلت */
         body.device-tablet .main-layout { flex-direction: column; }
         body.device-tablet .partners-sidebar { width: 100%; }
-        body.device-tablet .items-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        body.device-tablet .items-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
 
-        /* 2. وضع الهاتف (Mobile Mode) */
-        body.device-mobile .header-container { flex-direction: column; align-items: stretch; gap: 10px; }
+        /* 2. الهاتف الذكي (Mobile Mode) - مانع الزوم والكبس */
+        body.device-mobile .main-header { padding: 10px; }
+        body.device-mobile .header-container { flex-direction: column; align-items: stretch; gap: 8px; }
         body.device-mobile .brand { justify-content: center; }
         body.device-mobile .search-box { max-width: 100%; width: 100%; }
-        body.device-mobile .header-actions { justify-content: center; flex-wrap: wrap; }
+        body.device-mobile .header-actions { justify-content: center; width: 100%; }
         body.device-mobile .main-layout { flex-direction: column; }
         body.device-mobile .partners-sidebar { width: 100%; }
-        body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 14px; }
-        body.device-mobile .card-thumb { height: 200px; }
-
-        /* 3. وضع الكمبيوتر (Desktop Mode) */
-        body.device-desktop .main-layout { flex-direction: row; }
-        body.device-desktop .items-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+        body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 12px; }
+        body.device-mobile .card-thumb { height: 180px; }
     </style>
 </head>
 <body>
@@ -249,9 +247,9 @@
     <!-- نافذة منبثقة تفاعلية لاختيار نوع الجهاز -->
     <div id="deviceOverlay" class="device-selector-overlay">
         <div class="device-selector-card">
-            <i class="fa-solid fa-gamepad rgb-text" style="font-size: 3rem; margin-bottom: 12px;"></i>
-            <h2 style="font-size: 1.4rem; color: #fff; margin-bottom: 6px;">مرحباً بك في ALIOPZTE Store</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">اختر نوع جهازه لتهيئ وتخصيص الموقع بأفضل عرض مريح لك:</p>
+            <i class="fa-solid fa-gamepad rgb-text" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
+            <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 4px;">مرحباً بك في ALIOPZTE Store</h2>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">اختر نوع جهازك لتهيئة التنسيق تلقائياً وبدون أي زوم:</p>
             
             <div class="device-options">
                 <button class="device-btn" onclick="setDeviceMode('mobile')">
@@ -306,10 +304,10 @@
             <div>
                 <span class="featured-badge"><i class="fa-solid fa-fire"></i> الأفضل والأكثر رواجاً</span>
                 <div class="featured-title" id="featuredTitleText">جاري تحميل العنصر الرائج...</div>
-                <p id="featuredDescText" style="color:var(--text-muted); font-size:0.85rem; margin-top:4px;"></p>
+                <p id="featuredDescText" style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;"></p>
             </div>
-            <button class="btn-card-view" style="width:auto; padding:12px 24px;" onclick="openFeaturedModal()">
-                <i class="fa-solid fa-eye"></i> عرض التفاصيل والتحميل
+            <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="openFeaturedModal()">
+                <i class="fa-solid fa-eye"></i> التفاصيل والتحميل
             </button>
         </div>
 
@@ -327,7 +325,7 @@
 
                 <section class="content-section">
                     <div id="itemsGrid" class="items-grid">
-                        <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى...</p>
+                        <p style="text-align:center; width:100%; grid-column: 1/-1; padding:30px; color: var(--text-muted);">جاري تحميل المحتوى...</p>
                     </div>
                 </section>
             </main>
@@ -345,11 +343,11 @@
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
             <img id="mImg" src="" alt="" class="modal-img">
             <h2 id="mTitle" class="modal-title"></h2>
-            <div id="mMeta" style="display:flex; gap:15px; color:#00f2fe; font-weight:bold; font-size:0.85rem; margin-bottom:15px;"></div>
+            <div id="mMeta" style="display:flex; gap:10px; color:#00f2fe; font-weight:bold; font-size:0.8rem; margin-bottom:10px;"></div>
             <p id="mDesc" class="modal-desc"></p>
 
             <div class="rating-box">
-                <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom:6px;">قيم هذا العنصر:</p>
+                <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:4px;">قيم هذا العنصر:</p>
                 <div class="stars-container" id="starsContainer">
                     <i class="fa-solid fa-star" onclick="rateItem(1)"></i>
                     <i class="fa-solid fa-star" onclick="rateItem(2)"></i>
@@ -357,7 +355,7 @@
                     <i class="fa-solid fa-star" onclick="rateItem(4)"></i>
                     <i class="fa-solid fa-star" onclick="rateItem(5)"></i>
                 </div>
-                <span id="ratingMsg" style="font-size:0.75rem; color:#10b981;"></span>
+                <span id="ratingMsg" style="font-size:0.72rem; color:#10b981;"></span>
             </div>
 
             <button id="mDlBtn" onclick="startDownloadTimer()" class="countdown-btn">
@@ -378,7 +376,6 @@
             initCloudCounter();
         });
 
-        // البرمجة الخاصة باختيار الجهاز وتخصيص العرض
         function checkDeviceSelection() {
             const savedMode = localStorage.getItem("ali_device_mode");
             if (savedMode) {
@@ -478,7 +475,7 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 40px; color: var(--text-muted);">لا توجد عناصر.</p>';
+                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 30px; color: var(--text-muted);">لا توجد عناصر.</p>';
                 return;
             }
 

@@ -17,6 +17,9 @@
             --card-bg: rgba(13, 18, 30, 0.85);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --accent-cyan: #00f2fe;
+            --accent-purple: #7f00ff;
+            --accent-pink: #ff007f;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,92 +57,88 @@
             animation: rgbGlowText 4s ease infinite;
         }
 
+        /* نافذة اختيار الجهاز */
+        .device-selector-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(15px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+
+        .device-selector-card {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-cyan);
+            animation: rgbBorderGlow 4s infinite linear;
+            border-radius: 20px; padding: 30px 20px; max-width: 500px; width: 100%;
+            text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+        }
+
+        .device-options {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;
+        }
+
+        .device-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px; padding: 18px 10px; color: #fff;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+
+        .device-btn i { font-size: 2rem; color: var(--accent-cyan); }
+        .device-btn span { font-size: 0.95rem; font-weight: 800; }
+
+        .device-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(127, 0, 255, 0.2));
+            border-color: var(--accent-cyan); transform: translateY(-5px);
+        }
+
+        /* الهيدر العلوي */
         .main-header {
-            background: rgba(5, 7, 14, 0.95);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
-            z-index: 1000;
-            padding: 12px 20px;
+            background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 20px;
         }
 
         .header-container {
-            max-width: 1380px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
+            max-width: 1380px; margin: 0 auto; display: flex; align-items: center;
+            justify-content: space-between; gap: 12px; flex-wrap: wrap;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
         .brand-icon { font-size: 1.8rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
         .brand-text { font-size: 1.3rem; font-weight: 900; color: #fff; }
 
         .visitor-counter-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border-radius: 12px;
-            background: rgba(13, 18, 30, 0.95);
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #fff;
-            animation: rgbBorderGlow 4s infinite linear;
+            display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+            border-radius: 12px; background: rgba(13, 18, 30, 0.95); font-size: 0.85rem; font-weight: 800;
+            color: #fff; animation: rgbBorderGlow 4s infinite linear;
         }
 
-        .visitor-counter-badge i { color: #00f2fe; }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            min-width: 200px;
-            max-width: 350px;
-        }
-
+        .search-box { position: relative; flex: 1; min-width: 200px; max-width: 350px; }
         .search-box input {
-            width: 100%;
-            padding: 10px 42px 10px 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(13, 18, 30, 0.9);
-            color: #fff;
-            font-family: inherit;
-            font-size: 0.9rem;
+            width: 100%; padding: 10px 42px 10px 16px; border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9);
+            color: #fff; font-family: inherit; font-size: 0.9rem;
         }
-
-        .search-box input:focus { outline: none; animation: rgbBorderGlow 3s infinite linear; }
         .search-box i { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 8px; }
-
         .btn-social {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            text-decoration: none;
-            color: #fff;
+            display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px;
+            border-radius: 10px; font-weight: 700; font-size: 0.82rem; text-decoration: none; color: #fff;
         }
-
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
+        
         .btn-admin {
-            background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe);
-            color: #fff; border-radius: 10px; padding: 8px 12px;
-            font-weight: 900; font-size: 0.82rem; text-decoration: none;
+            background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff;
+            border-radius: 10px; padding: 8px 12px; font-weight: 900; font-size: 0.82rem; text-decoration: none;
             display: inline-flex; align-items: center; gap: 6px;
+        }
+
+        .btn-device-change {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--accent-cyan); padding: 8px 12px; border-radius: 10px; cursor: pointer;
+            font-size: 0.82rem; font-weight: bold; font-family: inherit;
         }
 
         .container { max-width: 1380px; margin: 0 auto; padding: 20px 15px; }
@@ -147,27 +146,14 @@
         /* كارت "عنصر الأسبوع الرائج" */
         .featured-banner {
             background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15));
-            border: 2px solid transparent;
-            animation: rgbBorderGlow 4s infinite linear;
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+            border: 2px solid transparent; animation: rgbBorderGlow 4s infinite linear;
+            border-radius: 18px; padding: 20px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
         }
 
         .featured-badge {
-            display: inline-block;
-            background: #ff007f;
-            color: #fff;
-            font-size: 0.75rem;
-            font-weight: 900;
-            padding: 4px 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+            display: inline-block; background: #ff007f; color: #fff;
+            font-size: 0.75rem; font-weight: 900; padding: 4px 10px; border-radius: 6px; margin-bottom: 8px;
         }
 
         .featured-title { font-size: 1.4rem; font-weight: 900; color: #fff; }
@@ -176,135 +162,115 @@
         .main-content { flex: 1; min-width: 0; }
 
         .partners-sidebar {
-            width: 270px;
-            background: rgba(13, 18, 30, 0.88);
-            border: 1px solid rgba(0, 242, 254, 0.25);
-            border-radius: 18px;
-            padding: 16px;
-            backdrop-filter: blur(12px);
+            width: 270px; background: rgba(13, 18, 30, 0.88);
+            border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 18px; padding: 16px; backdrop-filter: blur(12px);
         }
 
         .partners-header {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 1rem; font-weight: 900; margin-bottom: 14px;
-            padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
+            display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 900;
+            margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
         }
 
         .partners-list { display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto; }
-
         .partner-card {
-            background: rgba(5, 7, 14, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px; padding: 10px;
-            display: flex; align-items: center; gap: 10px;
+            background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px; padding: 10px; display: flex; align-items: center; gap: 10px;
         }
-
         .partner-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
         .partner-info { flex: 1; overflow: hidden; }
         .partner-name { font-size: 0.88rem; font-weight: 800; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-partner-yt {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 4px 8px; border-radius: 6px; background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; font-size: 0.72rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 6px;
+            background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; font-size: 0.72rem; text-decoration: none;
         }
 
-        .categories-bar {
-            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none;
-        }
-
+        .categories-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
         .cat-btn {
             background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-muted); padding: 8px 16px; border-radius: 12px;
-            font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
+            color: var(--text-muted); padding: 8px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; white-space: nowrap;
         }
+        .cat-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-color: transparent; font-weight: 900; }
 
-        .cat-btn.active {
-            background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
-            color: #fff; border-color: transparent; font-weight: 900;
-        }
-
-        .items-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px;
-        }
-
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
         .item-card {
             background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease;
         }
-
         .item-card:hover { transform: translateY(-5px); animation: rgbBorderGlow 3s infinite linear; }
-
         .card-thumb { width: 100%; height: 175px; position: relative; background: #000; overflow: hidden; }
         .card-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .item-card:hover .card-thumb img { transform: scale(1.06); }
-
-        .badge-tag {
-            position: absolute; top: 10px; right: 10px; padding: 4px 10px;
-            border-radius: 8px; font-size: 0.72rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85);
-        }
-
+        .badge-tag { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border-radius: 8px; font-size: 0.72rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
         .card-details { padding: 16px; display: flex; flex-direction: column; flex: 1; }
         .card-title { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
         .card-desc { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: #cbd5e1; margin-bottom: 14px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 10px; font-weight: 900; font-size: 0.9rem; border: none; cursor: pointer; }
 
-        .card-meta {
-            display: flex; align-items: center; justify-content: space-between;
-            font-size: 0.78rem; color: #cbd5e1; margin-bottom: 14px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .btn-card-view {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 10px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
-            color: #fff; border-radius: 10px; font-weight: 900; font-size: 0.9rem; border: none; cursor: pointer;
-        }
-
-        /* نافذة العرض Modal وتقييم النجوم */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000;
-            display: none; align-items: center; justify-content: center; padding: 20px;
-        }
-
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
-
-        .modal-box {
-            background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear;
-            border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh;
-            overflow-y: auto; position: relative; padding: 20px;
-        }
-
-        .modal-close {
-            position: absolute; top: 14px; left: 14px; background: rgba(255, 255, 255, 0.1);
-            border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
-        }
-
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 20px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 20px; }
+        .modal-close { position: absolute; top: 14px; left: 14px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
         .modal-img { width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; margin-bottom: 14px; }
         .modal-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; color: #fff; }
         .modal-desc { font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 16px; background: rgba(0, 0, 0, 0.4); padding: 12px; border-radius: 10px; }
-
-        /* نظام التقييم بالنجوم */
-        .rating-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px; padding: 12px; margin-bottom: 16px; text-align: center;
-        }
-
+        
+        .rating-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; margin-bottom: 16px; text-align: center; }
         .stars-container { display: flex; justify-content: center; gap: 8px; font-size: 1.4rem; cursor: pointer; margin-bottom: 8px; }
-        .stars-container i { color: #475569; transition: color 0.2s; }
+        .stars-container i { color: #475569; }
         .stars-container i.selected { color: #f59e0b; }
+        .countdown-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 10px; font-weight: 900; font-size: 1rem; cursor: pointer; border: none; }
 
-        .countdown-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            width: 100%; padding: 12px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
-            color: #fff; border-radius: 10px; font-weight: 900; font-size: 1rem; cursor: pointer; border: none;
-        }
+        /* --- تخصيص التخطيط حسب خيار الجهاز المحدد --- */
+        
+        /* 1. وضع التابلت (Tablet Mode) */
+        body.device-tablet .container { max-width: 100%; padding: 15px; }
+        body.device-tablet .main-layout { flex-direction: column; }
+        body.device-tablet .partners-sidebar { width: 100%; }
+        body.device-tablet .items-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
-        @media (max-width: 992px) { .main-layout { flex-direction: column; } .partners-sidebar { width: 100%; } }
+        /* 2. وضع الهاتف (Mobile Mode) */
+        body.device-mobile .header-container { flex-direction: column; align-items: stretch; gap: 10px; }
+        body.device-mobile .brand { justify-content: center; }
+        body.device-mobile .search-box { max-width: 100%; width: 100%; }
+        body.device-mobile .header-actions { justify-content: center; flex-wrap: wrap; }
+        body.device-mobile .main-layout { flex-direction: column; }
+        body.device-mobile .partners-sidebar { width: 100%; }
+        body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 14px; }
+        body.device-mobile .card-thumb { height: 200px; }
+
+        /* 3. وضع الكمبيوتر (Desktop Mode) */
+        body.device-desktop .main-layout { flex-direction: row; }
+        body.device-desktop .items-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
     </style>
 </head>
 <body>
 
+    <!-- نافذة منبثقة تفاعلية لاختيار نوع الجهاز -->
+    <div id="deviceOverlay" class="device-selector-overlay">
+        <div class="device-selector-card">
+            <i class="fa-solid fa-gamepad rgb-text" style="font-size: 3rem; margin-bottom: 12px;"></i>
+            <h2 style="font-size: 1.4rem; color: #fff; margin-bottom: 6px;">مرحباً بك في ALIOPZTE Store</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">اختر نوع جهازه لتهيئ وتخصيص الموقع بأفضل عرض مريح لك:</p>
+            
+            <div class="device-options">
+                <button class="device-btn" onclick="setDeviceMode('mobile')">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <span>هاتف</span>
+                </button>
+                <button class="device-btn" onclick="setDeviceMode('tablet')">
+                    <i class="fa-solid fa-tablet-screen-button"></i>
+                    <span>تابلت</span>
+                </button>
+                <button class="device-btn" onclick="setDeviceMode('desktop')">
+                    <i class="fa-solid fa-desktop"></i>
+                    <span>كمبيوتر</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- الهيدر العلوي -->
     <header class="main-header">
         <div class="header-container">
             <a href="index.html" class="brand">
@@ -323,6 +289,9 @@
             </div>
 
             <div class="header-actions">
+                <button class="btn-device-change" onclick="showDeviceSelector()" title="تغيير العرض المخصص للجهاز">
+                    <i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span>
+                </button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i> القناة</a>
                 <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i> ديسكورد</a>
                 <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i> الداشبورد</a>
@@ -332,7 +301,7 @@
 
     <div class="container">
         
-        <!-- كارت "عنصر الأسبوع الرائج" (يتم التحكم به من الداشبورد) -->
+        <!-- كارت "عنصر الأسبوع الرائج" -->
         <div class="featured-banner">
             <div>
                 <span class="featured-badge"><i class="fa-solid fa-fire"></i> الأفضل والأكثر رواجاً</span>
@@ -370,7 +339,7 @@
         </div>
     </div>
 
-    <!-- النافذة المنبثقة Modal مع نظام تقييم النجوم -->
+    <!-- النافذة المنبثقة Modal -->
     <div id="itemModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-box" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
@@ -378,8 +347,7 @@
             <h2 id="mTitle" class="modal-title"></h2>
             <div id="mMeta" style="display:flex; gap:15px; color:#00f2fe; font-weight:bold; font-size:0.85rem; margin-bottom:15px;"></div>
             <p id="mDesc" class="modal-desc"></p>
-            
-            <!-- نظام التقييم بالنجوم للزوار -->
+
             <div class="rating-box">
                 <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom:6px;">قيم هذا العنصر:</p>
                 <div class="stars-container" id="starsContainer">
@@ -403,12 +371,45 @@
         let allPartners = [];
         let currentCategory = 'all';
         let activeTargetUrl = '#';
-        let currentModalItem = null;
 
         document.addEventListener("DOMContentLoaded", () => {
+            checkDeviceSelection();
             loadStoreData();
             initCloudCounter();
         });
+
+        // البرمجة الخاصة باختيار الجهاز وتخصيص العرض
+        function checkDeviceSelection() {
+            const savedMode = localStorage.getItem("ali_device_mode");
+            if (savedMode) {
+                applyDeviceMode(savedMode);
+                document.getElementById("deviceOverlay").style.display = "none";
+            } else {
+                document.getElementById("deviceOverlay").style.display = "flex";
+            }
+        }
+
+        function setDeviceMode(mode) {
+            localStorage.setItem("ali_device_mode", mode);
+            applyDeviceMode(mode);
+            document.getElementById("deviceOverlay").style.display = "none";
+        }
+
+        function applyDeviceMode(mode) {
+            document.body.classList.remove("device-mobile", "device-tablet", "device-desktop");
+            document.body.classList.add("device-" + mode);
+
+            const labels = {
+                'mobile': 'هاتف',
+                'tablet': 'تابلت',
+                'desktop': 'كمبيوتر'
+            };
+            document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
+        }
+
+        function showDeviceSelector() {
+            document.getElementById("deviceOverlay").style.display = "flex";
+        }
 
         async function initCloudCounter() {
             try {
@@ -442,7 +443,7 @@
             const featuredItem = allItems.find(i => i.id == featuredId) || allItems[0];
             if (featuredItem) {
                 document.getElementById('featuredTitleText').innerText = featuredItem.title;
-                document.getElementById('featuredDescText').innerText = featuredItem.desc || 'اضغط لمشاهدة التفاصيل وتحميل العنصر الرائج لهذا الأسبوع.';
+                document.getElementById('featuredDescText').innerText = featuredItem.desc || 'اضغط لمشاهدة التفاصيل وتحميل العنصر الرائج.';
                 window.featuredItemObj = featuredItem;
             }
         }
@@ -502,7 +503,6 @@
         }
 
         function openModal(item) {
-            currentModalItem = item;
             activeTargetUrl = item.url;
             document.getElementById('mImg').src = item.image;
             document.getElementById('mTitle').innerText = item.title;

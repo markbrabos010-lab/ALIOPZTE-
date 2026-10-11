@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد ALIOPZTE | إدارة المتجر والترند</title>
+    <title>داشبورد ALIOPZTE | إدارة المتجر</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -21,7 +21,7 @@
         input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,7,14,0.8); color: #fff; font-family: inherit; }
 
         .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { flex: 1; min-width: 110px; padding: 12px; border: none; border-radius: 10px; background: rgba(255,255,255,0.05); color: #888; font-weight: bold; cursor: pointer; }
+        .tab-btn { flex: 1; min-width: 100px; padding: 10px; border: none; border-radius: 10px; background: rgba(255,255,255,0.05); color: #888; font-weight: bold; cursor: pointer; font-size: 0.82rem; }
         .tab-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff); color: #fff; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
@@ -35,7 +35,6 @@
 </head>
 <body>
 
-    <!-- شاشة تسجيل الدخول الحصري -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
             <i class="fa-solid fa-shield-halved" style="font-size: 2.8rem; color: var(--accent-cyan); margin-bottom: 15px;"></i>
@@ -56,16 +55,16 @@
 
         <div class="form-group"><label><i class="fa-solid fa-key"></i> توكن GitHub</label><input type="password" id="ghToken" placeholder="الصق التوكن هنا..."></div>
 
-        <!-- رومات اللوحة -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('itemsTab', this)">الألعاب والمودات</button>
+            <button class="tab-btn active" onclick="switchTab('itemsTab', this)">الألعاب</button>
             <button class="tab-btn" onclick="switchTab('videosTab', this)">الفيديوهات</button>
-            <button class="tab-btn" onclick="switchTab('codesTab', this)">أكواد الهدايا</button>
-            <button class="tab-btn" onclick="switchTab('wheelTab', this)">عجلة الحظ</button>
-            <button class="tab-btn" onclick="switchTab('partnersTab', this)">الشراكات</button>
+            <button class="tab-btn" onclick="switchTab('newsTab', this)">شريط الأخبار</button>
+            <button class="tab-btn" onclick="switchTab('codesTab', this)">الأكواد</button>
+            <button class="tab-btn" onclick="switchTab('wheelTab', this)">العجلة</button>
+            <button class="tab-btn" onclick="switchTab('partnersTab', this)">الشركاء</button>
         </div>
 
-        <!-- روم 1: الألعاب والمودات -->
+        <!-- الألعاب والمودات -->
         <div id="itemsTab" class="tab-content active">
             <h2 id="itemTitleHead">إضافة / تعديل عنصر</h2>
             <form onsubmit="handleItemSave(event)">
@@ -83,49 +82,58 @@
                 <div class="form-group"><label>رابط التحميل</label><input type="url" id="itemUrl" required></div>
                 <div class="form-group"><label>الوصف</label><textarea id="itemDesc" rows="2"></textarea></div>
                 <button type="submit" id="btnSaveItem" class="btn-submit">حفظ العنصر</button>
-                <button type="button" id="btnCancelItem" class="btn-submit btn-cancel" onclick="resetItemForm()">إلغاء التعديل</button>
+                <button type="button" id="btnCancelItem" class="btn-submit btn-cancel" onclick="resetItemForm()">إلغاء</button>
             </form>
             <div style="margin-top:20px;"><h3>العناصر الحالية:</h3><div id="itemsList"></div></div>
         </div>
 
-        <!-- روم 2: الفيديوهات -->
+        <!-- الفيديوهات -->
         <div id="videosTab" class="tab-content">
             <h2 id="vidTitleHead">إضافة / تعديل فيديو</h2>
             <form onsubmit="handleVideoSave(event)">
                 <div class="form-group"><label>عنوان الفيديو</label><input type="text" id="vidTitle" required></div>
                 <div class="form-group"><label>رابط غلاف الفيديو</label><input type="url" id="vidImg" required></div>
-                <div class="form-group"><label>رابط الفيديو (يوتيوب)</label><input type="url" id="vidUrl" required></div>
+                <div class="form-group"><label>رابط يوتيوب</label><input type="url" id="vidUrl" required></div>
                 <div class="form-group"><label>الوصف</label><textarea id="vidDesc" rows="2"></textarea></div>
                 <button type="submit" id="btnSaveVid" class="btn-submit">حفظ الفيديو</button>
-                <button type="button" id="btnCancelVid" class="btn-submit btn-cancel" onclick="resetVideoForm()">إلغاء التعديل</button>
+                <button type="button" id="btnCancelVid" class="btn-submit btn-cancel" onclick="resetVideoForm()">إلغاء</button>
             </form>
             <div style="margin-top:20px;"><h3>الفيديوهات الحالية:</h3><div id="videosList"></div></div>
         </div>
 
-        <!-- روم 3: أكواد الهدايا -->
+        <!-- شريط الأخبار المتحرك -->
+        <div id="newsTab" class="tab-content">
+            <h2>إدارة شريط الأخبار المتحرك</h2>
+            <form onsubmit="handleNewsSave(event)">
+                <div class="form-group"><label>نص الخبر أو التنبيه المتحرك أعلى الموقع</label><input type="text" id="newsInput" required placeholder="مثال: ترقبوا أقوى مود قادم غداً..."></div>
+                <button type="submit" class="btn-submit">تحديث ونشر الشريط</button>
+            </form>
+        </div>
+
+        <!-- الأكواد -->
         <div id="codesTab" class="tab-content">
             <h2>إضافة كود هدية جديد</h2>
             <form onsubmit="handleCodeSave(event)">
                 <div class="form-group"><label>الكود</label><input type="text" id="cCode" required placeholder="مثال: ALI2026"></div>
-                <div class="form-group"><label>رابط الملف المفتوح بهذا الكود</label><input type="url" id="cUrl" required placeholder="https://..."></div>
-                <button type="submit" class="btn-submit">حفظ الكود ونشره</button>
+                <div class="form-group"><label>رابط المود المفتوح بالكود</label><input type="url" id="cUrl" required placeholder="https://..."></div>
+                <button type="submit" class="btn-submit">حفظ الكود</button>
             </form>
-            <div style="margin-top:20px;"><h3>الأكواد المتاحة:</h3><div id="codesList"></div></div>
+            <div style="margin-top:20px;"><h3>الأكواد:</h3><div id="codesList"></div></div>
         </div>
 
-        <!-- روم 4: الجوائز لعجلة الحظ -->
+        <!-- عجلة الحظ -->
         <div id="wheelTab" class="tab-content">
-            <h2>إدارة جوائز عجلة الحظ</h2>
+            <h2>إدارة جوائز العجلة</h2>
             <form onsubmit="handleWheelSave(event)">
-                <div class="form-group"><label>اسم الجائزة الجديد</label><input type="text" id="wPrize" required placeholder="مثال: مود سيارات نادرة"></div>
-                <button type="submit" class="btn-submit">إضافة جائزة للعجلة</button>
+                <div class="form-group"><label>اسم الجائزة</label><input type="text" id="wPrize" required placeholder="مثال: مود سيارات"></div>
+                <button type="submit" class="btn-submit">إضافة جائزة</button>
             </form>
-            <div style="margin-top:20px;"><h3>الجوائز الحالية:</h3><div id="wheelList"></div></div>
+            <div style="margin-top:20px;"><h3>الجوائز:</h3><div id="wheelList"></div></div>
         </div>
 
-        <!-- روم 5: الشراكات -->
+        <!-- الشراكات -->
         <div id="partnersTab" class="tab-content">
-            <h2>إضافة شريك جديد</h2>
+            <h2>إضافة شريك</h2>
             <form onsubmit="handlePartnerSave(event)">
                 <div class="form-group"><label>اسم الشريك</label><input type="text" id="pName" required></div>
                 <div class="form-group"><label>رابط الصورة</label><input type="url" id="pImg" required></div>
@@ -142,7 +150,7 @@
         const REPO = "ALIOPZTE-";
         const PATH = "data.json";
 
-        let currentData = { items: [], partners: [], codes: [], wheelPrizes: [] };
+        let currentData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "" };
         let fileSha = "";
         let editingItemId = null, editingVideoId = null;
 
@@ -170,7 +178,9 @@
                     currentData.items = parsed.items || [];
                     currentData.partners = parsed.partners || [];
                     currentData.codes = parsed.codes || [];
-                    currentData.wheelPrizes = parsed.wheelPrizes || ["مود ماينكرافت حصري", "سكربت روبلكس نادرة"];
+                    currentData.wheelPrizes = parsed.wheelPrizes || [];
+                    currentData.newsTicker = parsed.newsTicker || "";
+                    document.getElementById("newsInput").value = currentData.newsTicker;
                     renderLists();
                 }
             } catch(e) {}
@@ -189,12 +199,12 @@
 
             const cList = document.getElementById("codesList"); cList.innerHTML = "";
             currentData.codes.forEach((code, index) => {
-                cList.innerHTML += `<div class="list-item"><span>الكود: <b>${code.code}</b></span><button class="btn-del" onclick="deleteCode(${index})">حذف الكود</button></div>`;
+                cList.innerHTML += `<div class="list-item"><span>الكود: <b>${code.code}</b></span><button class="btn-del" onclick="deleteCode(${index})">حذف</button></div>`;
             });
 
             const wList = document.getElementById("wheelList"); wList.innerHTML = "";
             currentData.wheelPrizes.forEach((prize, index) => {
-                wList.innerHTML += `<div class="list-item"><span>الجائزة: <b>${prize}</b></span><button class="btn-del" onclick="deleteWheelPrize(${index})">حذف</button></div>`;
+                wList.innerHTML += `<div class="list-item"><span>الجائزة: <b>${prize}</b></span><button class="btn-del" onclick="deleteWheel(${index})">حذف</button></div>`;
             });
 
             const pList = document.getElementById("partnersList"); pList.innerHTML = "";
@@ -297,6 +307,12 @@
             document.getElementById("btnCancelVid").style.display = "none";
         }
 
+        function handleNewsSave(e) {
+            e.preventDefault();
+            currentData.newsTicker = document.getElementById("newsInput").value.trim();
+            saveDataToGitHub();
+        }
+
         function handleCodeSave(e) {
             e.preventDefault();
             currentData.codes.unshift({ id: Date.now(), code: document.getElementById("cCode").value.trim(), url: document.getElementById("cUrl").value.trim() });
@@ -319,7 +335,7 @@
 
         function deleteItem(id) { currentData.items = currentData.items.filter(i => i.id !== id); saveDataToGitHub(); }
         function deleteCode(index) { currentData.codes.splice(index, 1); saveDataToGitHub(); }
-        function deleteWheelPrize(index) { currentData.wheelPrizes.splice(index, 1); saveDataToGitHub(); }
+        function deleteWheel(index) { currentData.wheelPrizes.splice(index, 1); saveDataToGitHub(); }
         function deletePartner(index) { currentData.partners.splice(index, 1); saveDataToGitHub(); }
 
         async function saveDataToGitHub() {
@@ -340,7 +356,7 @@
                 const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
                     method: "PUT",
                     headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: "تحديث المحتوى واللوحة الشاملة", content: encoded, sha: fileSha })
+                    body: JSON.stringify({ message: "تحديث شامل للمتجر", content: encoded, sha: fileSha })
                 });
 
                 if (res.ok) {

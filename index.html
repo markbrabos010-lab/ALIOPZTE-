@@ -207,10 +207,79 @@
             box-shadow: 0 0 12px rgba(127, 0, 255, 0.4);
         }
 
+        .btn-sound {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #00f2fe;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
         .container {
             max-width: 1380px;
             margin: 0 auto;
             padding: 20px 15px;
+        }
+
+        /* كارت "عنصر الأسبوع المميز" */
+        .featured-banner {
+            background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15));
+            border: 2px solid transparent;
+            animation: rgbBorderGlow 4s infinite linear;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .featured-badge {
+            display: inline-block;
+            background: #ff007f;
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .featured-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        /* شريط الوسوم السريعة */
+        .tag-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tag-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tag-btn.active {
+            background: var(--card-bg);
+            border-color: #00f2fe;
+            color: #00f2fe;
         }
 
         .main-layout {
@@ -315,7 +384,7 @@
             gap: 10px;
             overflow-x: auto;
             padding-bottom: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             scrollbar-width: none;
         }
 
@@ -458,7 +527,7 @@
             cursor: pointer;
         }
 
-        /* Modal */
+        /* Modal النافذة المنبثقة للوصف والتحميل الآمن */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -534,7 +603,7 @@
             border-right: 4px solid #00f2fe;
         }
 
-        .modal-dl-btn {
+        .countdown-btn {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -543,296 +612,4 @@
             padding: 12px;
             background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f);
             background-size: 200% 200%;
-            animation: rgbGlowText 3s ease infinite;
-            color: #fff;
-            border-radius: 10px;
-            font-weight: 900;
-            font-size: 1rem;
-            text-decoration: none;
-        }
-
-        /* تحسينات الشاشات الصغيرة والهواتف (الوضع الطولي) */
-        @media (max-width: 992px) {
-            .main-layout { flex-direction: column; }
-            .partners-sidebar { width: 100%; }
-        }
-
-        @media (max-width: 768px) {
-            .main-header { padding: 10px; position: relative; }
-            .header-container {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            .brand { justify-content: center; }
-            .visitor-counter-badge { justify-content: center; width: 100%; }
-            .search-box { max-width: 100%; width: 100%; }
-            .header-actions { justify-content: center; width: 100%; }
-            .btn-social, .btn-admin { flex: 1; justify-content: center; text-align: center; }
-            .items-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- الهيدر العلوي -->
-    <header class="main-header">
-        <div class="header-container">
-            <a href="index.html" class="brand">
-                <i class="fa-solid fa-gamepad brand-icon"></i>
-                <div class="brand-text">ALIOPZTE <span class="rgb-text">STORE</span></div>
-            </a>
-
-            <!-- عداد الزوار السحابي -->
-            <div class="visitor-counter-badge" title="إجمالي زوار المتجر الحقيقي">
-                <i class="fa-solid fa-users"></i>
-                <span>الزوار: <strong id="visitorCount" class="rgb-text">جاري التحميل...</strong></span>
-            </div>
-            
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" oninput="filterItems()" placeholder="ابحث عن ألعاب، مودات، سكربتات...">
-            </div>
-
-            <div class="header-actions">
-                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube">
-                    <i class="fa-brands fa-youtube"></i> القناة
-                </a>
-                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord">
-                    <i class="fa-brands fa-discord"></i> الديسكورد
-                </a>
-                <a href="admin.html" class="btn-admin">
-                    <i class="fa-solid fa-gauge-high"></i> الداشبورد
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="main-layout">
-            
-            <!-- المحتوى الرئيسي (التصنيفات والمنتجات) -->
-            <main class="main-content">
-                <!-- شريط التصنيفات -->
-                <nav class="categories-bar">
-                    <button class="cat-btn active" onclick="selectCategory('all', this)"><i class="fa-solid fa-border-all"></i> الكل</button>
-                    <button class="cat-btn" onclick="selectCategory('minecraft', this)"><i class="fa-solid fa-cube"></i> ماين كرافت</button>
-                    <button class="cat-btn" onclick="selectCategory('roblox', this)"><i class="fa-solid fa-gamepad"></i> روبلكس</button>
-                    <button class="cat-btn" onclick="selectCategory('mods', this)"><i class="fa-solid fa-puzzle-piece"></i> مودات</button>
-                    <button class="cat-btn" onclick="selectCategory('scripts', this)"><i class="fa-solid fa-code"></i> سكربتات</button>
-                    <button class="cat-btn" onclick="selectCategory('other-games', this)"><i class="fa-solid fa-ghost"></i> ألعاب أخرى</button>
-                    <button class="cat-btn" onclick="selectCategory('videos', this)"><i class="fa-solid fa-play"></i> فيديوهات</button>
-                </nav>
-
-                <!-- قسم المحتوى -->
-                <section class="content-section">
-                    <div id="itemsGrid" class="items-grid">
-                        <p style="text-align:center; width:100%; grid-column: 1/-1; padding:40px; color: var(--text-muted);">جاري تحميل المحتوى من السيرفر...</p>
-                    </div>
-                </section>
-            </main>
-
-            <!-- شريط الشراكات الجانبي -->
-            <aside class="partners-sidebar">
-                <div class="partners-header">
-                    <i class="fa-solid fa-handshake rgb-text"></i>
-                    <span>روم الشراكات</span>
-                </div>
-                <div id="partnersGrid" class="partners-list">
-                    <p style="text-align:center; color: var(--text-muted); font-size:0.85rem; padding: 15px;">جاري تحميل الشركاء...</p>
-                </div>
-            </aside>
-
-        </div>
-    </div>
-
-    <!-- النافذة المنبثقة للوصف والتفاصيل Modal -->
-    <div id="itemModal" class="modal-overlay" onclick="closeModal(event)">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
-            <img id="mImg" src="" alt="" class="modal-img">
-            <h2 id="mTitle" class="modal-title"></h2>
-            <div id="mMeta" style="display:flex; gap:15px; color:#00f2fe; font-weight:bold; font-size:0.85rem; margin-bottom:15px;"></div>
-            <p id="mDesc" class="modal-desc"></p>
-            <a id="mDlBtn" href="" target="_blank" class="modal-dl-btn"><i class="fa-solid fa-download"></i> تنزيل / مشاهدة الآن</a>
-        </div>
-    </div>
-
-    <script>
-        let allItems = [];
-        let allPartners = [];
-        let currentCategory = 'all';
-
-        document.addEventListener("DOMContentLoaded", () => {
-            loadStoreData();
-            initCloudCounter();
-        });
-
-        async function initCloudCounter() {
-            const countElem = document.getElementById('visitorCount');
-            try {
-                if (typeof Counter !== 'undefined') {
-                    const counter = new Counter({ workspace: 'aliopzte_store_global' });
-                    const res = await counter.up('store_visits');
-                    if (res && res.value) {
-                        countElem.innerText = res.value;
-                        return;
-                    }
-                }
-            } catch (err) {}
-
-            try {
-                const res = await fetch('https://api.counterapi.dev/v1/aliopzte_store_global/store_visits/up');
-                if (res.ok) {
-                    const data = await res.json();
-                    countElem.innerText = data.count || '150';
-                } else {
-                    countElem.innerText = '150';
-                }
-            } catch (e) {
-                countElem.innerText = '150';
-            }
-        }
-
-        async function loadStoreData() {
-            try {
-                const res = await fetch('data.json?t=' + new Date().getTime());
-                if (!res.ok) throw new Error("تعذر جلب ملف البيانات");
-                
-                const data = await res.json();
-                if (Array.isArray(data)) {
-                    allItems = data;
-                    allPartners = [];
-                } else {
-                    allItems = data.items || [];
-                    allPartners = data.partners || [];
-                }
-
-                renderItems(allItems);
-                renderPartners(allPartners);
-            } catch (err) {
-                console.error("خطأ في تحميل البيانات:", err);
-                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column: 1/-1; color:#ef4444; padding:30px;">تعذر تحميل المنتجات، يرجى المحاولة لاحقاً.</p>';
-            }
-        }
-
-        function renderPartners(partners) {
-            const grid = document.getElementById('partnersGrid');
-            grid.innerHTML = '';
-
-            if (!partners || partners.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; color: var(--text-muted); font-size:0.85rem; padding: 15px;">لا يوجد شركاء حالياً.</p>';
-                return;
-            }
-
-            partners.forEach(partner => {
-                const card = document.createElement('div');
-                card.className = 'partner-card';
-                card.innerHTML = `
-                    <img src="${partner.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${partner.name}" class="partner-avatar">
-                    <div class="partner-info">
-                        <div class="partner-name">${partner.name}</div>
-                        ${partner.youtubeUrl ? `
-                            <a href="${partner.youtubeUrl}" target="_blank" class="btn-partner-yt">
-                                <i class="fa-brands fa-youtube"></i> يوتيوب
-                            </a>
-                        ` : ''}
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderItems(items) {
-            const grid = document.getElementById('itemsGrid');
-            grid.innerHTML = '';
-
-            const filtered = items.filter(item => {
-                const matchesCat = (currentCategory === 'all') || (item.category === currentCategory);
-                const query = document.getElementById('searchInput').value.trim().toLowerCase();
-                const matchesSearch = !query || 
-                    (item.title && item.title.toLowerCase().includes(query)) ||
-                    (item.desc && item.desc.toLowerCase().includes(query));
-                return matchesCat && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 40px; color: var(--text-muted);">لا تتوفر عناصر في هذا القسم حالياً.</p>';
-                return;
-            }
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.onclick = () => openModal(item);
-
-                card.innerHTML = `
-                    <div class="card-thumb">
-                        <img src="${item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png'}" alt="${item.title}">
-                        <span class="badge-tag">${getCategoryLabel(item.category)}</span>
-                    </div>
-                    <div class="card-details">
-                        <h3 class="card-title">${item.title}</h3>
-                        <p class="card-desc">${item.desc || 'اضغط لمشاهدة التفاصيل والوصف...'}</p>
-                        <div class="card-meta">
-                            <span><i class="fa-solid fa-code-branch" style="color:#00f2fe;"></i> ${item.version || 'v1.0'}</span>
-                            <span><i class="fa-solid fa-star" style="color:#f59e0b;"></i> ${item.rating || '4.9'}</span>
-                            <span><i class="fa-solid fa-download" style="color:#7f00ff;"></i> ${item.downloads || '1k'}</span>
-                        </div>
-                        <button class="btn-card-view">
-                            <i class="fa-solid fa-eye"></i> عرض التفاصيل والتحميل
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function openModal(item) {
-            document.getElementById('mImg').src = item.image || 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/github/github.png';
-            document.getElementById('mTitle').innerText = item.title;
-            document.getElementById('mDesc').innerText = item.desc && item.desc.trim() !== '' ? item.desc : 'لا يوجد وصف إضافي لهذا العنصر.';
-            document.getElementById('mDlBtn').href = item.url;
-            document.getElementById('mMeta').innerHTML = `
-                <span><i class="fa-solid fa-tag"></i> ${getCategoryLabel(item.category)}</span>
-                <span><i class="fa-solid fa-code-branch"></i> ${item.version || 'v1.0'}</span>
-                <span><i class="fa-solid fa-user"></i> ${item.developer || 'ALIOPZTE'}</span>
-            `;
-            document.getElementById('itemModal').classList.add('active');
-        }
-
-        function closeModal(e) {
-            if (e.target.id === 'itemModal') {
-                document.getElementById('itemModal').classList.remove('active');
-            }
-        }
-
-        function closeModalDirect() {
-            document.getElementById('itemModal').classList.remove('active');
-        }
-
-        function selectCategory(cat, btn) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderItems(allItems);
-        }
-
-        function filterItems() {
-            renderItems(allItems);
-        }
-
-        function getCategoryLabel(cat) {
-            const labels = {
-                'minecraft': 'ماين كرافت',
-                'roblox': 'روبلكس',
-                'mods': 'مودات',
-                'scripts': 'سكربتات',
-                'other-games': 'ألعاب أخرى',
-                'videos': 'فيديو'
-            };
-            return labels[cat] || cat;
-        }
-    </script>
-</body>
-</html>
+            animation

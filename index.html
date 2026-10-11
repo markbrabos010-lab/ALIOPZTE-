@@ -2,14 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- منع الزوم التلقائي وضبط العرض على قدر شاشة الهاتف تماماً -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ALIOPZTE Store | عالم الـ RGB والألعاب</title>
-    <!-- خط تجوال من Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <!-- مكتبة Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
@@ -23,33 +20,18 @@
             --accent-pink: #ff007f;
         }
 
-        html, body {
-            width: 100%;
-            max-width: 100vw;
-            overflow-x: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
+        html, body { width: 100%; max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-dark);
             background-image: 
                 radial-gradient(circle at 20% 20%, rgba(255, 0, 128, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
-            background-attachment: fixed;
-            color: var(--text-main);
-            font-family: 'Tajawal', sans-serif;
-            min-height: 100vh;
+            background-attachment: fixed; color: var(--text-main); font-family: 'Tajawal', sans-serif; min-height: 100vh;
         }
 
         * { box-sizing: border-box; }
 
-        @keyframes rgbGlowText {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        @keyframes rgbGlowText { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes rgbBorderGlow {
             0% { border-color: #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.5); }
             33% { border-color: #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.5); }
@@ -59,178 +41,78 @@
 
         .rgb-text {
             background: linear-gradient(90deg, #ff007f, #00f2fe, #7f00ff, #00ff88, #ff007f);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rgbGlowText 4s ease infinite;
+            background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgbGlowText 4s ease infinite;
         }
 
-        /* نافذة اختيار الجهاز */
-        .device-selector-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(5, 7, 14, 0.96); backdrop-filter: blur(15px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px;
-        }
+        .device-selector-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 7, 14, 0.96); backdrop-filter: blur(15px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px; }
+        .device-selector-card { background: var(--card-bg); border: 2px solid var(--accent-cyan); animation: rgbBorderGlow 4s infinite linear; border-radius: 20px; padding: 25px 15px; max-width: 420px; width: 100%; text-align: center; }
+        .device-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .device-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px 5px; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
-        .device-selector-card {
-            background: var(--card-bg);
-            border: 2px solid var(--accent-cyan);
-            animation: rgbBorderGlow 4s infinite linear;
-            border-radius: 20px; padding: 25px 15px; max-width: 420px; width: 100%;
-            text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
-        }
-
-        .device-options {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;
-        }
-
-        .device-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; padding: 15px 5px; color: #fff;
-            cursor: pointer; transition: all 0.3s ease;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-        }
-
-        .device-btn i { font-size: 1.8rem; color: var(--accent-cyan); }
-        .device-btn span { font-size: 0.85rem; font-weight: 800; }
-
-        /* الهيدر العلوي */
-        .main-header {
-            background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 15px;
-            width: 100%;
-        }
-
-        .header-container {
-            max-width: 1380px; margin: 0 auto; display: flex; align-items: center;
-            justify-content: space-between; gap: 10px; flex-wrap: wrap;
-        }
-
+        .main-header { background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 15px; width: 100%; }
+        .header-container { max-width: 1380px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
         .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .brand-icon { font-size: 1.6rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .visitor-counter-badge {
-            display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px;
-            border-radius: 12px; background: rgba(13, 18, 30, 0.95); font-size: 0.8rem; font-weight: 800;
-            color: #fff; animation: rgbBorderGlow 4s infinite linear;
-        }
-
+        .visitor-counter-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 12px; background: rgba(13, 18, 30, 0.95); font-size: 0.8rem; font-weight: 800; color: #fff; animation: rgbBorderGlow 4s infinite linear; }
         .search-box { position: relative; flex: 1; min-width: 180px; max-width: 350px; }
-        .search-box input {
-            width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9);
-            color: #fff; font-family: inherit; font-size: 0.85rem;
-        }
+        .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .btn-social {
-            display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px;
-            border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff;
-        }
+        .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; }
+        .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
+        .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
-        
-        .btn-admin {
-            background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff;
-            border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 4px;
-        }
-
-        .btn-device-change {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(0, 242, 254, 0.3);
-            color: var(--accent-cyan); padding: 6px 10px; border-radius: 8px; cursor: pointer;
-            font-size: 0.78rem; font-weight: bold; font-family: inherit;
-        }
+        .btn-admin { background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
-        .featured-banner {
-            background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15));
-            border: 2px solid transparent; animation: rgbBorderGlow 4s infinite linear;
-            border-radius: 16px; padding: 16px; margin-bottom: 16px;
-            display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap;
-        }
-
-        .featured-badge {
-            display: inline-block; background: #ff007f; color: #fff;
-            font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px;
-        }
-
+        .featured-banner { background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15)); border: 2px solid transparent; animation: rgbBorderGlow 4s infinite linear; border-radius: 16px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+        .featured-badge { display: inline-block; background: #ff007f; color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
         .featured-title { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
         .main-layout { display: flex; gap: 16px; align-items: flex-start; width: 100%; }
         .main-content { flex: 1; min-width: 0; width: 100%; }
 
-        .partners-sidebar {
-            width: 260px; background: rgba(13, 18, 30, 0.88);
-            border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 16px; padding: 14px; backdrop-filter: blur(12px);
-        }
-
-        .partners-header {
-            display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 900;
-            margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff;
-        }
-
+        .partners-sidebar { width: 260px; background: rgba(13, 18, 30, 0.88); border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 16px; padding: 14px; backdrop-filter: blur(12px); }
+        .partners-header { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 900; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff; }
         .partners-list { display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
-        .partner-card {
-            background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px;
-        }
+        .partner-card { background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px; }
         .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
-        .partner-info { flex: 1; overflow: hidden; }
-        .partner-name { font-size: 0.82rem; font-weight: 800; color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-partner-yt {
-            display: inline-flex; align-items: center; gap: 4px; padding: 3px 6px; border-radius: 6px;
-            background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; font-size: 0.68rem; text-decoration: none;
-        }
 
         .categories-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
-        .cat-btn {
-            background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap;
-        }
+        .cat-btn { background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
         .cat-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-color: transparent; font-weight: 900; }
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
-        .item-card {
-            background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease;
-        }
+        .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; }
         .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
         .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
         .card-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
         .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .card-meta { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 10px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
         .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; }
 
-        /* Modal */
+        /* Modal العام */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 16px; }
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 16px; text-align: center; }
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
-        .modal-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
-        .modal-title { font-size: 1.15rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
-        .modal-desc { font-size: 0.85rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 14px; background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 8px; }
-        
-        .rating-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 10px; margin-bottom: 12px; text-align: center; }
-        .stars-container { display: flex; justify-content: center; gap: 6px; font-size: 1.2rem; cursor: pointer; margin-bottom: 4px; }
-        .stars-container i { color: #475569; }
-        .stars-container i.selected { color: #f59e0b; }
-        .countdown-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.9rem; cursor: pointer; border: none; }
 
-        /* --- القواعد الخاصة بالأجهزة --- */
-        
-        /* 1. التابلت */
+        /* عجلة الحظ */
+        .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
+        .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
+
+        /* القواعد الخاصة بالأجهزة */
         body.device-tablet .main-layout { flex-direction: column; }
         body.device-tablet .partners-sidebar { width: 100%; }
         body.device-tablet .items-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
 
-        /* 2. الهاتف الذكي (Mobile Mode) - مانع الزوم والكبس */
         body.device-mobile .main-header { padding: 10px; }
         body.device-mobile .header-container { flex-direction: column; align-items: stretch; gap: 8px; }
         body.device-mobile .brand { justify-content: center; }
@@ -239,31 +121,20 @@
         body.device-mobile .main-layout { flex-direction: column; }
         body.device-mobile .partners-sidebar { width: 100%; }
         body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 12px; }
-        body.device-mobile .card-thumb { height: 180px; }
     </style>
 </head>
 <body>
 
-    <!-- نافذة منبثقة تفاعلية لاختيار نوع الجهاز -->
+    <!-- اختيار الجهاز -->
     <div id="deviceOverlay" class="device-selector-overlay">
         <div class="device-selector-card">
             <i class="fa-solid fa-gamepad rgb-text" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
-            <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 4px;">مرحباً بك في ALIOPZTE Store</h2>
-            <p style="color: var(--text-muted); font-size: 0.82rem;">اختر نوع جهازك لتهيئة التنسيق تلقائياً وبدون أي زوم:</p>
-            
+            <h2 style="font-size: 1.2rem; color: #fff;">مرحباً بك في ALIOPZTE Store</h2>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">اختر نوع جهازك لتهيئة التنسيق تلقائياً:</p>
             <div class="device-options">
-                <button class="device-btn" onclick="setDeviceMode('mobile')">
-                    <i class="fa-solid fa-mobile-screen-button"></i>
-                    <span>هاتف</span>
-                </button>
-                <button class="device-btn" onclick="setDeviceMode('tablet')">
-                    <i class="fa-solid fa-tablet-screen-button"></i>
-                    <span>تابلت</span>
-                </button>
-                <button class="device-btn" onclick="setDeviceMode('desktop')">
-                    <i class="fa-solid fa-desktop"></i>
-                    <span>كمبيوتر</span>
-                </button>
+                <button class="device-btn" onclick="setDeviceMode('mobile')"><i class="fa-solid fa-mobile-screen-button"></i><span>هاتف</span></button>
+                <button class="device-btn" onclick="setDeviceMode('tablet')"><i class="fa-solid fa-tablet-screen-button"></i><span>تابلت</span></button>
+                <button class="device-btn" onclick="setDeviceMode('desktop')"><i class="fa-solid fa-desktop"></i><span>كمبيوتر</span></button>
             </div>
         </div>
     </div>
@@ -276,7 +147,7 @@
                 <div class="brand-text">ALIOPZTE <span class="rgb-text">STORE</span></div>
             </a>
 
-            <div class="visitor-counter-badge" title="إجمالي زوار المتجر الحقيقي">
+            <div class="visitor-counter-badge">
                 <i class="fa-solid fa-users"></i>
                 <span>الزوار: <strong id="visitorCount" class="rgb-text">150</strong></span>
             </div>
@@ -287,28 +158,22 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-device-change" onclick="showDeviceSelector()" title="تغيير العرض المخصص للجهاز">
-                    <i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span>
-                </button>
-                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i> القناة</a>
-                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i> ديسكورد</a>
+                <button class="btn-action wheel-btn" onclick="openWheelModal()"><i class="fa-solid fa-spin fa-dharmachakra"></i> عجلة الحظ</button>
+                <button class="btn-action code-btn" onclick="openCodeModal()"><i class="fa-solid fa-key"></i> ادخل كود</button>
                 <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i> الداشبورد</a>
             </div>
         </div>
     </header>
 
     <div class="container">
-        
-        <!-- كارت "عنصر الأسبوع الرائج" -->
+        <!-- عنصر الأسبوع الرائج -->
         <div class="featured-banner">
             <div>
                 <span class="featured-badge"><i class="fa-solid fa-fire"></i> الأفضل والأكثر رواجاً</span>
-                <div class="featured-title" id="featuredTitleText">جاري تحميل العنصر الرائج...</div>
+                <div class="featured-title" id="featuredTitleText">جاري التحميل...</div>
                 <p id="featuredDescText" style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;"></p>
             </div>
-            <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="openFeaturedModal()">
-                <i class="fa-solid fa-eye"></i> التفاصيل والتحميل
-            </button>
+            <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="openFeaturedModal()"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
         </div>
 
         <div class="main-layout">
@@ -324,9 +189,7 @@
                 </nav>
 
                 <section class="content-section">
-                    <div id="itemsGrid" class="items-grid">
-                        <p style="text-align:center; width:100%; grid-column: 1/-1; padding:30px; color: var(--text-muted);">جاري تحميل المحتوى...</p>
-                    </div>
+                    <div id="itemsGrid" class="items-grid"></div>
                 </section>
             </main>
 
@@ -337,162 +200,112 @@
         </div>
     </div>
 
-    <!-- النافذة المنبثقة Modal -->
-    <div id="itemModal" class="modal-overlay" onclick="closeModal(event)">
-        <div class="modal-box" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
-            <img id="mImg" src="" alt="" class="modal-img">
-            <h2 id="mTitle" class="modal-title"></h2>
-            <div id="mMeta" style="display:flex; gap:10px; color:#00f2fe; font-weight:bold; font-size:0.8rem; margin-bottom:10px;"></div>
-            <p id="mDesc" class="modal-desc"></p>
-
-            <div class="rating-box">
-                <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:4px;">قيم هذا العنصر:</p>
-                <div class="stars-container" id="starsContainer">
-                    <i class="fa-solid fa-star" onclick="rateItem(1)"></i>
-                    <i class="fa-solid fa-star" onclick="rateItem(2)"></i>
-                    <i class="fa-solid fa-star" onclick="rateItem(3)"></i>
-                    <i class="fa-solid fa-star" onclick="rateItem(4)"></i>
-                    <i class="fa-solid fa-star" onclick="rateItem(5)"></i>
-                </div>
-                <span id="ratingMsg" style="font-size:0.72rem; color:#10b981;"></span>
+    <!-- نافذة عجلة الحظ -->
+    <div id="wheelModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:#00f2fe;"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة للحصول على هدية ومود حصري اليوم!</p>
+            
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div id="wheel" class="wheel"></div>
             </div>
 
-            <button id="mDlBtn" onclick="startDownloadTimer()" class="countdown-btn">
-                <i class="fa-solid fa-download"></i> تجهيز رابط التحميل
-            </button>
+            <button id="spinBtn" onclick="spinWheel()" class="btn-card-view" style="font-size:1rem; padding:12px;"><i class="fa-solid fa-play"></i> تدوير العجلة الآن</button>
+            <p id="wheelMsg" style="margin-top:10px; font-weight:bold; color:#00ff88; font-size:0.85rem;"></p>
+        </div>
+    </div>
+
+    <!-- نافذة كود الهدايا -->
+    <div id="codeModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('codeModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:#ff007f;"><i class="fa-solid fa-key"></i> أدخل كود الهدية</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">أدخل كود الخصم أو المود الخاص المحصل من القناة:</p>
+            
+            <input type="text" id="codeInputValue" placeholder="أدخل الكود هنا (مثال: ALI2026)" style="width:100%; padding:10px; border-radius:10px; border:1px solid #00f2fe; background:#000; color:#fff; text-align:center; font-size:1.1rem; margin-bottom:12px;">
+            
+            <button onclick="redeemCode()" class="btn-card-view" style="font-size:1rem; padding:10px;"><i class="fa-solid fa-unlock"></i> تفعيل الكود</button>
+            <p id="codeMsg" style="margin-top:10px; font-weight:bold; font-size:0.85rem;"></p>
+        </div>
+    </div>
+
+    <!-- نافذة عرض المحتوى والتحميل -->
+    <div id="itemModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('itemModal')"><i class="fa-solid fa-xmark"></i></button>
+            <img id="mImg" src="" alt="" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
+            <h2 id="mTitle" style="font-size:1.1rem; color:#fff;"></h2>
+            <p id="mDesc" style="font-size:0.82rem; color:#cbd5e1; background:rgba(0,0,0,0.4); padding:8px; border-radius:8px; margin:10px 0;"></p>
+            <button id="mDlBtn" onclick="startDownloadTimer()" class="btn-card-view"><i class="fa-solid fa-download"></i> تجهيز رابط التحميل</button>
         </div>
     </div>
 
     <script>
         let allItems = [];
         let allPartners = [];
+        let allCodes = [];
         let currentCategory = 'all';
         let activeTargetUrl = '#';
 
         document.addEventListener("DOMContentLoaded", () => {
             checkDeviceSelection();
             loadStoreData();
-            initCloudCounter();
         });
 
         function checkDeviceSelection() {
             const savedMode = localStorage.getItem("ali_device_mode");
             if (savedMode) {
-                applyDeviceMode(savedMode);
+                document.body.classList.add("device-" + savedMode);
                 document.getElementById("deviceOverlay").style.display = "none";
-            } else {
-                document.getElementById("deviceOverlay").style.display = "flex";
             }
         }
 
         function setDeviceMode(mode) {
             localStorage.setItem("ali_device_mode", mode);
-            applyDeviceMode(mode);
-            document.getElementById("deviceOverlay").style.display = "none";
-        }
-
-        function applyDeviceMode(mode) {
             document.body.classList.remove("device-mobile", "device-tablet", "device-desktop");
             document.body.classList.add("device-" + mode);
-
-            const labels = {
-                'mobile': 'هاتف',
-                'tablet': 'تابلت',
-                'desktop': 'كمبيوتر'
-            };
-            document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
-        }
-
-        function showDeviceSelector() {
-            document.getElementById("deviceOverlay").style.display = "flex";
-        }
-
-        async function initCloudCounter() {
-            try {
-                const res = await fetch('https://api.counterapi.dev/v1/aliopzte_store_global/store_visits/up');
-                if (res.ok) {
-                    const data = await res.json();
-                    document.getElementById('visitorCount').innerText = data.count || '150';
-                }
-            } catch (e) {}
+            document.getElementById("deviceOverlay").style.display = "none";
         }
 
         async function loadStoreData() {
             try {
                 const res = await fetch('data.json?t=' + new Date().getTime());
-                if (!res.ok) throw new Error();
-                
                 const data = await res.json();
                 allItems = data.items || [];
                 allPartners = data.partners || [];
-                const featuredId = data.featuredId || (allItems[0] ? allItems[0].id : null);
+                allCodes = data.codes || [];
 
                 renderItems(allItems);
                 renderPartners(allPartners);
-                setupFeaturedBanner(featuredId);
-            } catch (err) {
-                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; color:#ef4444; padding:30px;">تعذر تحميل المنتجات.</p>';
-            }
-        }
-
-        function setupFeaturedBanner(featuredId) {
-            const featuredItem = allItems.find(i => i.id == featuredId) || allItems[0];
-            if (featuredItem) {
-                document.getElementById('featuredTitleText').innerText = featuredItem.title;
-                document.getElementById('featuredDescText').innerText = featuredItem.desc || 'اضغط لمشاهدة التفاصيل وتحميل العنصر الرائج.';
-                window.featuredItemObj = featuredItem;
-            }
-        }
-
-        function openFeaturedModal() {
-            if (window.featuredItemObj) openModal(window.featuredItemObj);
+                if(allItems.length > 0) {
+                    document.getElementById('featuredTitleText').innerText = allItems[0].title;
+                    document.getElementById('featuredDescText').innerText = allItems[0].desc || '';
+                    window.featuredItemObj = allItems[0];
+                }
+            } catch (e) {}
         }
 
         function renderPartners(partners) {
             const grid = document.getElementById('partnersGrid');
             grid.innerHTML = '';
-            partners.forEach(partner => {
-                grid.innerHTML += `
-                    <div class="partner-card">
-                        <img src="${partner.image}" class="partner-avatar">
-                        <div class="partner-info">
-                            <div class="partner-name">${partner.name}</div>
-                            <a href="${partner.youtubeUrl}" target="_blank" class="btn-partner-yt"><i class="fa-brands fa-youtube"></i> يوتيوب</a>
-                        </div>
-                    </div>`;
+            partners.forEach(p => {
+                grid.innerHTML += `<div class="partner-card"><img src="${p.image}" class="partner-avatar"><div><div style="font-size:0.82rem; font-weight:bold;">${p.name}</div><a href="${p.youtubeUrl}" target="_blank" style="color:#ff4d4d; font-size:0.7rem;">يوتيوب</a></div></div>`;
             });
         }
 
         function renderItems(items) {
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = '';
-            const filtered = items.filter(item => {
-                const matchesCat = (currentCategory === 'all') || (item.category === currentCategory);
-                const query = document.getElementById('searchInput').value.trim().toLowerCase();
-                const matchesSearch = !query || item.title.toLowerCase().includes(query);
-                return matchesCat && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; grid-column: 1/-1; padding: 30px; color: var(--text-muted);">لا توجد عناصر.</p>';
-                return;
-            }
-
+            const filtered = items.filter(i => currentCategory === 'all' || i.category === currentCategory);
             filtered.forEach(item => {
                 grid.innerHTML += `
                     <div class="item-card" onclick='openModal(${JSON.stringify(item)})'>
-                        <div class="card-thumb">
-                            <img src="${item.image}">
-                            <span class="badge-tag">${item.category}</span>
-                        </div>
+                        <div class="card-thumb"><img src="${item.image}"><span class="badge-tag">${item.category}</span></div>
                         <div class="card-details">
                             <h3 class="card-title">${item.title}</h3>
                             <p class="card-desc">${item.desc || '...'}</p>
-                            <div class="card-meta">
-                                <span><i class="fa-solid fa-star" style="color:#f59e0b;"></i> ${item.rating || '4.9'}</span>
-                                <span><i class="fa-solid fa-download" style="color:#7f00ff;"></i> ${item.downloads || '1k'}</span>
-                            </div>
                             <button class="btn-card-view"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
                         </div>
                     </div>`;
@@ -503,25 +316,38 @@
             activeTargetUrl = item.url;
             document.getElementById('mImg').src = item.image;
             document.getElementById('mTitle').innerText = item.title;
-            document.getElementById('mDesc').innerText = item.desc || 'لا يوجد وصف.';
-            document.getElementById('mDlBtn').innerHTML = `<i class="fa-solid fa-download"></i> اضغط لتجهيز الرابط الآمن`;
-            document.getElementById('mDlBtn').disabled = false;
-            resetStars();
+            document.getElementById('mDesc').innerText = item.desc || '';
             document.getElementById('itemModal').classList.add('active');
         }
 
-        function rateItem(stars) {
-            const starElements = document.querySelectorAll('#starsContainer i');
-            starElements.forEach((el, index) => {
-                if (index < stars) el.classList.add('selected');
-                else el.classList.remove('selected');
-            });
-            document.getElementById('ratingMsg').innerText = `شكراً لتقييمك! (${stars}/5 نجوم)`;
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openWheelModal() { document.getElementById('wheelModal').classList.add('active'); }
+        function openCodeModal() { document.getElementById('codeModal').classList.add('active'); }
+        function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
+
+        function spinWheel() {
+            const wheel = document.getElementById('wheel');
+            const deg = 1440 + Math.floor(Math.random() * 360);
+            wheel.style.transform = `rotate(${deg}deg)`;
+            document.getElementById('spinBtn').disabled = true;
+
+            setTimeout(() => {
+                document.getElementById('wheelMsg').innerText = "🎉 مبروك! فزت بمود حصري لهذا اليوم!";
+            }, 4000);
         }
 
-        function resetStars() {
-            document.querySelectorAll('#starsContainer i').forEach(el => el.classList.remove('selected'));
-            document.getElementById('ratingMsg').innerText = '';
+        function redeemCode() {
+            const val = document.getElementById('codeInputValue').value.trim();
+            const found = allCodes.find(c => c.code.toLowerCase() === val.toLowerCase());
+            const msg = document.getElementById('codeMsg');
+
+            if (found) {
+                msg.style.color = "#00ff88";
+                msg.innerHTML = `✅ كود صحيح! <a href="${found.url}" target="_blank" style="color:#00f2fe; text-decoration:underline;">اضغط هنا لفتح الملف الخاص</a>`;
+            } else {
+                msg.style.color = "#ef4444";
+                msg.innerText = "❌ الكود غير صحيح أو منتهي الصلاحية!";
+            }
         }
 
         function startDownloadTimer() {
@@ -529,7 +355,7 @@
             btn.disabled = true;
             let seconds = 5;
             const timer = setInterval(() => {
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> تجهيز الرابط خلال ${seconds} ثوانٍ...`;
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> تجهيز الرابط خلال ${seconds}ث...`;
                 seconds--;
                 if (seconds < 0) {
                     clearInterval(timer);
@@ -540,15 +366,12 @@
             }, 1000);
         }
 
-        function closeModal(e) { if (e.target.id === 'itemModal') document.getElementById('itemModal').classList.remove('active'); }
-        function closeModalDirect() { document.getElementById('itemModal').classList.remove('active'); }
         function selectCategory(cat, btn) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderItems(allItems);
         }
-        function filterItems() { renderItems(allItems); }
     </script>
 </body>
 </html>

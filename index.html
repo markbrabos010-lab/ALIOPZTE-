@@ -64,8 +64,6 @@
         .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; }
         .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
-        .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
-        .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
         .btn-admin { background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
@@ -97,7 +95,7 @@
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; }
 
-        /* Modal العام */
+        /* Modal */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
         .modal-box { background: #0d121e; border: 2px solid transparent; animation: rgbBorderGlow 3s infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 16px; text-align: center; }
@@ -107,6 +105,30 @@
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
+
+        /* المساعد الذكي العائم AI Widget */
+        .ai-widget-btn {
+            position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px;
+            border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #7f00ff);
+            border: 2px solid #fff; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+            display: flex; align-items: center; justify-content: center; color: #fff;
+            font-size: 1.5rem; cursor: pointer; z-index: 3000; animation: rgbBorderGlow 3s infinite linear;
+        }
+
+        .ai-chat-box {
+            position: fixed; bottom: 85px; right: 20px; width: 330px; height: 420px;
+            background: #0d121e; border: 2px solid var(--accent-cyan); border-radius: 18px;
+            display: none; flex-direction: column; overflow: hidden; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .ai-chat-box.active { display: flex; }
+        .ai-chat-header { background: rgba(0, 242, 254, 0.1); padding: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
+        .ai-chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; }
+        .ai-msg { padding: 8px 12px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
+        .ai-msg.bot { background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.3); align-self: flex-start; color: #fff; }
+        .ai-msg.user { background: linear-gradient(90deg, #ff007f, #7f00ff); align-self: flex-end; color: #fff; }
+        .ai-chat-input { display: flex; padding: 8px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.1); }
+        .ai-chat-input input { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #1e293b; color: #fff; font-size: 0.8rem; }
+        .ai-chat-input button { background: var(--accent-cyan); color: #000; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; margin-right: 6px; cursor: pointer; }
 
         /* القواعد الخاصة بالأجهزة */
         body.device-tablet .main-layout { flex-direction: column; }
@@ -200,12 +222,28 @@
         </div>
     </div>
 
-    <!-- نافذة عجلة الحظ -->
+    <!-- المساعد الذكي AI Chat Widget -->
+    <div class="ai-widget-btn" onclick="toggleAIChat()"><i class="fa-solid fa-robot"></i></div>
+    <div id="aiChatBox" class="ai-chat-box">
+        <div class="ai-chat-header">
+            <span><i class="fa-solid fa-robot rgb-text"></i> مساعد ALIOPZTE الذكي</span>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleAIChat()"></i>
+        </div>
+        <div id="aiMessages" class="ai-chat-messages">
+            <div class="ai-msg bot">مرحباً بك! أنا مساعد ALIOPZTE الذكي. كيف يمكنني مساعدتك في تركيب المودات أو التحميل اليوم؟</div>
+        </div>
+        <div class="ai-chat-input">
+            <input type="text" id="aiInput" placeholder="اكتب سؤالك هنا..." onkeypress="handleAIPress(event)">
+            <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- نافذة عجلة الحظ (مع القفل اليومي 24 ساعة) -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
             <h2 style="color:#00f2fe;"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
-            <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة للحصول على هدية ومود حصري اليوم!</p>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة مرة واحدة يومياً للحصول على الجوائز!</p>
             
             <div class="wheel-container">
                 <div class="wheel-pointer"></div>
@@ -213,7 +251,7 @@
             </div>
 
             <button id="spinBtn" onclick="spinWheel()" class="btn-card-view" style="font-size:1rem; padding:12px;"><i class="fa-solid fa-play"></i> تدوير العجلة الآن</button>
-            <p id="wheelMsg" style="margin-top:10px; font-weight:bold; color:#00ff88; font-size:0.85rem;"></p>
+            <p id="wheelMsg" style="margin-top:10px; font-weight:bold; font-size:0.85rem;"></p>
         </div>
     </div>
 
@@ -246,12 +284,14 @@
         let allItems = [];
         let allPartners = [];
         let allCodes = [];
+        let allWheelPrizes = [];
         let currentCategory = 'all';
         let activeTargetUrl = '#';
 
         document.addEventListener("DOMContentLoaded", () => {
             checkDeviceSelection();
             loadStoreData();
+            checkWheelStatus();
         });
 
         function checkDeviceSelection() {
@@ -276,6 +316,7 @@
                 allItems = data.items || [];
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
+                allWheelPrizes = data.wheelPrizes || ["مود ماينكرافت حصري", "سكربت روبلكس نادرة", "خصم خاص", "حظ سعيد المرة القادمة"];
 
                 renderItems(allItems);
                 renderPartners(allPartners);
@@ -312,6 +353,61 @@
             });
         }
 
+        /* قفل عجلة الحظ لمدة 24 ساعة ومنع الريفرش */
+        function checkWheelStatus() {
+            const lastSpin = localStorage.getItem("ali_last_spin");
+            const now = new Date().getTime();
+            if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) {
+                const hoursLeft = Math.ceil((24 * 60 * 60 * 1000 - (now - lastSpin)) / (1000 * 60 * 60));
+                document.getElementById('spinBtn').disabled = true;
+                document.getElementById('wheelMsg').style.color = "#ff4d4d";
+                document.getElementById('wheelMsg').innerText = `🔒 لقد استخدمت العجلة اليوم! عد بعد ${hoursLeft} ساعة.`;
+            }
+        }
+
+        function spinWheel() {
+            const lastSpin = localStorage.getItem("ali_last_spin");
+            const now = new Date().getTime();
+            if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) return;
+
+            const wheel = document.getElementById('wheel');
+            const deg = 1440 + Math.floor(Math.random() * 360);
+            wheel.style.transform = `rotate(${deg}deg)`;
+            document.getElementById('spinBtn').disabled = true;
+
+            localStorage.setItem("ali_last_spin", now);
+
+            setTimeout(() => {
+                const prize = allWheelPrizes[Math.floor(Math.random() * allWheelPrizes.length)];
+                document.getElementById('wheelMsg').style.color = "#00ff88";
+                document.getElementById('wheelMsg').innerText = "🎉 مبروك! فزت بـ: " + prize;
+            }, 4000);
+        }
+
+        /* المساعد الذكي AI Chat */
+        function toggleAIChat() { document.getElementById('aiChatBox').classList.toggle('active'); }
+        function handleAIPress(e) { if(e.key === 'Enter') sendAIMessage(); }
+        
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const txt = input.value.trim();
+            if(!txt) return;
+
+            const msgs = document.getElementById('aiMessages');
+            msgs.innerHTML += `<div class="ai-msg user">${txt}</div>`;
+            input.value = '';
+
+            setTimeout(() => {
+                let reply = "يمكنك التوجه لتبويب الألعاب وتنزيل أحدث الملفات بضغطة زر مباشرة!";
+                if(txt.includes("ماين") || txt.includes("مود")) reply = "لتثبيت مودات ماين كرافت: حمل ملف المود وافتحه عبر تطبيق Minecraft مباشرة!";
+                if(txt.includes("روبلكس") || txt.includes("سكربت")) reply = "لتشغيل سكربتات روبلكس: انسخ السكربت من زر التحميل واستخدم المحاقن المعتمدة لديك.";
+                if(txt.includes("كود") || txt.includes("هدية")) reply = "اضغط على زر (ادخل كود) في أعلى الموقع واكتب الكود الخاص بك للحصول على الملف!";
+                
+                msgs.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
+                msgs.scrollTop = msgs.scrollHeight;
+            }, 600);
+        }
+
         function openModal(item) {
             activeTargetUrl = item.url;
             document.getElementById('mImg').src = item.image;
@@ -324,17 +420,6 @@
         function openWheelModal() { document.getElementById('wheelModal').classList.add('active'); }
         function openCodeModal() { document.getElementById('codeModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
-
-        function spinWheel() {
-            const wheel = document.getElementById('wheel');
-            const deg = 1440 + Math.floor(Math.random() * 360);
-            wheel.style.transform = `rotate(${deg}deg)`;
-            document.getElementById('spinBtn').disabled = true;
-
-            setTimeout(() => {
-                document.getElementById('wheelMsg').innerText = "🎉 مبروك! فزت بمود حصري لهذا اليوم!";
-            }, 4000);
-        }
 
         function redeemCode() {
             const val = document.getElementById('codeInputValue').value.trim();

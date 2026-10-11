@@ -20,6 +20,12 @@
             --accent-pink: #ff007f;
         }
 
+        /* الثيمات الملونة للـ RGB */
+        body.theme-cyan { --accent-cyan: #00f2fe; --accent-purple: #7f00ff; --accent-pink: #ff007f; }
+        body.theme-pink { --accent-cyan: #ff007f; --accent-purple: #9333ea; --accent-pink: #00f2fe; }
+        body.theme-green { --accent-cyan: #00ff88; --accent-purple: #047857; --accent-pink: #34d399; }
+        body.theme-gold { --accent-cyan: #f59e0b; --accent-purple: #b45309; --accent-pink: #fbbf24; }
+
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-dark);
@@ -33,46 +39,53 @@
 
         @keyframes rgbGlowText { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes rgbBorderGlow {
-            0% { border-color: #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.5); }
-            33% { border-color: #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.5); }
-            66% { border-color: #7f00ff; box-shadow: 0 0 15px rgba(127, 0, 255, 0.5); }
-            100% { border-color: #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.5); }
+            0% { border-color: var(--accent-pink); box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
+            50% { border-color: var(--accent-cyan); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+            100% { border-color: var(--accent-pink); box-shadow: 0 0 15px rgba(255, 0, 127, 0.4); }
         }
 
         .rgb-text {
-            background: linear-gradient(90deg, #ff007f, #00f2fe, #7f00ff, #00ff88, #ff007f);
+            background: linear-gradient(90deg, var(--accent-pink), var(--accent-cyan), var(--accent-purple), var(--accent-pink));
             background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgbGlowText 4s ease infinite;
         }
 
-        /* نافذة اختيار الجهاز وقوانين الحقوق */
+        /* نافذة حقوق النشر وتحديد الجهاز */
         .device-selector-overlay, .copyright-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 7, 14, 0.96); backdrop-filter: blur(15px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px; }
         .device-selector-card, .copyright-card { background: var(--card-bg); border: 2px solid var(--accent-cyan); animation: rgbBorderGlow 4s infinite linear; border-radius: 20px; padding: 25px 20px; max-width: 450px; width: 100%; text-align: center; }
         .device-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .device-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px 5px; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
+        /* الهيدر العلوي */
         .main-header { background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 15px; width: 100%; }
         .header-container { max-width: 1380px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
         .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .brand-icon { font-size: 1.6rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
+        .brand-icon { font-size: 1.6rem; color: var(--accent-cyan); filter: drop-shadow(0 0 8px var(--accent-cyan)); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 320px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
         .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; }
-        .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
-        .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
+        .btn-action.code-btn { background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple)); }
+        .btn-action.wheel-btn { background: linear-gradient(90deg, var(--accent-cyan), #00ff88); color: #000; font-weight: 900; }
+        .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
         .btn-social { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
-        .btn-admin { background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
+        .btn-admin { background: linear-gradient(90deg, var(--accent-pink), var(--accent-purple), var(--accent-cyan)); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
+        .btn-theme { background: rgba(255,255,255,0.08); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; }
+
+        /* شريط الأخبار والتنبيهات المتحرك */
+        .news-ticker-bar { background: rgba(13, 18, 30, 0.9); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 8px 0; overflow: hidden; white-space: nowrap; width: 100%; font-size: 0.85rem; color: #cbd5e1; }
+        .news-ticker-content { display: inline-block; animation: tickerScroll 25s linear infinite; padding-left: 100%; }
+        @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
         .featured-banner { background: linear-gradient(135deg, rgba(255, 0, 127, 0.15), rgba(0, 242, 254, 0.15)); border: 2px solid transparent; animation: rgbBorderGlow 4s infinite linear; border-radius: 16px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
-        .featured-badge { display: inline-block; background: #ff007f; color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
+        .featured-badge { display: inline-block; background: var(--accent-pink); color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
         .featured-title { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
         .main-layout { display: flex; gap: 16px; align-items: flex-start; width: 100%; }
@@ -82,21 +95,26 @@
         .partners-header { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 900; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff; }
         .partners-list { display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
         .partner-card { background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px; }
-        .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
+        .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-cyan); }
 
         .categories-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
         .cat-btn { background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
-        .cat-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-color: transparent; font-weight: 900; }
+        .cat-btn.active { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); color: #fff; border-color: transparent; font-weight: 900; }
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
-        .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; }
+        .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; position: relative; }
         .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
         .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
+        
+        /* زر المفضلة ❤️ على الكارت */
+        .btn-card-fav { position: absolute; top: 8px; left: 8px; background: rgba(5, 7, 14, 0.8); border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; font-size: 0.9rem; }
+        .btn-card-fav.active { color: #ef4444; }
+
         .card-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
         .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; }
+        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink)); color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; }
 
         /* Modal العام */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
@@ -106,21 +124,8 @@
 
         /* عجلة الحظ */
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--accent-cyan); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
-
-        /* المساعد الذكي AI Chat Widget */
-        .ai-widget-btn { position: fixed; bottom: 20px; right: 20px; width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #00f2fe, #7f00ff); border: 2px solid #fff; box-shadow: 0 0 20px rgba(0, 242, 254, 0.6); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.5rem; cursor: pointer; z-index: 3000; animation: rgbBorderGlow 3s infinite linear; }
-        .ai-chat-box { position: fixed; bottom: 85px; right: 20px; width: 330px; height: 420px; background: #0d121e; border: 2px solid var(--accent-cyan); border-radius: 18px; display: none; flex-direction: column; overflow: hidden; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .ai-chat-box.active { display: flex; }
-        .ai-chat-header { background: rgba(0, 242, 254, 0.1); padding: 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: bold; }
-        .ai-chat-messages { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; }
-        .ai-msg { padding: 8px 12px; border-radius: 10px; max-width: 85%; line-height: 1.4; }
-        .ai-msg.bot { background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.3); align-self: flex-start; color: #fff; }
-        .ai-msg.user { background: linear-gradient(90deg, #ff007f, #7f00ff); align-self: flex-end; color: #fff; }
-        .ai-chat-input { display: flex; padding: 8px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255,255,255,0.1); }
-        .ai-chat-input input { flex: 1; padding: 8px; border-radius: 8px; border: none; background: #1e293b; color: #fff; font-size: 0.8rem; }
-        .ai-chat-input button { background: var(--accent-cyan); color: #000; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; margin-right: 6px; cursor: pointer; }
 
         /* القواعد الخاصة بالأجهزة */
         body.device-tablet .main-layout { flex-direction: column; }
@@ -137,17 +142,17 @@
         body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 12px; }
     </style>
 </head>
-<body>
+<body class="theme-cyan">
 
-    <!-- نافذة قوانين حقوق الطبع والنشر (تظهر عند الدخول أول مرة) -->
+    <!-- نافذة قوانين حقوق الطبع والنشر -->
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
         <div class="copyright-card">
             <i class="fa-solid fa-shield-halved rgb-text" style="font-size: 2.8rem; margin-bottom: 12px;"></i>
             <h2 style="font-size: 1.25rem; color: #fff; margin-bottom: 8px;">قوانين وحقوق النشر (ALIOPZTE)</h2>
             <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.6; text-align: right; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
-                مرحباً بك! يرجى العلم أن جميع المحتويات، المودات، والملفات الموجودة في هذا المتجر محمية بحقوق طبع ونشر خاصة.<br><br>
+                مرحباً بك! يرجى العلم أن جميع المحتويات والمودات هنا محمية:<br><br>
                 • **يُمنع منعاً باتاً** إعادة نشر أو استخلاص محتوى الموقع دون **أخذ إذن مسبق**.<br>
-                • يجب **ذكر المصدر الأساسي (ALIOPZTE Store)** بشكل واضح عند استخدام أو مشاركة أي محتوى.
+                • يجب **ذكر المصدر الأساسي (ALIOPZTE Store)** عند مشاركة أي محتوى.
             </p>
             <button onclick="acceptCopyright()" class="btn-card-view" style="font-size: 1rem; padding: 12px;">
                 <i class="fa-solid fa-check"></i> أوافق وأقر بالشروط
@@ -155,7 +160,7 @@
         </div>
     </div>
 
-    <!-- اختيار الجهاز -->
+    <!-- تحديد الجهاز -->
     <div id="deviceOverlay" class="device-selector-overlay" style="display:none;">
         <div class="device-selector-card">
             <i class="fa-solid fa-gamepad rgb-text" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
@@ -169,7 +174,7 @@
         </div>
     </div>
 
-    <!-- الهيدر العلوي (مع أزرار الديسكورد واليوتيوب في الأعلى) -->
+    <!-- الهيدر العلوي -->
     <header class="main-header">
         <div class="header-container">
             <a href="index.html" class="brand">
@@ -183,14 +188,23 @@
             </div>
 
             <div class="header-actions">
-                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i> القناة</a>
-                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i> ديسكورد</a>
-                <button class="btn-action wheel-btn" onclick="openWheelModal()"><i class="fa-solid fa-spin fa-dharmachakra"></i> الحظ</button>
+                <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i></a>
+                <button class="btn-action wheel-btn" onclick="openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
                 <button class="btn-action code-btn" onclick="openCodeModal()"><i class="fa-solid fa-key"></i> كود</button>
-                <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i> الداشبورد</a>
+                <button class="btn-action fav-btn" onclick="toggleWishlistFilter()"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> (<span id="favCount">0</span>)</button>
+                <button class="btn-theme" onclick="cycleTheme()" title="تغيير لون النيون RGB"><i class="fa-solid fa-palette"></i></button>
+                <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i></a>
             </div>
         </div>
     </header>
+
+    <!-- شريط الأخبار المتحرك -->
+    <div class="news-ticker-bar">
+        <div class="news-ticker-content" id="newsTickerText">
+            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | لا تنسَ الانضمام لسرير الديسكورد والاشتراك في القناة!
+        </div>
+    </div>
 
     <div class="container">
         <!-- عنصر الأسبوع الرائج -->
@@ -227,27 +241,11 @@
         </div>
     </div>
 
-    <!-- المساعد الذكي AI Chat Widget -->
-    <div class="ai-widget-btn" onclick="toggleAIChat()"><i class="fa-solid fa-robot"></i></div>
-    <div id="aiChatBox" class="ai-chat-box">
-        <div class="ai-chat-header">
-            <span><i class="fa-solid fa-robot rgb-text"></i> مساعد ALIOPZTE الذكي</span>
-            <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="toggleAIChat()"></i>
-        </div>
-        <div id="aiMessages" class="ai-chat-messages">
-            <div class="ai-msg bot">مرحباً بك! أنا مساعد ALIOPZTE الذكي. كيف يمكنني مساعدتك في تركيب المودات أو التحميل اليوم؟</div>
-        </div>
-        <div class="ai-chat-input">
-            <input type="text" id="aiInput" placeholder="اكتب سؤالك هنا..." onkeypress="handleAIPress(event)">
-            <button onclick="sendAIMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
-
     <!-- نافذة عجلة الحظ -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:#00f2fe;"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
+            <h2 style="color:var(--accent-cyan);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
             <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة مرة واحدة يومياً للحصول على الجوائز!</p>
             
             <div class="wheel-container">
@@ -264,10 +262,10 @@
     <div id="codeModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('codeModal')"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:#ff007f;"><i class="fa-solid fa-key"></i> أدخل كود الهدية</h2>
+            <h2 style="color:var(--accent-pink);"><i class="fa-solid fa-key"></i> أدخل كود الهدية</h2>
             <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">أدخل كود الخصم أو المود الخاص المحصل من القناة:</p>
             
-            <input type="text" id="codeInputValue" placeholder="أدخل الكود هنا (مثال: ALI2026)" style="width:100%; padding:10px; border-radius:10px; border:1px solid #00f2fe; background:#000; color:#fff; text-align:center; font-size:1.1rem; margin-bottom:12px;">
+            <input type="text" id="codeInputValue" placeholder="أدخل الكود هنا (مثال: ALI2026)" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--accent-cyan); background:#000; color:#fff; text-align:center; font-size:1.1rem; margin-bottom:12px;">
             
             <button onclick="redeemCode()" class="btn-card-view" style="font-size:1rem; padding:10px;"><i class="fa-solid fa-unlock"></i> تفعيل الكود</button>
             <p id="codeMsg" style="margin-top:10px; font-weight:bold; font-size:0.85rem;"></p>
@@ -292,17 +290,34 @@
         let allWheelPrizes = [];
         let currentCategory = 'all';
         let activeTargetUrl = '#';
+        let viewingWishlist = false;
+        let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
         document.addEventListener("DOMContentLoaded", () => {
             checkCopyrightAgreement();
             loadStoreData();
             checkWheelStatus();
+            updateWishlistCount();
+            initTheme();
         });
 
-        /* التحقق من موافقة حقوق الطبع والنشر */
+        /* ثيمات الألوان RGB */
+        function initTheme() {
+            const savedTheme = localStorage.getItem("ali_theme") || "theme-cyan";
+            document.body.className = savedTheme;
+        }
+
+        function cycleTheme() {
+            const themes = ["theme-cyan", "theme-pink", "theme-green", "theme-gold"];
+            const current = localStorage.getItem("ali_theme") || "theme-cyan";
+            const nextIdx = (themes.indexOf(current) + 1) % themes.length;
+            const newTheme = themes[nextIdx];
+            localStorage.setItem("ali_theme", newTheme);
+            document.body.className = newTheme;
+        }
+
         function checkCopyrightAgreement() {
-            const accepted = localStorage.getItem("ali_copyright_accepted");
-            if (!accepted) {
+            if (!localStorage.getItem("ali_copyright_accepted")) {
                 document.getElementById("copyrightOverlay").style.display = "flex";
             } else {
                 checkDeviceSelection();
@@ -340,6 +355,10 @@
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
                 allWheelPrizes = data.wheelPrizes || ["مود ماينكرافت حصري", "سكربت روبلكس نادرة", "خصم خاص", "حظ سعيد المرة القادمة"];
+                
+                if (data.newsTicker) {
+                    document.getElementById('newsTickerText').innerText = data.newsTicker;
+                }
 
                 renderItems(allItems);
                 renderPartners(allPartners);
@@ -362,18 +381,52 @@
         function renderItems(items) {
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = '';
-            const filtered = items.filter(i => currentCategory === 'all' || i.category === currentCategory);
+            
+            let filtered = items.filter(i => {
+                const matchesCat = (currentCategory === 'all') || (i.category === currentCategory);
+                const matchesWishlist = !viewingWishlist || wishlist.includes(i.id);
+                return matchesCat && matchesWishlist;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:var(--text-muted);">لا توجد عناصر مطابقة.</p>';
+                return;
+            }
+
             filtered.forEach(item => {
+                const isFav = wishlist.includes(item.id);
                 grid.innerHTML += `
-                    <div class="item-card" onclick='openModal(${JSON.stringify(item)})'>
-                        <div class="card-thumb"><img src="${item.image}"><span class="badge-tag">${item.category}</span></div>
-                        <div class="card-details">
+                    <div class="item-card">
+                        <button class="btn-card-fav ${isFav ? 'active' : ''}" onclick="toggleWishlist(event, ${item.id})"><i class="fa-solid fa-heart"></i></button>
+                        <div class="card-thumb" onclick='openModal(${JSON.stringify(item)})'><img src="${item.image}"><span class="badge-tag">${item.category}</span></div>
+                        <div class="card-details" onclick='openModal(${JSON.stringify(item)})'>
                             <h3 class="card-title">${item.title}</h3>
                             <p class="card-desc">${item.desc || '...'}</p>
                             <button class="btn-card-view"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
                         </div>
                     </div>`;
             });
+        }
+
+        function toggleWishlist(e, id) {
+            e.stopPropagation();
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(itemId => itemId !== id);
+            } else {
+                wishlist.push(id);
+            }
+            localStorage.setItem("ali_wishlist", JSON.stringify(wishlist));
+            updateWishlistCount();
+            renderItems(allItems);
+        }
+
+        function updateWishlistCount() {
+            document.getElementById('favCount').innerText = wishlist.length;
+        }
+
+        function toggleWishlistFilter() {
+            viewingWishlist = !viewingWishlist;
+            renderItems(allItems);
         }
 
         function checkWheelStatus() {
@@ -406,29 +459,6 @@
             }, 4000);
         }
 
-        function toggleAIChat() { document.getElementById('aiChatBox').classList.toggle('active'); }
-        function handleAIPress(e) { if(e.key === 'Enter') sendAIMessage(); }
-        
-        function sendAIMessage() {
-            const input = document.getElementById('aiInput');
-            const txt = input.value.trim();
-            if(!txt) return;
-
-            const msgs = document.getElementById('aiMessages');
-            msgs.innerHTML += `<div class="ai-msg user">${txt}</div>`;
-            input.value = '';
-
-            setTimeout(() => {
-                let reply = "يمكنك التوجه لتبويب الألعاب وتنزيل أحدث الملفات بضغطة زر مباشرة!";
-                if(txt.includes("ماين") || txt.includes("مود")) reply = "لتثبيت مودات ماين كرافت: حمل ملف المود وافتحه عبر تطبيق Minecraft مباشرة!";
-                if(txt.includes("روبلكس") || txt.includes("سكربت")) reply = "لتشغيل سكربتات روبلكس: انسخ السكربت من زر التحميل واستخدم المحاقن المعتمدة لديك.";
-                if(txt.includes("كود") || txt.includes("هدية")) reply = "اضغط على زر (كود) في أعلى الموقع واكتب الكود الخاص بك للحصول على الملف!";
-                
-                msgs.innerHTML += `<div class="ai-msg bot">${reply}</div>`;
-                msgs.scrollTop = msgs.scrollHeight;
-            }, 600);
-        }
-
         function openModal(item) {
             activeTargetUrl = item.url;
             document.getElementById('mImg').src = item.image;
@@ -449,7 +479,7 @@
 
             if (found) {
                 msg.style.color = "#00ff88";
-                msg.innerHTML = `✅ كود صحيح! <a href="${found.url}" target="_blank" style="color:#00f2fe; text-decoration:underline;">اضغط هنا لفتح الملف الخاص</a>`;
+                msg.innerHTML = `✅ كود صحيح! <a href="${found.url}" target="_blank" style="color:var(--accent-cyan); text-decoration:underline;">اضغط هنا لفتح الملف الخاص</a>`;
             } else {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ الكود غير صحيح أو منتهي الصلاحية!";
@@ -474,10 +504,13 @@
 
         function selectCategory(cat, btn) {
             currentCategory = cat;
+            viewingWishlist = false;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderItems(allItems);
         }
+
+        function filterItems() { renderItems(allItems); }
     </script>
 </body>
 </html>

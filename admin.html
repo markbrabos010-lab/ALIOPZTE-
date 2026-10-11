@@ -28,6 +28,7 @@
         .login-card {
             background: var(--card-bg); border: 2px solid var(--accent-cyan);
             border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
         }
 
         .admin-container {
@@ -68,13 +69,16 @@
 </head>
 <body>
 
+    <!-- شاشة قفل الباسورد بدون إظهار أي رموز -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
             <i class="fa-solid fa-shield-halved" style="font-size: 2.8rem; color: var(--accent-cyan); margin-bottom: 15px;"></i>
             <h2>لوحة تحكم <span style="color:var(--accent-cyan)">ALIOPZTE</span></h2>
-            <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:20px;">أدخل كلمة السر (19861986)</p>
+            <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:20px;">أدخل كلمة السر الخاصة للوصول</p>
             <form onsubmit="checkPassword(event)">
-                <div class="form-group"><input type="password" id="passInput" placeholder="أدخل كلمة السر..." required style="text-align:center;"></div>
+                <div class="form-group">
+                    <input type="password" id="passInput" placeholder="أدخل كلمة السر..." required style="text-align:center;">
+                </div>
                 <button type="submit" class="btn-submit">دخول الداشبورد</button>
             </form>
         </div>
@@ -88,7 +92,6 @@
 
         <div class="form-group"><label><i class="fa-solid fa-key"></i> توكن GitHub</label><input type="password" id="ghToken" placeholder="الصق التوكن هنا..."></div>
 
-        <!-- اختيار العنصر الأفضل/الرائج لعرضه في واجهة المتجر -->
         <div class="form-group" style="background: rgba(0,242,254,0.05); padding: 15px; border-radius: 12px; border: 1px solid var(--accent-cyan);">
             <label><i class="fa-solid fa-fire" style="color:#ff007f"></i> تحديد العنصر الرائج (الأفضل هذا الأسبوع في الواجهة)</label>
             <select id="featuredSelect" onchange="updateFeaturedItem()" style="font-weight:bold; color:#00f2fe;">
@@ -102,7 +105,6 @@
             <button class="tab-btn" onclick="switchTab('partnersTab', this)">روم الشراكات</button>
         </div>
 
-        <!-- تبويب الألعاب -->
         <div id="itemsTab" class="tab-content active">
             <h2 id="itemFormTitle">إضافة / تعديل عنصر</h2>
             <form id="itemForm" onsubmit="handleItemSave(event)">
@@ -128,7 +130,6 @@
             <div class="list-section"><h3>العناصر الحالية:</h3><div id="itemsList"></div></div>
         </div>
 
-        <!-- تبويب الفيديوهات -->
         <div id="videosTab" class="tab-content">
             <h2 id="vidFormTitle">إضافة / تعديل فيديو</h2>
             <form id="videoForm" onsubmit="handleVideoSave(event)">
@@ -145,7 +146,6 @@
             <div class="list-section"><h3>الفيديوهات الحالية:</h3><div id="videosList"></div></div>
         </div>
 
-        <!-- تبويب الشراكات -->
         <div id="partnersTab" class="tab-content">
             <h2 id="partnerFormTitle">إضافة شريك</h2>
             <form id="partnerForm" onsubmit="handlePartnerSave(event)">

@@ -145,7 +145,6 @@
 </head>
 <body>
 
-    <!-- نافذة إشعار التحديثات الجديدة -->
     <div id="notificationOverlay" class="notification-overlay" style="display:none;">
         <div class="notification-card">
             <i class="fa-solid fa-bell rgb-text" style="font-size: 2.8rem; margin-bottom: 12px;"></i>
@@ -159,7 +158,6 @@
         </div>
     </div>
 
-    <!-- نافذة قوانين حقوق الطبع والنشر -->
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
         <div class="copyright-card">
             <i class="fa-solid fa-shield-halved rgb-text" style="font-size: 2.8rem; margin-bottom: 12px;"></i>
@@ -175,7 +173,6 @@
         </div>
     </div>
 
-    <!-- نافذة اختيار الجهاز -->
     <div id="deviceOverlay" class="device-selector-overlay" style="display:none;">
         <div class="device-selector-card">
             <i class="fa-solid fa-gamepad rgb-text" style="font-size: 2.5rem; margin-bottom: 10px;"></i>
@@ -189,7 +186,6 @@
         </div>
     </div>
 
-    <!-- الهيدر العلوي -->
     <header class="main-header">
         <div class="header-container">
             <a href="index.html" class="brand">
@@ -217,7 +213,6 @@
         </div>
     </header>
 
-    <!-- شريط الأخبار المتحرك -->
     <div class="news-ticker-bar">
         <div class="news-ticker-content" id="newsTickerText">
             🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | لا تنسَ الانضمام لسرير الديسكورد والاشتراك في القناة!
@@ -225,7 +220,6 @@
     </div>
 
     <div class="container">
-        <!-- عنصر الأسبوع الرائج -->
         <div class="featured-banner">
             <div>
                 <span class="featured-badge"><i class="fa-solid fa-fire"></i> الأفضل والأكثر رواجاً</span>
@@ -259,7 +253,6 @@
         </div>
     </div>
 
-    <!-- نافذة عجلة الحظ -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -276,7 +269,6 @@
         </div>
     </div>
 
-    <!-- نافذة كود الهدايا -->
     <div id="codeModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('codeModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -290,7 +282,6 @@
         </div>
     </div>
 
-    <!-- نافذة عرض المحتوى والتحميل -->
     <div id="itemModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('itemModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -331,7 +322,6 @@
             updateWishlistCount();
         });
 
-        // طلب إذن الإشعارات الرسمي من متصفح الهاتف
         function requestNotificationPermission() {
             if (!("Notification" in window)) {
                 alert("متصفحك لا يدعم إشعارات النظام.");
@@ -345,14 +335,14 @@
                     });
                     alert("✅ تم منح إذن الإشعارات بنجاح!");
                 } else {
-                    alert("❌ تم رفض إذن الإشعارات. يمكنك تفعيله لاحقاً من إعدادات المتصفح.");
+                    alert("❌ تم رفض إذن الإشعارات.");
                 }
             });
         }
 
         function installPWA() {
             if (isIOS) {
-                alert("لتثبيت التطبيق على الآيفون (Safari):\n1. اضغط على زر المشاركة (Share) ⎋ في الأسفل.\n2. انزل لأسفل واضغط على 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+                alert("لتثبيت التطبيق على الآيفون (Safari):\n1. اضغط على زر المشاركة ⎋ في الأسفل.\n2. انزل لأسفل واضغط على 'إضافة إلى الشاشة الرئيسية'.");
             } else if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
@@ -362,7 +352,7 @@
                     deferredPrompt = null;
                 });
             } else {
-                alert("للتثبيت: اضغط على القائمة (النقاط الثلاث في المتصفح) ثم اختر 'إضافة إلى الشاشة الرئيسية'.");
+                alert("للتثبيت: اضغط على القائمة ثم اختر 'إضافة إلى الشاشة الرئيسية'.");
             }
         }
 
@@ -424,41 +414,36 @@
             document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
         }
 
+        // تحميل البيانات بطلب مباشر يُسقط التخزين المؤقت للـ Cache
         async function loadStoreData() {
             try {
-                const res = await fetch('data.json?t=' + new Date().getTime());
+                const res = await fetch('data.json?nocache=' + new Date().getTime());
                 const data = await res.json();
                 allItems = data.items || [];
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
-                allWheelPrizes = data.wheelPrizes || ["مود ماينكرافت حصري", "سكربت روبلكس نادرة", "خصم خاص", "حظ سعيد المرة القادمة"];
+                allWheelPrizes = data.wheelPrizes || [];
                 
                 if (data.newsTicker) {
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
-                    
-                    const lastSeenNews = localStorage.getItem("ali_last_seen_news");
-                    if (lastSeenNews && lastSeenNews !== data.newsTicker) {
-                        document.getElementById('notificationText').innerText = "خبر جديد: " + data.newsTicker;
-                        document.getElementById('notificationOverlay').style.display = 'flex';
-                        
-                        // إرسال إشعار نظام حقيقي إذا كان الإذن ممنوحاً
-                        if (Notification.permission === "granted") {
-                            new Notification("تحديث جديد من ALIOPZTE", {
-                                body: data.newsTicker,
-                                icon: "https://cdn-icons-png.flaticon.com/512/686/686589.png"
-                            });
-                        }
-                    }
-                    localStorage.setItem("ali_last_seen_news", data.newsTicker);
                 }
 
-                renderItems(allItems);
-                renderPartners(allPartners);
-                if(allItems.length > 0) {
+                // تحديد العنصر الرائج (أشهر شي)
+                if(data.featuredId && allItems.length > 0) {
+                    const featItem = allItems.find(i => i.id == data.featuredId);
+                    if(featItem) {
+                        document.getElementById('featuredTitleText').innerText = featItem.title;
+                        document.getElementById('featuredDescText').innerText = featItem.desc || '';
+                        window.featuredItemObj = featItem;
+                    }
+                } else if(allItems.length > 0) {
                     document.getElementById('featuredTitleText').innerText = allItems[0].title;
                     document.getElementById('featuredDescText').innerText = allItems[0].desc || '';
                     window.featuredItemObj = allItems[0];
                 }
+
+                renderItems(allItems);
+                renderPartners(allPartners);
             } catch (e) {}
         }
 

@@ -8,20 +8,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --bg-dark: #05070e; --card-bg: rgba(13, 18, 30, 0.9); --text-main: #f8fafc; }
-        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Tajawal', sans-serif; padding: 20px; margin: 0; }
-        .container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,242,254,0.3); }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Tajawal', sans-serif; padding: 20px; margin: 0; min-height: 100vh; }
+        
+        /* شاشة تسجيل الدخول بكلمة المرور */
+        .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05070e; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-card { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); }
+        .login-card i { font-size: 3rem; color: #00f2fe; margin-bottom: 15px; }
+        
+        .container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,242,254,0.3); display: none; }
         h1 { text-align: center; color: #00f2fe; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #000; color: #fff; font-family: inherit; }
+        input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #000; color: #fff; font-family: inherit; box-sizing: border-box; }
         button { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
         button:hover { opacity: 0.9; }
         .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 5px; display: none; border: 1px solid #00f2fe; }
         textarea { height: 80px; }
+        .error-msg { color: #ff4d4d; font-weight: bold; font-size: 0.85rem; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
-    <div class="container">
+
+    <!-- نافذة طلب كلمة المرور -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card">
+            <i class="fa-solid fa-user-shield"></i>
+            <h2 style="color:#fff; margin-bottom: 10px;">لوحة تحكم الأدمن</h2>
+            <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور للوصول لإدارة المتجر:</p>
+            <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
+            <button onclick="checkPassword()"><i class="fa-solid fa-key"></i> دخول اللوحة</button>
+            <div id="loginError" class="error-msg">❌ كلمة المرور غير صحيحة! حاول مرة أخرى.</div>
+        </div>
+    </div>
+
+    <!-- محتوى لوحة التحكم الرئيسي -->
+    <div id="adminMainContent" class="container">
         <h1><i class="fa-solid fa-gauge-high"></i> لوحة تحكم متجر ALIOPZTE</h1>
         <p style="text-align:center; color:#94a3b8; font-size:0.85rem;">ارفع الصور مباشرة من هاتفك، عدل البيانات وحمل ملف `data.json` الجديد لرفعه على GitHub.</p>
 
@@ -60,7 +81,6 @@
             <label>صورة العنصر (اختر من جهازك):</label>
             <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this)">
             <img id="imagePreview" class="preview-img">
-            <input type="hidden" id="itemImageBase64">
         </div>
 
         <button onclick="addNewItem()"><i class="fa-solid fa-plus"></i> إضافة العنصر للقائمة</button>
@@ -73,19 +93,35 @@
     </div>
 
     <script>
+        // يمكنك تغيير كلمة المرور من هذا السطر:
+        const ADMIN_PASSWORD = "ALI2026";
+
+        function checkPassword() {
+            const enteredPass = document.getElementById('passwordInput').value.trim();
+            const errorMsg = document.getElementById('loginError');
+
+            if (enteredPass === ADMIN_PASSWORD) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('adminMainContent').style.display = 'block';
+                loadInitialData();
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
         let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "" };
         let base64ImageString = "";
 
-        // تحميل ملف data.json الحالي عند فتح اللوحة
-        fetch('data.json')
-            .then(res => res.json())
-            .then(data => {
-                storeData = data;
-                if(data.newsTicker) document.getElementById('newsTickerInput').value = data.newsTicker;
-            })
-            .catch(() => {});
+        function loadInitialData() {
+            fetch('data.json?t=' + new Date().getTime())
+                .then(res => res.json())
+                .then(data => {
+                    storeData = data;
+                    if(data.newsTicker) document.getElementById('newsTickerInput').value = data.newsTicker;
+                })
+                .catch(() => {});
+        }
 
-        // تحويل الصورة المرفوعة من الهاتف إلى Base64
         function encodeImageFileAsURL(element) {
             const file = element.files[0];
             if (file) {
@@ -125,7 +161,6 @@
 
             alert("✅ تم إضافة العنصر بنجاح! اضغط الآن على زر تحميل ملف data.json وارفعه في GitHub.");
             
-            // تفريغ الحقول
             document.getElementById('itemTitle').value = '';
             document.getElementById('itemDesc').value = '';
             document.getElementById('itemUrl').value = '';

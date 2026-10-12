@@ -10,7 +10,6 @@
         :root { --bg-dark: #05070e; --card-bg: rgba(13, 18, 30, 0.9); --text-main: #f8fafc; }
         body { background: var(--bg-dark); color: var(--text-main); font-family: 'Tajawal', sans-serif; padding: 20px; margin: 0; min-height: 100vh; }
         
-        /* شاشة تسجيل الدخول بكلمة المرور */
         .login-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #05070e; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .login-card { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); }
         .login-card i { font-size: 3rem; color: #00f2fe; margin-bottom: 15px; }
@@ -25,6 +24,8 @@
         .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 5px; display: none; border: 1px solid #00f2fe; }
         textarea { height: 80px; }
         .error-msg { color: #ff4d4d; font-weight: bold; font-size: 0.85rem; margin-top: 10px; display: none; }
+        
+        .partner-item { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -79,11 +80,33 @@
         </div>
         <div class="form-group">
             <label>صورة العنصر (اختر من جهازك):</label>
-            <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this)">
+            <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'item')">
             <img id="imagePreview" class="preview-img">
         </div>
 
         <button onclick="addNewItem()"><i class="fa-solid fa-plus"></i> إضافة العنصر للقائمة</button>
+
+        <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
+
+        <h3><i class="fa-solid fa-handshake"></i> إدارة روم الشراكات (الشركاء القدامى والجدد):</h3>
+        <div id="partnersList" style="margin-bottom:15px;"></div>
+
+        <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; border:1px solid rgba(0,242,254,0.3);">
+            <div class="form-group">
+                <label>اسم القناة/الشريك:</label>
+                <input type="text" id="partnerName" placeholder="اسم الشريك...">
+            </div>
+            <div class="form-group">
+                <label>رابط اليوتيوب:</label>
+                <input type="text" id="partnerUrl" placeholder="https://youtube.com/@...">
+            </div>
+            <div class="form-group">
+                <label>صورة الشريك (اختر من جهازك):</label>
+                <input type="file" id="partnerImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'partner')">
+                <img id="partnerPreview" class="preview-img">
+            </div>
+            <button onclick="addPartner()" style="background:linear-gradient(90deg, #7f00ff, #00f2fe);"><i class="fa-solid fa-user-plus"></i> إضافة شريك جديد</button>
+        </div>
 
         <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
 
@@ -93,8 +116,8 @@
     </div>
 
     <script>
-        // يمكنك تغيير كلمة المرور من هذا السطر:
-        const ADMIN_PASSWORD = "ALI2026";
+        // كلمة المرور الجديدة
+        const ADMIN_PASSWORD = "19861986";
 
         function checkPassword() {
             const enteredPass = document.getElementById('passwordInput').value.trim();
@@ -110,7 +133,8 @@
         }
 
         let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "" };
-        let base64ImageString = "";
+        let itemBase64 = "";
+        let partnerBase64 = "";
 
         function loadInitialData() {
             fetch('data.json?t=' + new Date().getTime())
@@ -118,19 +142,71 @@
                 .then(data => {
                     storeData = data;
                     if(data.newsTicker) document.getElementById('newsTickerInput').value = data.newsTicker;
+                    renderPartnersList();
                 })
                 .catch(() => {});
         }
 
-        function encodeImageFileAsURL(element) {
+        function renderPartnersList() {
+            const listContainer = document.getElementById('partnersList');
+            listContainer.innerHTML = '';
+            if(!storeData.partners || storeData.partners.length === 0) {
+                listContainer.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا يوجد شركاء حالياً.</p>';
+                return;
+            }
+            storeData.partners.forEach((p, idx) => {
+                listContainer.innerHTML += `
+                    <div class="partner-item">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="${p.image}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                            <span>${p.name}</span>
+                        </div>
+                        <button onclick="deletePartner(${idx})" style="width:auto; padding:4px 8px; background:#ff4d4d; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>`;
+            });
+        }
+
+        function deletePartner(idx) {
+            storeData.partners.splice(idx, 1);
+            renderPartnersList();
+        }
+
+        function addPartner() {
+            const name = document.getElementById('partnerName').value.trim();
+            const url = document.getElementById('partnerUrl').value.trim();
+            if(!name || !url) { alert("أدخل اسم القناة ورابط اليوتيوب!"); return; }
+
+            storeData.partners.push({
+                name: name,
+                youtubeUrl: url,
+                image: partnerBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+            });
+
+            renderPartnersList();
+            document.getElementById('partnerName').value = '';
+            document.getElementById('partnerUrl').value = '';
+            document.getElementById('partnerImageFile').value = '';
+            document.getElementById('partnerPreview').style.display = 'none';
+            partnerBase64 = "";
+            alert("✅ تم إضافة الشريك لروم الشراكات بنجاح!");
+        }
+
+        function encodeImageFileAsURL(element, type) {
             const file = element.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onloadend = function() {
-                    base64ImageString = reader.result;
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = base64ImageString;
-                    preview.style.display = 'block';
+                    if (type === 'item') {
+                        itemBase64 = reader.result;
+                        const preview = document.getElementById('imagePreview');
+                        preview.src = itemBase64;
+                        preview.style.display = 'block';
+                    } else {
+                        partnerBase64 = reader.result;
+                        const preview = document.getElementById('partnerPreview');
+                        preview.src = partnerBase64;
+                        preview.style.display = 'block';
+                    }
                 }
                 reader.readAsDataURL(file);
             }
@@ -153,7 +229,7 @@
                 category: category,
                 desc: desc,
                 url: url,
-                image: base64ImageString || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+                image: itemBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
             };
 
             storeData.items.unshift(newItem);
@@ -166,7 +242,7 @@
             document.getElementById('itemUrl').value = '';
             document.getElementById('itemImageFile').value = '';
             document.getElementById('imagePreview').style.display = 'none';
-            base64ImageString = "";
+            itemBase64 = "";
         }
 
         function downloadJsonFile() {

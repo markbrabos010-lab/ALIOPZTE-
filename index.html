@@ -361,7 +361,7 @@
         let viewingWishlist = false;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZEtqtNccuc3KTV7Q_WR1xn2APdtfuJ_gG9aOD_m9AHSnyskM7EFq1h3nIrb_7kCE_iw/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1KoE3YcvPZq_-anHYZ9-3IuyMYuLhqY7wjk4duli5W3RLT8qsRoUVJQZvIkk_yY5DPQ/exec";
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
 
         let deferredPrompt;
@@ -630,11 +630,14 @@
 
         function filterItems() { renderItems(allItems); }
 
-        // جلب وعرض التقييمات من جدول البيانات ديناميكياً
+        // جلب وعرض التقييمات من جدول البيانات ديناميكياً مع معالجة إعادة التوجيه
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
-                const res = await fetch(GOOGLE_SCRIPT_URL);
+                const res = await fetch(GOOGLE_SCRIPT_URL + "?nocache=" + new Date().getTime(), {
+                    method: 'GET',
+                    redirect: 'follow'
+                });
                 const data = await res.json();
                 
                 if (!data || data.length === 0) {
@@ -643,20 +646,21 @@
                 }
 
                 listContainer.innerHTML = '';
-                // ترتيب التقييمات من الأحدث إلى الأقدم
                 data.reverse().forEach(item => {
-                    listContainer.innerHTML += `
-                        <div class="review-card">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                <span style="font-weight: bold; color: #fff; font-size: 0.9rem;">👤 ${item.name}</span>
-                                <span style="color: #ffd700; font-size: 0.85rem;">${item.stars}</span>
+                    if (item.name || item.comment) {
+                        listContainer.innerHTML += `
+                            <div class="review-card">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <span style="font-weight: bold; color: #fff; font-size: 0.9rem;">👤 ${item.name}</span>
+                                    <span style="color: #ffd700; font-size: 0.85rem;">${item.stars}</span>
+                                </div>
+                                <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0; line-height: 1.4;">${item.comment}</p>
                             </div>
-                            <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0; line-height: 1.4;">${item.comment}</p>
-                        </div>
-                    `;
+                        `;
+                    }
                 });
             } catch (e) {
-                listContainer.innerHTML = '<p style="color: #ef4444; text-align: center; font-size: 0.85rem;">عذراً، تعذر جلب التقييمات حالياً.</p>';
+                listContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; font-size: 0.85rem;">لا توجد تقييمات حالياً. أضف تقييمك الأول بالأعلى!</p>';
             }
         }
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ALIOPZTE Store | عالم الـ RGB والألعاب</title>
     
-    <!-- رابط ملف الـ Manifest لتفعيل التثبيت كتطبيق -->
+    <!-- رابط ملف الـ Manifest لتفعيل التطبيق -->
     <link rel="manifest" href="manifest.json">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,7 +73,7 @@
         .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
         .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; }
+        .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; display: none; }
         
         .btn-social { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
@@ -189,8 +189,8 @@
             </div>
 
             <div class="header-actions">
-                <!-- زر تثبيت التطبيق (يظهر تلقائياً عندما يدعم المتصفح PWA) -->
-                <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()" style="display:none;"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت التطبيق</button>
+                <!-- زر تثبيت التطبيق (يعمل للأندرويد والآيفون) -->
+                <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت التطبيق</button>
                 
                 <button class="btn-device-select" onclick="openDeviceSelector()"><i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span></button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
@@ -298,17 +298,32 @@
         let viewingWishlist = false;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
-        // متغيرات التثبيت PWA
+        // متغيرات التثبيت (أندرويد وآيفون)
         let deferredPrompt;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            const installBtn = document.getElementById('installAppBtn');
-            if (installBtn) installBtn.style.display = 'inline-flex';
+            document.getElementById('installAppBtn').style.display = 'inline-flex';
+        });
+
+        // إظهار زر التثبيت للآيفون تلقائياً
+        document.addEventListener("DOMContentLoaded", () => {
+            if (isIOS) {
+                document.getElementById('installAppBtn').style.display = 'inline-flex';
+            }
+            applySpeed(currentSpeedIdx);
+            checkCopyrightAgreement();
+            loadStoreData();
+            checkWheelStatus();
+            updateWishlistCount();
         });
 
         function installPWA() {
-            if (deferredPrompt) {
+            if (isIOS) {
+                alert("لتثبيت التطبيق على الآيفون (Safari):\n1. اضغط على زر المشاركة (Share) ⎋ في الأسفل.\n2. انزل لأسفل واضغط على 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
+            } else if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
@@ -317,7 +332,7 @@
                     deferredPrompt = null;
                 });
             } else {
-                alert("للتثبيت: اضغط على خيارات المتصفح (النقاط الثلاث في الأعلى) ثم اختر 'إضافة إلى الشاشة الرئيسية' أو 'تثبيت التطبيق'.");
+                alert("للتثبيت: اضغط على القائمة (النقاط الثلاث في المتصفح) ثم اختر 'إضافة إلى الشاشة الرئيسية'.");
             }
         }
 
@@ -328,14 +343,6 @@
             { label: '2x',   value: '1s' }
         ];
         let currentSpeedIdx = parseInt(localStorage.getItem("ali_speed_idx")) || 1;
-
-        document.addEventListener("DOMContentLoaded", () => {
-            applySpeed(currentSpeedIdx);
-            checkCopyrightAgreement();
-            loadStoreData();
-            checkWheelStatus();
-            updateWishlistCount();
-        });
 
         function cycleRgbSpeed() {
             currentSpeedIdx = (currentSpeedIdx + 1) % speeds.length;
@@ -358,7 +365,7 @@
         }
 
         function acceptCopyright() {
-            localStorage.getItem("ali_copyright_accepted", "true");
+            localStorage.setItem("ali_copyright_accepted", "true");
             document.getElementById("copyrightOverlay").style.display = "none";
             checkDeviceSelection();
         }

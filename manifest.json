@@ -1,0 +1,17 @@
+{
+  "name": "ALIOPZTE Store",
+  "short_name": "ALIOPZTE",
+  "description": "متجر ALIOPZTE الرسمي للألعاب والمودات والسكربتات",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#05070e",
+  "theme_color": "#00f2fe",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/686/686589.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | ALIOPZTE Store</title>
+    <title>لوحة التحكم الشاملة | ALIOPZTE Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -14,18 +14,21 @@
         .login-card { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: 0 0 25px rgba(0, 242, 254, 0.4); }
         .login-card i { font-size: 3rem; color: #00f2fe; margin-bottom: 15px; }
         
-        .container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,242,254,0.3); display: none; }
-        h1 { text-align: center; color: #00f2fe; }
+        .container { max-width: 850px; margin: 0 auto; background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,242,254,0.3); display: none; }
+        h1 { text-align: center; color: #00f2fe; margin-bottom: 5px; }
+        h3 { color: #00f2fe; border-bottom: 1px solid rgba(0,242,254,0.3); padding-bottom: 8px; margin-top: 25px; display: flex; align-items: center; gap: 8px; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9rem; }
         input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #000; color: #fff; font-family: inherit; box-sizing: border-box; }
-        button { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+        button { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.95rem; }
         button:hover { opacity: 0.9; }
+        .btn-danger { background: #ef4444 !important; }
         .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 5px; display: none; border: 1px solid #00f2fe; }
-        textarea { height: 80px; }
+        textarea { height: 70px; }
         .error-msg { color: #ff4d4d; font-weight: bold; font-size: 0.85rem; margin-top: 10px; display: none; }
         
-        .partner-item { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+        .list-box { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px; margin-bottom: 15px; max-height: 250px; overflow-y: auto; }
+        .list-item { background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     </style>
 </head>
 <body>
@@ -37,7 +40,7 @@
             <h2 style="color:#fff; margin-bottom: 10px;">لوحة تحكم الأدمن</h2>
             <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور للوصول لإدارة المتجر:</p>
             <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
-            <button onclick="checkPassword()"><i class="fa-solid fa-key"></i> دخول اللوحة</button>
+            <button onclick="checkPassword()" style="width:100%; padding:12px;"><i class="fa-solid fa-key"></i> دخول اللوحة</button>
             <div id="loginError" class="error-msg">❌ كلمة المرور غير صحيحة! حاول مرة أخرى.</div>
         </div>
     </div>
@@ -45,78 +48,90 @@
     <!-- محتوى لوحة التحكم الرئيسي -->
     <div id="adminMainContent" class="container">
         <h1><i class="fa-solid fa-gauge-high"></i> لوحة تحكم متجر ALIOPZTE</h1>
-        <p style="text-align:center; color:#94a3b8; font-size:0.85rem;">ارفع الصور مباشرة من هاتفك، عدل البيانات وحمل ملف `data.json` الجديد لرفعه على GitHub.</p>
+        <p style="text-align:center; color:#94a3b8; font-size:0.85rem;">إدارة كافة أقسام المتجر، المودات، الأكواد، الجوائز والرومات.</p>
 
+        <!-- 1. شريط الأخبار -->
         <div class="form-group">
-            <label>شريط الأخبار المتحرك (News Ticker):</label>
+            <label><i class="fa-solid fa-bullhorn" style="color:#00f2fe;"></i> شريط الأخبار المتحرك (News Ticker):</label>
             <input type="text" id="newsTickerInput" placeholder="اكتب الخبر الجديد هنا...">
         </div>
 
-        <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
+        <!-- 2. قسم العناصر والمودات والفيديوهات الحالية -->
+        <h3><i class="fa-solid fa-boxes-stacked"></i> العناصر والمودات الحالية في المتجر (حذف وتعديل):</h3>
+        <div id="itemsList" class="list-box"></div>
 
-        <h3>إضافة عنصر جديد (مود/لعبة/سكربت):</h3>
-        <div class="form-group">
-            <label>عنوان العنصر:</label>
-            <input type="text" id="itemTitle" placeholder="مثال: مود الجرافيك الخرافي">
-        </div>
-        <div class="form-group">
-            <label>التصنيف:</label>
-            <select id="itemCategory">
-                <option value="minecraft">ماين كرافت</option>
-                <option value="roblox">روبلكس</option>
-                <option value="mods">مودات</option>
-                <option value="scripts">سكربتات</option>
-                <option value="other-games">ألعاب أخرى</option>
-                <option value="videos">فيديوهات</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>وصف العنصر:</label>
-            <textarea id="itemDesc" placeholder="شرح مختصر للمود..."></textarea>
-        </div>
-        <div class="form-group">
-            <label>رابط التحميل أو الملف:</label>
-            <input type="text" id="itemUrl" placeholder="https://...">
-        </div>
-        <div class="form-group">
-            <label>صورة العنصر (اختر من جهازك):</label>
-            <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'item')">
-            <img id="imagePreview" class="preview-img">
-        </div>
-
-        <button onclick="addNewItem()"><i class="fa-solid fa-plus"></i> إضافة العنصر للقائمة</button>
-
-        <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
-
-        <h3><i class="fa-solid fa-handshake"></i> إدارة روم الشراكات (الشركاء القدامى والجدد):</h3>
-        <div id="partnersList" style="margin-bottom:15px;"></div>
-
-        <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; border:1px solid rgba(0,242,254,0.3);">
+        <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; border:1px solid rgba(0,242,254,0.3); margin-bottom:20px;">
+            <h4 style="margin:0 0 10px 0; color:#fff;">إضافة عنصر جديد (مود/لعبة/سكربت/فيديو):</h4>
             <div class="form-group">
-                <label>اسم القناة/الشريك:</label>
-                <input type="text" id="partnerName" placeholder="اسم الشريك...">
+                <input type="text" id="itemTitle" placeholder="عنوان العنصر...">
             </div>
             <div class="form-group">
-                <label>رابط اليوتيوب:</label>
-                <input type="text" id="partnerUrl" placeholder="https://youtube.com/@...">
+                <select id="itemCategory">
+                    <option value="minecraft">ماين كرافت</option>
+                    <option value="roblox">روبلكس</option>
+                    <option value="mods">مودات</option>
+                    <option value="scripts">سكربتات</option>
+                    <option value="other-games">ألعاب أخرى</option>
+                    <option value="videos">فيديوهات</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea id="itemDesc" placeholder="وصف وتفاصيل العنصر..."></textarea>
+            </div>
+            <div class="form-group">
+                <input type="text" id="itemUrl" placeholder="رابط التحميل أو مشاهدة الفيديو (https://...)">
+            </div>
+            <div class="form-group">
+                <label>صورة العنصر (من الجهاز):</label>
+                <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'item')">
+                <img id="imagePreview" class="preview-img">
+            </div>
+            <button onclick="addNewItem()" style="width:100%;"><i class="fa-solid fa-plus"></i> إضافة العنصر للمتجر</button>
+        </div>
+
+        <!-- 3. قسم كود الهدايا -->
+        <h3><i class="fa-solid fa-key"></i> إدارة أكواد الهدايا (الأكواد الحالية والإضافة):</h3>
+        <div id="codesList" class="list-box"></div>
+        <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+            <input type="text" id="newCodeName" placeholder="الكود (مثال: ALI2026)" style="flex:1; min-width:150px;">
+            <input type="text" id="newCodeUrl" placeholder="رابط الملف الخفي..." style="flex:2; min-width:200px;">
+            <button onclick="addCode()"><i class="fa-solid fa-plus"></i> إضافة كود</button>
+        </div>
+
+        <!-- 4. قسم عجلة الحظ -->
+        <h3><i class="fa-solid fa-dharmachakra"></i> إدارة جوائز عجلة الحظ:</h3>
+        <div id="wheelPrizesList" class="list-box"></div>
+        <div style="display:flex; gap:8px; margin-bottom:20px;">
+            <input type="text" id="newPrizeName" placeholder="اسم الجائزة الجديدة..." style="flex:1;">
+            <button onclick="addWheelPrize()"><i class="fa-solid fa-plus"></i> إضافة جائزة</button>
+        </div>
+
+        <!-- 5. قسم الشراكات وروم الشركاء -->
+        <h3><i class="fa-solid fa-handshake"></i> إدارة روم الشراكات:</h3>
+        <div id="partnersList" class="list-box"></div>
+        <div style="background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; border:1px solid rgba(0,242,254,0.3); margin-bottom:20px;">
+            <div class="form-group">
+                <input type="text" id="partnerName" placeholder="اسم الشريك/القناة...">
+            </div>
+            <div class="form-group">
+                <input type="text" id="partnerUrl" placeholder="رابط اليوتيوب (https://...)">
             </div>
             <div class="form-group">
                 <label>صورة الشريك (اختر من جهازك):</label>
                 <input type="file" id="partnerImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'partner')">
                 <img id="partnerPreview" class="preview-img">
             </div>
-            <button onclick="addPartner()" style="background:linear-gradient(90deg, #7f00ff, #00f2fe);"><i class="fa-solid fa-user-plus"></i> إضافة شريك جديد</button>
+            <button onclick="addPartner()" style="width:100%; background:linear-gradient(90deg, #7f00ff, #00f2fe);"><i class="fa-solid fa-user-plus"></i> إضافة الشريك</button>
         </div>
 
         <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
 
-        <button onclick="downloadJsonFile()" style="background: linear-gradient(90deg, #10b981, #059669);"><i class="fa-solid fa-download"></i> تحميل ملف `data.json` المحدث</button>
+        <button onclick="downloadJsonFile()" style="width:100%; padding:14px; font-size:1.1rem; background: linear-gradient(90deg, #10b981, #059669);"><i class="fa-solid fa-download"></i> حفظ وتحميل ملف `data.json` المحدث</button>
         <br><br>
-        <a href="index.html" style="display:block; text-align:center; color:#00f2fe; text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> العودة للمتجر الرئيسي</a>
+        <a href="index.html" style="display:block; text-align:center; color:#00f2fe; text-decoration:none; font-weight:bold;"><i class="fa-solid fa-arrow-right"></i> العودة للمتجر الرئيسي</a>
     </div>
 
     <script>
-        // كلمة المرور الجديدة
         const ADMIN_PASSWORD = "19861986";
 
         function checkPassword() {
@@ -141,55 +156,128 @@
                 .then(res => res.json())
                 .then(data => {
                     storeData = data;
+                    if(!storeData.items) storeData.items = [];
+                    if(!storeData.partners) storeData.partners = [];
+                    if(!storeData.codes) storeData.codes = [];
+                    if(!storeData.wheelPrizes) storeData.wheelPrizes = [];
+
                     if(data.newsTicker) document.getElementById('newsTickerInput').value = data.newsTicker;
-                    renderPartnersList();
+                    
+                    renderAllLists();
                 })
                 .catch(() => {});
         }
 
-        function renderPartnersList() {
-            const listContainer = document.getElementById('partnersList');
-            listContainer.innerHTML = '';
-            if(!storeData.partners || storeData.partners.length === 0) {
-                listContainer.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا يوجد شركاء حالياً.</p>';
-                return;
-            }
-            storeData.partners.forEach((p, idx) => {
-                listContainer.innerHTML += `
-                    <div class="partner-item">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="${p.image}" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
-                            <span>${p.name}</span>
-                        </div>
-                        <button onclick="deletePartner(${idx})" style="width:auto; padding:4px 8px; background:#ff4d4d; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
-                    </div>`;
-            });
-        }
-
-        function deletePartner(idx) {
-            storeData.partners.splice(idx, 1);
+        function renderAllLists() {
+            renderItemsList();
+            renderCodesList();
+            renderWheelPrizesList();
             renderPartnersList();
         }
 
+        /* 1. قائمة العناصر والمودات */
+        function renderItemsList() {
+            const box = document.getElementById('itemsList');
+            box.innerHTML = '';
+            if(storeData.items.length === 0) { box.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا توجد عناصر مضافة.</p>'; return; }
+            storeData.items.forEach((item, idx) => {
+                box.innerHTML += `
+                    <div class="list-item">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="${item.image}" style="width:35px; height:35px; border-radius:6px; object-fit:cover;">
+                            <div>
+                                <div style="font-weight:bold; font-size:0.85rem;">${item.title}</div>
+                                <span style="font-size:0.7rem; color:#00f2fe;">${item.category}</span>
+                            </div>
+                        </div>
+                        <button onclick="deleteItem(${idx})" class="btn-danger" style="padding:4px 8px; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>`;
+            });
+        }
+        function deleteItem(idx) { storeData.items.splice(idx, 1); renderItemsList(); }
+
+        /* 2. قائمة الأكواد */
+        function renderCodesList() {
+            const box = document.getElementById('codesList');
+            box.innerHTML = '';
+            if(storeData.codes.length === 0) { box.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا توجد أكواد مضافة.</p>'; return; }
+            storeData.codes.forEach((c, idx) => {
+                box.innerHTML += `
+                    <div class="list-item">
+                        <div>
+                            <span style="font-weight:bold; color:#ff007f;">${c.code}</span>
+                            <span style="font-size:0.75rem; color:#94a3b8; margin-right:10px;">(${c.url})</span>
+                        </div>
+                        <button onclick="deleteCode(${idx})" class="btn-danger" style="padding:4px 8px; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>`;
+            });
+        }
+        function addCode() {
+            const code = document.getElementById('newCodeName').value.trim();
+            const url = document.getElementById('newCodeUrl').value.trim();
+            if(!code || !url) { alert("أدخل الكود والرابط!"); return; }
+            storeData.codes.push({ code: code, url: url });
+            document.getElementById('newCodeName').value = '';
+            document.getElementById('newCodeUrl').value = '';
+            renderCodesList();
+        }
+        function deleteCode(idx) { storeData.codes.splice(idx, 1); renderCodesList(); }
+
+        /* 3. قائمة عجلة الحظ */
+        function renderWheelPrizesList() {
+            const box = document.getElementById('wheelPrizesList');
+            box.innerHTML = '';
+            if(storeData.wheelPrizes.length === 0) { box.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا توجد جوائز مضافة.</p>'; return; }
+            storeData.wheelPrizes.forEach((prize, idx) => {
+                box.innerHTML += `
+                    <div class="list-item">
+                        <span style="font-weight:bold; color:#00ff88;">🎁 ${prize}</span>
+                        <button onclick="deleteWheelPrize(${idx})" class="btn-danger" style="padding:4px 8px; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>`;
+            });
+        }
+        function addWheelPrize() {
+            const prize = document.getElementById('newPrizeName').value.trim();
+            if(!prize) return;
+            storeData.wheelPrizes.push(prize);
+            document.getElementById('newPrizeName').value = '';
+            renderWheelPrizesList();
+        }
+        function deleteWheelPrize(idx) { storeData.wheelPrizes.splice(idx, 1); renderWheelPrizesList(); }
+
+        /* 4. قائمة الشراكات */
+        function renderPartnersList() {
+            const box = document.getElementById('partnersList');
+            box.innerHTML = '';
+            if(storeData.partners.length === 0) { box.innerHTML = '<p style="color:#94a3b8; font-size:0.8rem;">لا يوجد شركاء.</p>'; return; }
+            storeData.partners.forEach((p, idx) => {
+                box.innerHTML += `
+                    <div class="list-item">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <img src="${p.image}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
+                            <span style="font-weight:bold;">${p.name}</span>
+                        </div>
+                        <button onclick="deletePartner(${idx})" class="btn-danger" style="padding:4px 8px; font-size:0.75rem;"><i class="fa-solid fa-trash"></i> حذف</button>
+                    </div>`;
+            });
+        }
         function addPartner() {
             const name = document.getElementById('partnerName').value.trim();
             const url = document.getElementById('partnerUrl').value.trim();
-            if(!name || !url) { alert("أدخل اسم القناة ورابط اليوتيوب!"); return; }
-
+            if(!name || !url) { alert("أدخل اسم القناة والرابط!"); return; }
             storeData.partners.push({
                 name: name,
                 youtubeUrl: url,
                 image: partnerBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
             });
-
-            renderPartnersList();
             document.getElementById('partnerName').value = '';
             document.getElementById('partnerUrl').value = '';
             document.getElementById('partnerImageFile').value = '';
             document.getElementById('partnerPreview').style.display = 'none';
             partnerBase64 = "";
-            alert("✅ تم إضافة الشريك لروم الشراكات بنجاح!");
+            renderPartnersList();
         }
+        function deletePartner(idx) { storeData.partners.splice(idx, 1); renderPartnersList(); }
 
         function encodeImageFileAsURL(element, type) {
             const file = element.files[0];
@@ -218,10 +306,7 @@
             const desc = document.getElementById('itemDesc').value.trim();
             const url = document.getElementById('itemUrl').value.trim();
 
-            if (!title || !url) {
-                alert("يرجى إدخال عنوان العنصر ورابط التحميل على الأقل!");
-                return;
-            }
+            if (!title || !url) { alert("أدخل العنوان والرابط!"); return; }
 
             const newItem = {
                 id: Date.now(),
@@ -233,16 +318,15 @@
             };
 
             storeData.items.unshift(newItem);
-            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
+            renderItemsList();
 
-            alert("✅ تم إضافة العنصر بنجاح! اضغط الآن على زر تحميل ملف data.json وارفعه في GitHub.");
-            
             document.getElementById('itemTitle').value = '';
             document.getElementById('itemDesc').value = '';
             document.getElementById('itemUrl').value = '';
             document.getElementById('itemImageFile').value = '';
             document.getElementById('imagePreview').style.display = 'none';
             itemBase64 = "";
+            alert("✅ تم إضافة العنصر بنجاح!");
         }
 
         function downloadJsonFile() {

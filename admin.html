@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الكاملة | ALIOPZTE Store</title>
+    <title>لوحة التحكم | ALIOPZTE Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -20,9 +20,8 @@
         
         .btn-back { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 16px; border-radius: 10px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
 
-        /* التبويبات الفخمة والمرتبة */
         .tabs-nav { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .tab-btn { flex: 1; min-width: 130px; padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; border-radius: 12px; font-weight: 900; font-size: 0.85rem; cursor: pointer; text-align: center; white-space: nowrap; transition: 0.3s; }
+        .tab-btn { flex: 1; min-width: 120px; padding: 12px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; border-radius: 12px; font-weight: 900; font-size: 0.82rem; cursor: pointer; text-align: center; white-space: nowrap; transition: 0.3s; }
         .tab-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff); color: #fff; border-color: transparent; box-shadow: 0 0 15px rgba(0,242,254,0.4); }
 
         .tab-content { display: none; }
@@ -33,7 +32,8 @@
         input, textarea, select { width: 100%; padding: 11px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: #000; color: #fff; font-family: inherit; box-sizing: border-box; }
         
         .btn-submit { width: 100%; padding: 12px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); border: none; color: #fff; font-weight: 900; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
-        .btn-delete { background: #ef4444; border: none; color: #fff; padding: 5px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.78rem; }
+        .btn-delete { background: #ef4444; border: none; color: #fff; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.78rem; }
+        .btn-edit { background: #3b82f6; border: none; color: #fff; padding: 5px 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.78rem; margin-left: 5px; }
 
         .items-list { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px; margin-top: 15px; max-height: 250px; overflow-y: auto; }
         .item-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: rgba(13, 18, 30, 0.8); border-radius: 8px; margin-bottom: 8px; }
@@ -42,43 +42,56 @@
 </head>
 <body>
 
-    <!-- نافذة تسجيل الدخول بكلمة المرور -->
     <div id="loginOverlay" class="login-overlay">
         <div class="login-card">
             <i class="fa-solid fa-user-shield"></i>
             <h2 style="color:#fff; margin-bottom: 10px;">لوحة تحكم الأدمن</h2>
-            <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور للوصول لإدارة المتجر:</p>
+            <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور (19861986):</p>
             <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
             <button onclick="checkPassword()" class="btn-submit"><i class="fa-solid fa-key"></i> دخول اللوحة</button>
             <p id="loginError" style="color:#ff4d4d; font-weight:bold; display:none; margin-top:10px;">❌ كلمة المرور غير صحيحة!</p>
         </div>
     </div>
 
-    <!-- لوحة التحكم الرئيسية بالتبويبات -->
     <div id="adminBox" class="admin-box">
         <div class="admin-header">
-            <div class="admin-title"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم الكامله ALIOPZTE</div>
+            <div class="admin-title"><i class="fa-solid fa-gauge-high"></i> لوحة التحكم ALIOPZTE</div>
             <a href="index.html" class="btn-back"><i class="fa-solid fa-store"></i> العودة للمتجر</a>
         </div>
 
         <div class="form-group">
             <label><i class="fa-solid fa-key" style="color:#00f2fe;"></i> توكن GitHub (GitHub Token):</label>
-            <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            <input type="password" id="githubToken" placeholder="ضع التوكن هنا للتحديث المباشر...">
         </div>
 
-        <!-- أزرار التبويبات الفخمة -->
+        <!-- إعدادات عامة (الأخبار وأشهر شي) -->
+        <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; border:1px solid rgba(0,242,254,0.3); margin-bottom:20px;">
+            <h3 style="color:#00f2fe; margin-top:0; font-size:1rem;"><i class="fa-solid fa-sliders"></i> إعدادات المتجر العامة</h3>
+            <div class="form-group">
+                <label>شريط الأخبار المتحرك:</label>
+                <input type="text" id="newsTickerInput" placeholder="اكتب الخبر الجديد هنا...">
+            </div>
+            <div class="form-group">
+                <label>العنصر الرائج / أشهر شي (اختر من عناصر المتجر):</label>
+                <select id="featuredSelect">
+                    <option value="">-- اختر العنصر الرائج --</option>
+                </select>
+            </div>
+            <button onclick="saveGeneralSettings()" class="btn-submit" style="padding:8px; font-size:0.9rem;"><i class="fa-solid fa-floppy-disk"></i> حفظ الإعدادات العامة</button>
+        </div>
+
         <div class="tabs-nav">
             <button class="tab-btn active" onclick="switchTab('tab-items', this)"><i class="fa-solid fa-gamepad"></i> الألعاب والمودات</button>
-            <button class="tab-btn" onclick="switchTab('tab-videos', this)"><i class="fa-solid fa-video"></i> قسم الفيديوهات</button>
             <button class="tab-btn" onclick="switchTab('tab-partners', this)"><i class="fa-solid fa-handshake"></i> روم الشراكات</button>
             <button class="tab-btn" onclick="switchTab('tab-codes', this)"><i class="fa-solid fa-key"></i> الأكواد</button>
             <button class="tab-btn" onclick="switchTab('tab-wheel', this)"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ</button>
         </div>
 
-        <!-- 1. تبويب الألعاب والمودات -->
+        <!-- تبويب الألعاب والمودات والفيديوهات -->
         <div id="tab-items" class="tab-content active">
-            <h3 style="color:#00f2fe; margin-top:0;">إضافة / تعديل عنصر (لعبة / مود / سكربت)</h3>
-            <div class="form-group"><input type="text" id="itemTitle" placeholder="عنوان العنصر..."></div>
+            <h3 id="formModeTitle" style="color:#00f2fe; margin-top:0;">إضافة عنصر جديد</h3>
+            <input type="hidden" id="editItemIndex" value="-1">
+            <div class="form-group"><input type="text" id="itemTitle" placeholder="عنوان العنصر أو الفيديو..."></div>
             <div class="form-group">
                 <select id="itemCategory">
                     <option value="minecraft">ماين كرافت</option>
@@ -86,69 +99,52 @@
                     <option value="mods">مودات</option>
                     <option value="scripts">سكربتات</option>
                     <option value="other-games">ألعاب أخرى</option>
+                    <option value="videos">فيديوهات (Video)</option>
                 </select>
             </div>
-            <div class="form-group"><textarea id="itemDesc" placeholder="شرح مختصر..."></textarea></div>
-            <div class="form-group"><input type="text" id="itemUrl" placeholder="رابط التحميل المباشر (https://...)"></div>
+            <div class="form-group"><textarea id="itemDesc" placeholder="شرح مختصر أو تفاصيل..."></textarea></div>
+            <div class="form-group"><input type="text" id="itemUrl" placeholder="رابط التحميل أو رابط يوتيوب (https://...)"></div>
             <div class="form-group">
                 <label>صورة العنصر (اختر صورة من جهازك):</label>
-                <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'item')">
+                <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this)">
                 <img id="imagePreview" class="preview-img">
             </div>
-            <button onclick="addItem()" class="btn-submit"><i class="fa-solid fa-plus"></i> حفظ وإضافة العنصر</button>
+            <button onclick="saveItem()" class="btn-submit" id="saveItemBtn"><i class="fa-solid fa-plus"></i> حفظ وإضافة العنصر</button>
+            <button onclick="resetItemForm()" style="background:#64748b; margin-top:5px; display:none;" class="btn-submit" id="cancelEditBtn">إلغاء التعديل</button>
             
             <h4 style="margin-top:20px;">العناصر الحالية:</h4>
             <div id="itemsList" class="items-list"></div>
         </div>
 
-        <!-- 2. تبويب الفيديوهات -->
-        <div id="tab-videos" class="tab-content">
-            <h3 style="color:#00f2fe; margin-top:0;">إضافة فيديو جديد للقناة</h3>
-            <div class="form-group"><input type="text" id="videoTitle" placeholder="عنوان الفيديو..."></div>
-            <div class="form-group"><input type="text" id="videoUrl" placeholder="رابط فيديو اليوتيوب (https://...)"></div>
-            <div class="form-group">
-                <label>صورة مصغرة للفيديو (اختر من جهازك):</label>
-                <input type="file" id="videoImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'video')">
-                <img id="videoPreview" class="preview-img">
-            </div>
-            <button onclick="addVideo()" class="btn-submit"><i class="fa-solid fa-video"></i> إضافة الفيديو</button>
-        </div>
-
-        <!-- 3. تبويب الشراكات -->
+        <!-- تبويب الشراكات -->
         <div id="tab-partners" class="tab-content">
             <h3 style="color:#00f2fe; margin-top:0;">إضافة شريك جديد</h3>
             <div class="form-group"><input type="text" id="partnerName" placeholder="اسم الشريك/القناة..."></div>
             <div class="form-group"><input type="text" id="partnerUrl" placeholder="رابط قناة اليوتيوب..."></div>
             <div class="form-group">
-                <label>صورة الشريك (اختر من جهازك):</label>
-                <input type="file" id="partnerImageFile" accept="image/*" onchange="encodeImageFileAsURL(this, 'partner')">
+                <label>صورة الشريك:</label>
+                <input type="file" id="partnerImageFile" accept="image/*" onchange="encodePartnerImage(this)">
                 <img id="partnerPreview" class="preview-img">
             </div>
             <button onclick="addPartner()" class="btn-submit"><i class="fa-solid fa-user-plus"></i> إضافة للشراكات</button>
-
-            <h4 style="margin-top:20px;">الشركاء الحاليون:</h4>
-            <div id="partnersList" class="items-list"></div>
+            <div id="partnersList" class="items-list" style="margin-top:15px;"></div>
         </div>
 
-        <!-- 4. تبويب الأكواد -->
+        <!-- تبويب الأكواد -->
         <div id="tab-codes" class="tab-content">
             <h3 style="color:#00f2fe; margin-top:0;">إدارة أكواد الهدايا</h3>
             <div class="form-group"><input type="text" id="codeName" placeholder="الكود (مثال: ALI2026)..."></div>
             <div class="form-group"><input type="text" id="codeUrl" placeholder="رابط الملف الخاص بالكود..."></div>
             <button onclick="addCode()" class="btn-submit"><i class="fa-solid fa-key"></i> إضافة الكود</button>
-
-            <h4 style="margin-top:20px;">الأكواد الحالية:</h4>
-            <div id="codesList" class="items-list"></div>
+            <div id="codesList" class="items-list" style="margin-top:15px;"></div>
         </div>
 
-        <!-- 5. تبويب عجلة الحظ -->
+        <!-- تبويب عجلة الحظ -->
         <div id="tab-wheel" class="tab-content">
             <h3 style="color:#00f2fe; margin-top:0;">إدارة جوائز عجلة الحظ</h3>
             <div class="form-group"><input type="text" id="prizeName" placeholder="اسم الجائزة..."></div>
             <button onclick="addPrize()" class="btn-submit"><i class="fa-solid fa-dharmachakra"></i> إضافة الجائزة</button>
-
-            <h4 style="margin-top:20px;">الجوائز الحالية:</h4>
-            <div id="wheelList" class="items-list"></div>
+            <div id="wheelList" class="items-list" style="margin-top:15px;"></div>
         </div>
     </div>
 
@@ -173,128 +169,222 @@
             btn.classList.add('active');
         }
 
-        let storeData = { items: [], partners: [], codes: [], wheelPrizes: [] };
-        let imgBase64 = "", videoImgBase64 = "", partnerImgBase64 = "";
+        let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "", featuredId: null };
+        let currentImgBase64 = "", partnerImgBase64 = "";
 
         function loadData() {
             fetch('data.json?t=' + new Date().getTime())
                 .then(r => r.json())
                 .then(d => {
                     storeData = d;
+                    if(!storeData.items) storeData.items = [];
+                    if(!storeData.partners) storeData.partners = [];
+                    if(!storeData.codes) storeData.codes = [];
+                    if(!storeData.wheelPrizes) storeData.wheelPrizes = [];
+
+                    if(storeData.newsTicker) document.getElementById('newsTickerInput').value = storeData.newsTicker;
                     renderLists();
+                    updateFeaturedDropdown();
                 }).catch(() => {});
         }
 
+        function updateFeaturedDropdown() {
+            const select = document.getElementById('featuredSelect');
+            select.innerHTML = '<option value="">-- اختر العنصر الرائج --</option>';
+            storeData.items.forEach(item => {
+                const selected = (storeData.featuredId == item.id) ? 'selected' : '';
+                select.innerHTML += `<option value="${item.id}" ${selected}>${item.title} (${item.category})</option>`;
+            });
+        }
+
+        function saveGeneralSettings() {
+            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
+            storeData.featuredId = document.getElementById('featuredSelect').value;
+            saveToGitHub("تم حفظ الإعدادات العامة بنجاح!");
+        }
+
         function renderLists() {
-            // عرض العناصر
-            const itemsBox = document.getElementById('itemsList');
-            itemsBox.innerHTML = storeData.items.map((item, i) => `
+            // العناصر
+            document.getElementById('itemsList').innerHTML = storeData.items.map((item, i) => `
                 <div class="item-row">
-                    <span>${item.title} (${item.category})</span>
-                    <button class="btn-delete" onclick="deleteItem(${i})">حذف</button>
+                    <span><b>${item.title}</b> (${item.category})</span>
+                    <div>
+                        <button class="btn-edit" onclick="editItem(${i})">تعديل</button>
+                        <button class="btn-delete" onclick="deleteItem(${i})">حذف</button>
+                    </div>
                 </div>
             `).join('');
 
-            // عرض الشركاء
-            const partnersBox = document.getElementById('partnersList');
-            partnersBox.innerHTML = (storeData.partners || []).map((p, i) => `
+            // الشركاء
+            document.getElementById('partnersList').innerHTML = (storeData.partners || []).map((p, i) => `
                 <div class="item-row">
                     <span>${p.name}</span>
                     <button class="btn-delete" onclick="deletePartner(${i})">حذف</button>
                 </div>
             `).join('');
 
-            // عرض الأكواد
-            const codesBox = document.getElementById('codesList');
-            codesBox.innerHTML = (storeData.codes || []).map((c, i) => `
+            // الأكواد
+            document.getElementById('codesList').innerHTML = (storeData.codes || []).map((c, i) => `
                 <div class="item-row">
                     <span>${c.code}</span>
                     <button class="btn-delete" onclick="deleteCode(${i})">حذف</button>
                 </div>
             `).join('');
 
-            // عرض عجلة الحظ
-            const wheelBox = document.getElementById('wheelList');
-            wheelBox.innerHTML = (storeData.wheelPrizes || []).map((w, i) => `
+            // العجلة
+            document.getElementById('wheelList').innerHTML = (storeData.wheelPrizes || []).map((w, i) => `
                 <div class="item-row">
                     <span>${w}</span>
                     <button class="btn-delete" onclick="deletePrize(${i})">حذف</button>
                 </div>
             `).join('');
+            
+            updateFeaturedDropdown();
         }
 
-        function encodeImageFileAsURL(element, type) {
+        function encodeImageFileAsURL(element) {
             const file = element.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onloadend = function() {
-                    if(type === 'item') { imgBase64 = reader.result; document.getElementById('imagePreview').src = imgBase64; document.getElementById('imagePreview').style.display='block'; }
-                    if(type === 'video') { videoImgBase64 = reader.result; document.getElementById('videoPreview').src = videoImgBase64; document.getElementById('videoPreview').style.display='block'; }
-                    if(type === 'partner') { partnerImgBase64 = reader.result; document.getElementById('partnerPreview').src = partnerImgBase64; document.getElementById('partnerPreview').style.display='block'; }
+                    currentImgBase64 = reader.result;
+                    document.getElementById('imagePreview').src = currentImgBase64;
+                    document.getElementById('imagePreview').style.display='block';
                 }
                 reader.readAsDataURL(file);
             }
         }
 
-        function addItem() {
-            const title = document.getElementById('itemTitle').value;
-            const category = document.getElementById('itemCategory').value;
-            const desc = document.getElementById('itemDesc').value;
-            const url = document.getElementById('itemUrl').value;
-            if(!title || !url) return alert("أدخل العنوان والرابط!");
-
-            storeData.items.unshift({ id: Date.now(), title, category, desc, url, image: imgBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png" });
-            saveToGitHub();
+        function encodePartnerImage(element) {
+            const file = element.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    partnerImgBase64 = reader.result;
+                    document.getElementById('partnerPreview').src = partnerImgBase64;
+                    document.getElementById('partnerPreview').style.display='block';
+                }
+                reader.readAsDataURL(file);
+            }
         }
 
-        function addVideo() {
-            const title = document.getElementById('videoTitle').value;
-            const url = document.getElementById('videoUrl').value;
-            if(!title || !url) return alert("أدخل العنوان والرابط!");
+        function saveItem() {
+            const title = document.getElementById('itemTitle').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const desc = document.getElementById('itemDesc').value.trim();
+            const url = document.getElementById('itemUrl').value.trim();
+            const editIdx = parseInt(document.getElementById('editItemIndex').value);
 
-            storeData.items.unshift({ id: Date.now(), title, category: "videos", desc: "فيديو جديد من القناة", url, image: videoImgBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png" });
-            saveToGitHub();
+            if(!title || !url) return alert("أدخل العنوان ورابط التحميل!");
+
+            if (editIdx > -1) {
+                storeData.items[editIdx].title = title;
+                storeData.items[editIdx].category = category;
+                storeData.items[editIdx].desc = desc;
+                storeData.items[editIdx].url = url;
+                if(currentImgBase64) {
+                    storeData.items[editIdx].image = currentImgBase64;
+                }
+                resetItemForm();
+                saveToGitHub("✅ تم تعديل العنصر بنجاح!");
+            } else {
+                const newItem = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    desc,
+                    url,
+                    image: currentImgBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+                };
+                storeData.items.unshift(newItem);
+                resetItemForm();
+                saveToGitHub("✅ تم إضافة العنصر بنجاح!");
+            }
+        }
+
+        function editItem(i) {
+            const item = storeData.items[i];
+            document.getElementById('itemTitle').value = item.title;
+            document.getElementById('itemCategory').value = item.category;
+            document.getElementById('itemDesc').value = item.desc || '';
+            document.getElementById('itemUrl').value = item.url;
+            document.getElementById('editItemIndex').value = i;
+            
+            document.getElementById('formModeTitle').innerText = "تعديل العنصر: " + item.title;
+            document.getElementById('saveItemBtn').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> تحديث وحفظ العنصر`;
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            
+            if(item.image && item.image.startsWith('data:')) {
+                currentImgBase64 = item.image;
+                document.getElementById('imagePreview').src = currentImgBase64;
+                document.getElementById('imagePreview').style.display = 'block';
+            }
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        function resetItemForm() {
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemDesc').value = '';
+            document.getElementById('itemUrl').value = '';
+            document.getElementById('itemImageFile').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('editItemIndex').value = -1;
+            document.getElementById('formModeTitle').innerText = "إضافة عنصر جديد";
+            document.getElementById('saveItemBtn').innerHTML = `<i class="fa-solid fa-plus"></i> حفظ وإضافة العنصر`;
+            document.getElementById('cancelEditBtn').style.display = 'none';
+            currentImgBase64 = "";
         }
 
         function addPartner() {
-            const name = document.getElementById('partnerName').value;
-            const youtubeUrl = document.getElementById('partnerUrl').value;
+            const name = document.getElementById('partnerName').value.trim();
+            const youtubeUrl = document.getElementById('partnerUrl').value.trim();
             if(!name) return alert("أدخل اسم الشريك!");
 
             if(!storeData.partners) storeData.partners = [];
             storeData.partners.push({ name, youtubeUrl, image: partnerImgBase64 || "https://cdn-icons-png.flaticon.com/512/686/686589.png" });
-            saveToGitHub();
+            document.getElementById('partnerName').value = '';
+            document.getElementById('partnerUrl').value = '';
+            document.getElementById('partnerImageFile').value = '';
+            document.getElementById('partnerPreview').style.display = 'none';
+            partnerImgBase64 = "";
+            saveToGitHub("✅ تمت إضافة الشريك بنجاح!");
         }
 
         function addCode() {
-            const code = document.getElementById('codeName').value;
-            const url = document.getElementById('codeUrl').value;
+            const code = document.getElementById('codeName').value.trim();
+            const url = document.getElementById('codeUrl').value.trim();
             if(!code || !url) return alert("أدخل الكود والرابط!");
 
             if(!storeData.codes) storeData.codes = [];
             storeData.codes.push({ code, url });
-            saveToGitHub();
+            document.getElementById('codeName').value = '';
+            document.getElementById('codeUrl').value = '';
+            saveToGitHub("✅ تمت إضافة الكود بنجاح!");
         }
 
         function addPrize() {
-            const prize = document.getElementById('prizeName').value;
+            const prize = document.getElementById('prizeName').value.trim();
             if(!prize) return;
 
             if(!storeData.wheelPrizes) storeData.wheelPrizes = [];
             storeData.wheelPrizes.push(prize);
-            saveToGitHub();
+            document.getElementById('prizeName').value = '';
+            saveToGitHub("✅ تمت إضافة الجائزة بنجاح!");
         }
 
-        function deleteItem(i) { storeData.items.splice(i, 1); saveToGitHub(); }
-        function deletePartner(i) { storeData.partners.splice(i, 1); saveToGitHub(); }
-        function deleteCode(i) { storeData.codes.splice(i, 1); saveToGitHub(); }
-        function deletePrize(i) { storeData.wheelPrizes.splice(i, 1); saveToGitHub(); }
+        function deleteItem(i) { storeData.items.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
+        function deletePartner(i) { storeData.partners.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
+        function deleteCode(i) { storeData.codes.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
+        function deletePrize(i) { storeData.wheelPrizes.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
 
-        // التحديث المباشر التلقائي لـ GitHub
-        async function saveToGitHub() {
+        // التحديث التلقائي المباشر بـ GitHub
+        async function saveToGitHub(successMsg) {
             const token = document.getElementById('githubToken').value.trim();
+            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
+            storeData.featuredId = document.getElementById('featuredSelect').value;
+
             if(!token) {
-                alert("تم التعديل محلياً! لإرساله مباشرة للموقع بدون تنزيل ملفات، يرجى وضع GitHub Token في الأعلى.");
+                alert("يرجى إدخال GitHub Token في الخانة المخصصة بالأعلى ليتم حفظ وتحديث الموقع تلقائياً!");
                 renderLists();
                 return;
             }
@@ -312,14 +402,14 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: "تحديث تلقائي من لوحة التحكم",
+                        message: "تحديث من لوحة التحكم",
                         content: btoa(unescape(encodeURIComponent(JSON.stringify(storeData, null, 2)))),
                         sha: shaData.sha
                     })
                 });
 
                 if(response.ok) {
-                    alert("✅ تم الحفظ والتحديث المباشر على الموقع بنجاح!");
+                    alert(successMsg + " وتم التحديث التلقائي المباشر على الموقع! 🚀");
                     renderLists();
                 } else {
                     alert("❌ التوكن غير صحيح أو انتهت صلاحيته.");

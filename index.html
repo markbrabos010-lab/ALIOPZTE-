@@ -681,12 +681,17 @@
             msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
             try {
-                // 1. الإرسال إلى Google Sheets للحفظ الفوري والعرض في الموقع
+                // 1. الإرسال إلى Google Sheets للحفظ الفوري عبر URLSearchParams
+                const formData = new URLSearchParams();
+                formData.append('name', name);
+                formData.append('stars', stars);
+                formData.append('comment', comment);
+
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, stars, comment })
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
                 });
 
                 // 2. إرسال إشعار فوري إلى ديسكورد
@@ -712,7 +717,7 @@
                 document.getElementById('revName').value = '';
                 document.getElementById('revComment').value = '';
 
-                setTimeout(fetchReviews, 1500); // تحديث القائمة لإظهار التقييم الجديد تلقائياً
+                setTimeout(fetchReviews, 2000); // تحديث القائمة بعد ثانيتين ليظهر التقييم المضاف تلقائياً
             } catch (e) {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";

@@ -154,9 +154,11 @@
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
 
-        /* تنسيقات قسم التقييمات المرتبط بديسكورد */
+        /* تنسيقات قسم التقييمات التلقائي المرتبط بـ Google Sheets وديسكورد */
         .review-section { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
         .review-header { color: #00f2fe; font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
+        .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; margin-top: 15px; }
+        .review-card { background: rgba(5,7,14,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 12px; border-radius: 10px; }
 
         body.device-tablet .main-layout { flex-direction: column; }
         body.device-tablet .partners-sidebar { width: 100%; }
@@ -261,12 +263,12 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم تقييمات وآراء المتابعين المرتبط بديسكورد -->
+                <!-- قسم تقييمات وآراء المتابعين المرتبط بـ Google Sheets وديسكورد -->
                 <section class="review-section">
                     <h2 class="review-header">
-                        <i class="fa-solid fa-star" style="color: #ffd700;"></i> أضف تقييمك ورأيك للمتجر
+                        <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين
                     </h2>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، تقييمك سيصلنا مباشرة إلى ديسكورد وسيسعدنا جداً!</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك فوراً هنا وفي ديسكورد!</p>
                     
                     <div>
                         <div style="margin-bottom: 10px;">
@@ -291,9 +293,14 @@
                         </div>
 
                         <button onclick="sendReviewToDiscord()" class="btn-card-view" style="font-size: 0.95rem; padding: 10px; width: 100%;">
-                            <i class="fa-solid fa-paper-plane"></i> إرسال التقييم
+                            <i class="fa-solid fa-paper-plane"></i> نشر التقييم الان
                         </button>
                         <p id="revMsg" style="margin-top: 8px; font-size: 0.82rem; font-weight: bold; text-align: center;"></p>
+                    </div>
+
+                    <!-- قائمة عرض التقييمات الديناميكية من Google Sheets -->
+                    <div id="reviewsList" class="reviews-list">
+                        <p style="color: var(--text-muted); text-align: center; font-size: 0.85rem;">جاري تحميل التقييمات...</p>
                     </div>
                 </section>
             </main>
@@ -354,6 +361,9 @@
         let viewingWishlist = false;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZEtqtNccuc3KTV7Q_WR1xn2APdtfuJ_gG9aOD_m9AHSnyskM7EFq1h3nIrb_7kCE_iw/exec";
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
+
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -372,6 +382,7 @@
             loadStoreData();
             checkWheelStatus();
             updateWishlistCount();
+            fetchReviews(); // تحميل وعرض التقييمات المخزنة فور فتح الموقع
         });
 
         function installPWA() {
@@ -619,7 +630,37 @@
 
         function filterItems() { renderItems(allItems); }
 
-        // دالة إرسال التقييمات مباشرة إلى ديسكورد
+        // جلب وعرض التقييمات من جدول البيانات ديناميكياً
+        async function fetchReviews() {
+            const listContainer = document.getElementById('reviewsList');
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL);
+                const data = await res.json();
+                
+                if (!data || data.length === 0) {
+                    listContainer.innerHTML = '<p style="color: var(--text-muted); text-align: center; font-size: 0.85rem;">لا توجد تقييمات حتى الآن. كن أول من يقيّم!</p>';
+                    return;
+                }
+
+                listContainer.innerHTML = '';
+                // ترتيب التقييمات من الأحدث إلى الأقدم
+                data.reverse().forEach(item => {
+                    listContainer.innerHTML += `
+                        <div class="review-card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <span style="font-weight: bold; color: #fff; font-size: 0.9rem;">👤 ${item.name}</span>
+                                <span style="color: #ffd700; font-size: 0.85rem;">${item.stars}</span>
+                            </div>
+                            <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0; line-height: 1.4;">${item.comment}</p>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                listContainer.innerHTML = '<p style="color: #ef4444; text-align: center; font-size: 0.85rem;">عذراً، تعذر جلب التقييمات حالياً.</p>';
+            }
+        }
+
+        // دالة إرسال التقييم إلى Google Sheets والديسكورد وتحديث الموقع فوراً
         async function sendReviewToDiscord() {
             const name = document.getElementById('revName').value.trim();
             const stars = document.getElementById('revStars').value;
@@ -632,35 +673,42 @@
                 return;
             }
 
-            const webhookUrl = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-
-            const payload = {
-                embeds: [{
-                    title: "🌟 تقييم جديد وصل للمتجر!",
-                    color: 65280,
-                    fields: [
-                        { name: "👤 اسم العضو:", value: name, inline: true },
-                        { name: "⭐ التقييم:", value: stars, inline: true },
-                        { name: "💬 التعليق:", value: comment, inline: false }
-                    ],
-                    timestamp: new Date().toISOString()
-                }]
-            };
+            msg.style.color = "#00f2fe";
+            msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
             try {
-                msg.style.color = "#00f2fe";
-                msg.innerText = "⏳ جاري إرسال تقييمك...";
-                
-                await fetch(webhookUrl, {
+                // 1. الإرسال إلى Google Sheets للحفظ الفوري والعرض في الموقع
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, stars, comment })
+                });
+
+                // 2. إرسال إشعار فوري إلى ديسكورد
+                await fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "🌟 تقييم جديد وصل للمتجر!",
+                            color: 65280,
+                            fields: [
+                                { name: "👤 اسم العضو:", value: name, inline: true },
+                                { name: "⭐ التقييم:", value: stars, inline: true },
+                                { name: "💬 التعليق:", value: comment, inline: false }
+                            ],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
                 });
 
                 msg.style.color = "#00ff88";
-                msg.innerText = "✅ شكراً لك! تم إرسال تقييمك بنجاح إلى ديسكورد المتجر.";
+                msg.innerText = "✅ تم نشر تقييمك بنجاح وسيظهر للجميع فوراً!";
                 document.getElementById('revName').value = '';
                 document.getElementById('revComment').value = '';
+
+                setTimeout(fetchReviews, 1500); // تحديث القائمة لإظهار التقييم الجديد تلقائياً
             } catch (e) {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";

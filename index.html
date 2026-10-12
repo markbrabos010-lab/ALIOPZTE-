@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- OneSignal SDK الرسمي المربوط بحسابك -->
+    <!-- OneSignal SDK المحدث مع مسار GitHub Pages الفرعي -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -20,6 +20,8 @@
         await OneSignal.init({
           appId: "29faedf2-0809-40cd-99ff-e5d630b887be",
           safari_web_id: "web.onesignal.auto.176df2c7-0aa7-402f-b46f-d31a547285c5",
+          serviceWorkerPath: "ALIOPZTE-/OneSignalSDKWorker.js",
+          serviceWorkerParam: { scope: "/ALIOPZTE-/" },
           allowLocalhostAsSecureOrigin: true,
         });
       });

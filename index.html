@@ -6,6 +6,7 @@
     <title>ALIOPZTE Store | عالم الـ RGB والألعاب</title>
     
     <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/686/686589.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -72,6 +73,7 @@
         .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
         .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
         .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; display: none; }
+        .btn-action.notif-btn { background: rgba(0, 242, 254, 0.2); border: 1px solid #00f2fe; color: #00f2fe; }
         
         .btn-social { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
@@ -143,10 +145,10 @@
 </head>
 <body>
 
-    <!-- نافذة إشعار التحديثات الجديدة (تظهر تلقائياً عند تغيير الأخبار أو المحتوى) -->
+    <!-- نافذة إشعار التحديثات الجديدة -->
     <div id="notificationOverlay" class="notification-overlay" style="display:none;">
         <div class="notification-card">
-            <i class="fa-solid fa-bell rgb-text" style="font-size: 2.8rem; margin-bottom: 12px; animation: bounce 1s infinite;"></i>
+            <i class="fa-solid fa-bell rgb-text" style="font-size: 2.8rem; margin-bottom: 12px;"></i>
             <h2 style="font-size: 1.25rem; color: #fff; margin-bottom: 8px;">تنبيه جديد من ALIOPZTE! 🚀</h2>
             <p id="notificationText" style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; text-align: right; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
                 تم تحديث محتوى المتجر أو إضافة أخبار جديدة!
@@ -202,6 +204,7 @@
 
             <div class="header-actions">
                 <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت التطبيق</button>
+                <button class="btn-action notif-btn" onclick="requestNotificationPermission()"><i class="fa-solid fa-bell"></i> تفعيل الإشعارات</button>
                 <button class="btn-device-select" onclick="openDeviceSelector()"><i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span></button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i></a>
@@ -328,6 +331,25 @@
             updateWishlistCount();
         });
 
+        // طلب إذن الإشعارات الرسمي من متصفح الهاتف
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                alert("متصفحك لا يدعم إشعارات النظام.");
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification("ALIOPZTE Store", {
+                        body: "تم تفعيل إشعارات المتجر بنجاح! ستتلقى التنبيهات فوراً.",
+                        icon: "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+                    });
+                    alert("✅ تم منح إذن الإشعارات بنجاح!");
+                } else {
+                    alert("❌ تم رفض إذن الإشعارات. يمكنك تفعيله لاحقاً من إعدادات المتصفح.");
+                }
+            });
+        }
+
         function installPWA() {
             if (isIOS) {
                 alert("لتثبيت التطبيق على الآيفون (Safari):\n1. اضغط على زر المشاركة (Share) ⎋ في الأسفل.\n2. انزل لأسفل واضغط على 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).");
@@ -402,7 +424,6 @@
             document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
         }
 
-        /* دالة تحميل البيانات مع نظام الإشعارات الذكي للتحديثات */
         async function loadStoreData() {
             try {
                 const res = await fetch('data.json?t=' + new Date().getTime());
@@ -415,11 +436,18 @@
                 if (data.newsTicker) {
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
                     
-                    // نظام التنبيه الذكي عند تغير الأخبار
                     const lastSeenNews = localStorage.getItem("ali_last_seen_news");
                     if (lastSeenNews && lastSeenNews !== data.newsTicker) {
                         document.getElementById('notificationText').innerText = "خبر جديد: " + data.newsTicker;
                         document.getElementById('notificationOverlay').style.display = 'flex';
+                        
+                        // إرسال إشعار نظام حقيقي إذا كان الإذن ممنوحاً
+                        if (Notification.permission === "granted") {
+                            new Notification("تحديث جديد من ALIOPZTE", {
+                                body: data.newsTicker,
+                                icon: "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+                            });
+                        }
                     }
                     localStorage.setItem("ali_last_seen_news", data.newsTicker);
                 }
@@ -580,4 +608,3 @@
     </script>
 </body>
 </html>
-ذ

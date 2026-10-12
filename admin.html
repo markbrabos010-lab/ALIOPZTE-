@@ -3,367 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد ALIOPZTE | إدارة المتجر</title>
+    <title>لوحة التحكم | ALIOPZTE Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --bg-dark: #05070e; --card-bg: rgba(13, 18, 30, 0.95); --accent-cyan: #00f2fe; --accent-purple: #7f00ff; --accent-pink: #ff007f; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg-dark); color: #fff; font-family: 'Tajawal', sans-serif; padding: 20px; }
-        
-        .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 7, 14, 0.98); backdrop-filter: blur(15px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .login-card { background: var(--card-bg); border: 2px solid var(--accent-cyan); border-radius: 20px; padding: 30px; max-width: 400px; width: 100%; text-align: center; }
-
-        .admin-container { display: none; max-width: 950px; margin: 0 auto; background: var(--card-bg); border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 20px; padding: 24px; }
-        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .form-group { margin-bottom: 16px; text-align: right; }
-        label { display: block; margin-bottom: 6px; font-weight: 700; color: #cbd5e1; }
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,7,14,0.8); color: #fff; font-family: inherit; }
-
-        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab-btn { flex: 1; min-width: 100px; padding: 10px; border: none; border-radius: 10px; background: rgba(255,255,255,0.05); color: #888; font-weight: bold; cursor: pointer; font-size: 0.82rem; }
-        .tab-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff); color: #fff; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        .btn-submit { width: 100%; padding: 14px; border-radius: 12px; border: none; background: linear-gradient(90deg, #ff007f, #7f00ff); color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
-        .btn-cancel { background: #475569; display: none; margin-top: 8px; }
-        .list-item { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
-        .btn-edit { background: #eab308; color: #000; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .btn-del { background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        :root { --bg-dark: #05070e; --card-bg: rgba(13, 18, 30, 0.9); --text-main: #f8fafc; }
+        body { background: var(--bg-dark); color: var(--text-main); font-family: 'Tajawal', sans-serif; padding: 20px; margin: 0; }
+        .container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; box-shadow: 0 0 20px rgba(0,242,254,0.3); }
+        h1 { text-align: center; color: #00f2fe; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #000; color: #fff; font-family: inherit; }
+        button { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+        button:hover { opacity: 0.9; }
+        .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 5px; display: none; border: 1px solid #00f2fe; }
+        textarea { height: 80px; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1><i class="fa-solid fa-gauge-high"></i> لوحة تحكم متجر ALIOPZTE</h1>
+        <p style="text-align:center; color:#94a3b8; font-size:0.85rem;">ارفع الصور مباشرة من هاتفك، عدل البيانات وحمل ملف `data.json` الجديد لرفعه على GitHub.</p>
 
-    <div id="loginOverlay" class="login-overlay">
-        <div class="login-card">
-            <i class="fa-solid fa-shield-halved" style="font-size: 2.8rem; color: var(--accent-cyan); margin-bottom: 15px;"></i>
-            <h2>لوحة تحكم <span style="color:var(--accent-cyan)">ALIOPZTE</span></h2>
-            <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:20px;">أدخل كلمة السر الخاصة للوصول</p>
-            <form onsubmit="checkPassword(event)">
-                <div class="form-group"><input type="password" id="passInput" placeholder="أدخل كلمة السر..." required style="text-align:center;"></div>
-                <button type="submit" class="btn-submit">دخول الداشبورد</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="adminContainer" class="admin-container">
-        <div class="header">
-            <h1><i class="fa-solid fa-gauge-high"></i> الداشبورد الاحترافي</h1>
-            <a href="index.html" style="color:#fff; text-decoration:none; background:rgba(255,255,255,0.1); padding:8px 16px; border-radius:10px;"><i class="fa-solid fa-store"></i> المتجر</a>
+        <div class="form-group">
+            <label>شريط الأخبار المتحرك (News Ticker):</label>
+            <input type="text" id="newsTickerInput" placeholder="اكتب الخبر الجديد هنا...">
         </div>
 
-        <div class="form-group"><label><i class="fa-solid fa-key"></i> توكن GitHub</label><input type="password" id="ghToken" placeholder="الصق التوكن هنا..."></div>
+        <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('itemsTab', this)">الألعاب</button>
-            <button class="tab-btn" onclick="switchTab('videosTab', this)">الفيديوهات</button>
-            <button class="tab-btn" onclick="switchTab('newsTab', this)">شريط الأخبار</button>
-            <button class="tab-btn" onclick="switchTab('codesTab', this)">الأكواد</button>
-            <button class="tab-btn" onclick="switchTab('wheelTab', this)">العجلة</button>
-            <button class="tab-btn" onclick="switchTab('partnersTab', this)">الشركاء</button>
+        <h3>إضافة عنصر جديد (مود/لعبة/سكربت):</h3>
+        <div class="form-group">
+            <label>عنوان العنصر:</label>
+            <input type="text" id="itemTitle" placeholder="مثال: مود الجرافيك الخرافي">
+        </div>
+        <div class="form-group">
+            <label>التصنيف:</label>
+            <select id="itemCategory">
+                <option value="minecraft">ماين كرافت</option>
+                <option value="roblox">روبلكس</option>
+                <option value="mods">مودات</option>
+                <option value="scripts">سكربتات</option>
+                <option value="other-games">ألعاب أخرى</option>
+                <option value="videos">فيديوهات</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>وصف العنصر:</label>
+            <textarea id="itemDesc" placeholder="شرح مختصر للمود..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>رابط التحميل أو الملف:</label>
+            <input type="text" id="itemUrl" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>صورة العنصر (اختر من جهازك):</label>
+            <input type="file" id="itemImageFile" accept="image/*" onchange="encodeImageFileAsURL(this)">
+            <img id="imagePreview" class="preview-img">
+            <input type="hidden" id="itemImageBase64">
         </div>
 
-        <!-- الألعاب والمودات -->
-        <div id="itemsTab" class="tab-content active">
-            <h2 id="itemTitleHead">إضافة / تعديل عنصر</h2>
-            <form onsubmit="handleItemSave(event)">
-                <div class="form-group"><label>العنوان</label><input type="text" id="itemTitle" required></div>
-                <div class="form-group"><label>التصنيف</label>
-                    <select id="itemCat">
-                        <option value="minecraft">ماين كرافت</option>
-                        <option value="roblox">روبلكس</option>
-                        <option value="mods">مودات</option>
-                        <option value="scripts">سكربتات</option>
-                        <option value="other-games">ألعاب أخرى</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>رابط الصورة</label><input type="url" id="itemImg" required></div>
-                <div class="form-group"><label>رابط التحميل</label><input type="url" id="itemUrl" required></div>
-                <div class="form-group"><label>الوصف</label><textarea id="itemDesc" rows="2"></textarea></div>
-                <button type="submit" id="btnSaveItem" class="btn-submit">حفظ العنصر</button>
-                <button type="button" id="btnCancelItem" class="btn-submit btn-cancel" onclick="resetItemForm()">إلغاء</button>
-            </form>
-            <div style="margin-top:20px;"><h3>العناصر الحالية:</h3><div id="itemsList"></div></div>
-        </div>
+        <button onclick="addNewItem()"><i class="fa-solid fa-plus"></i> إضافة العنصر للقائمة</button>
 
-        <!-- الفيديوهات -->
-        <div id="videosTab" class="tab-content">
-            <h2 id="vidTitleHead">إضافة / تعديل فيديو</h2>
-            <form onsubmit="handleVideoSave(event)">
-                <div class="form-group"><label>عنوان الفيديو</label><input type="text" id="vidTitle" required></div>
-                <div class="form-group"><label>رابط غلاف الفيديو</label><input type="url" id="vidImg" required></div>
-                <div class="form-group"><label>رابط يوتيوب</label><input type="url" id="vidUrl" required></div>
-                <div class="form-group"><label>الوصف</label><textarea id="vidDesc" rows="2"></textarea></div>
-                <button type="submit" id="btnSaveVid" class="btn-submit">حفظ الفيديو</button>
-                <button type="button" id="btnCancelVid" class="btn-submit btn-cancel" onclick="resetVideoForm()">إلغاء</button>
-            </form>
-            <div style="margin-top:20px;"><h3>الفيديوهات الحالية:</h3><div id="videosList"></div></div>
-        </div>
+        <hr style="border-color:rgba(255,255,255,0.1); margin:20px 0;">
 
-        <!-- شريط الأخبار المتحرك -->
-        <div id="newsTab" class="tab-content">
-            <h2>إدارة شريط الأخبار المتحرك</h2>
-            <form onsubmit="handleNewsSave(event)">
-                <div class="form-group"><label>نص الخبر أو التنبيه المتحرك أعلى الموقع</label><input type="text" id="newsInput" required placeholder="مثال: ترقبوا أقوى مود قادم غداً..."></div>
-                <button type="submit" class="btn-submit">تحديث ونشر الشريط</button>
-            </form>
-        </div>
-
-        <!-- الأكواد -->
-        <div id="codesTab" class="tab-content">
-            <h2>إضافة كود هدية جديد</h2>
-            <form onsubmit="handleCodeSave(event)">
-                <div class="form-group"><label>الكود</label><input type="text" id="cCode" required placeholder="مثال: ALI2026"></div>
-                <div class="form-group"><label>رابط المود المفتوح بالكود</label><input type="url" id="cUrl" required placeholder="https://..."></div>
-                <button type="submit" class="btn-submit">حفظ الكود</button>
-            </form>
-            <div style="margin-top:20px;"><h3>الأكواد:</h3><div id="codesList"></div></div>
-        </div>
-
-        <!-- عجلة الحظ -->
-        <div id="wheelTab" class="tab-content">
-            <h2>إدارة جوائز العجلة</h2>
-            <form onsubmit="handleWheelSave(event)">
-                <div class="form-group"><label>اسم الجائزة</label><input type="text" id="wPrize" required placeholder="مثال: مود سيارات"></div>
-                <button type="submit" class="btn-submit">إضافة جائزة</button>
-            </form>
-            <div style="margin-top:20px;"><h3>الجوائز:</h3><div id="wheelList"></div></div>
-        </div>
-
-        <!-- الشراكات -->
-        <div id="partnersTab" class="tab-content">
-            <h2>إضافة شريك</h2>
-            <form onsubmit="handlePartnerSave(event)">
-                <div class="form-group"><label>اسم الشريك</label><input type="text" id="pName" required></div>
-                <div class="form-group"><label>رابط الصورة</label><input type="url" id="pImg" required></div>
-                <div class="form-group"><label>رابط القناة</label><input type="url" id="pYt" required></div>
-                <button type="submit" class="btn-submit">حفظ الشريك</button>
-            </form>
-            <div style="margin-top:20px;"><h3>الشركاء:</h3><div id="partnersList"></div></div>
-        </div>
+        <button onclick="downloadJsonFile()" style="background: linear-gradient(90deg, #10b981, #059669);"><i class="fa-solid fa-download"></i> تحميل ملف `data.json` المحدث</button>
+        <br><br>
+        <a href="index.html" style="display:block; text-align:center; color:#00f2fe; text-decoration:none;"><i class="fa-solid fa-arrow-right"></i> العودة للمتجر الرئيسي</a>
     </div>
 
     <script>
-        const DASHBOARD_PIN = "19861986";
-        const OWNER = "markbrabos010-lab";
-        const REPO = "ALIOPZTE-";
-        const PATH = "data.json";
+        let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "" };
+        let base64ImageString = "";
 
-        let currentData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "" };
-        let fileSha = "";
-        let editingItemId = null, editingVideoId = null;
+        // تحميل ملف data.json الحالي عند فتح اللوحة
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                storeData = data;
+                if(data.newsTicker) document.getElementById('newsTickerInput').value = data.newsTicker;
+            })
+            .catch(() => {});
 
-        function checkPassword(e) {
-            e.preventDefault();
-            if (document.getElementById("passInput").value === DASHBOARD_PIN) {
-                document.getElementById("loginOverlay").style.display = "none";
-                document.getElementById("adminContainer").style.display = "block";
-                loadData();
-            } else { alert("كلمة السر خطأ!"); }
-        }
-
-        function switchTab(id, btn) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
-        }
-
-        async function loadData() {
-            try {
-                const res = await fetch('data.json?t=' + new Date().getTime());
-                if (res.ok) {
-                    const parsed = await res.json();
-                    currentData.items = parsed.items || [];
-                    currentData.partners = parsed.partners || [];
-                    currentData.codes = parsed.codes || [];
-                    currentData.wheelPrizes = parsed.wheelPrizes || [];
-                    currentData.newsTicker = parsed.newsTicker || "";
-                    document.getElementById("newsInput").value = currentData.newsTicker;
-                    renderLists();
+        // تحويل الصورة المرفوعة من الهاتف إلى Base64
+        function encodeImageFileAsURL(element) {
+            const file = element.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    base64ImageString = reader.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = base64ImageString;
+                    preview.style.display = 'block';
                 }
-            } catch(e) {}
-        }
-
-        function renderLists() {
-            const iList = document.getElementById("itemsList"); iList.innerHTML = "";
-            currentData.items.filter(i => i.category !== 'videos').forEach(item => {
-                iList.innerHTML += `<div class="list-item"><span><b>${item.title}</b></span><div><button class="btn-edit" onclick="editItem(${item.id})">تعديل</button> <button class="btn-del" onclick="deleteItem(${item.id})">حذف</button></div></div>`;
-            });
-
-            const vList = document.getElementById("videosList"); vList.innerHTML = "";
-            currentData.items.filter(i => i.category === 'videos').forEach(vid => {
-                vList.innerHTML += `<div class="list-item"><span><b>${vid.title}</b></span><div><button class="btn-edit" onclick="editVideo(${vid.id})">تعديل</button> <button class="btn-del" onclick="deleteItem(${vid.id})">حذف</button></div></div>`;
-            });
-
-            const cList = document.getElementById("codesList"); cList.innerHTML = "";
-            currentData.codes.forEach((code, index) => {
-                cList.innerHTML += `<div class="list-item"><span>الكود: <b>${code.code}</b></span><button class="btn-del" onclick="deleteCode(${index})">حذف</button></div>`;
-            });
-
-            const wList = document.getElementById("wheelList"); wList.innerHTML = "";
-            currentData.wheelPrizes.forEach((prize, index) => {
-                wList.innerHTML += `<div class="list-item"><span>الجائزة: <b>${prize}</b></span><button class="btn-del" onclick="deleteWheel(${index})">حذف</button></div>`;
-            });
-
-            const pList = document.getElementById("partnersList"); pList.innerHTML = "";
-            currentData.partners.forEach((p, index) => {
-                pList.innerHTML += `<div class="list-item"><span><b>${p.name}</b></span><button class="btn-del" onclick="deletePartner(${index})">حذف</button></div>`;
-            });
-        }
-
-        function handleItemSave(e) {
-            e.preventDefault();
-            if(editingItemId) {
-                const item = currentData.items.find(i => i.id === editingItemId);
-                if(item) {
-                    item.title = document.getElementById("itemTitle").value;
-                    item.category = document.getElementById("itemCat").value;
-                    item.image = document.getElementById("itemImg").value;
-                    item.url = document.getElementById("itemUrl").value;
-                    item.desc = document.getElementById("itemDesc").value;
-                }
-            } else {
-                currentData.items.unshift({
-                    id: Date.now(),
-                    title: document.getElementById("itemTitle").value,
-                    category: document.getElementById("itemCat").value,
-                    image: document.getElementById("itemImg").value,
-                    url: document.getElementById("itemUrl").value,
-                    desc: document.getElementById("itemDesc").value
-                });
+                reader.readAsDataURL(file);
             }
-            saveDataToGitHub();
-            resetItemForm();
         }
 
-        function editItem(id) {
-            const item = currentData.items.find(i => i.id === id);
-            if(!item) return;
-            editingItemId = id;
-            document.getElementById("itemTitle").value = item.title;
-            document.getElementById("itemCat").value = item.category;
-            document.getElementById("itemImg").value = item.image;
-            document.getElementById("itemUrl").value = item.url;
-            document.getElementById("itemDesc").value = item.desc || "";
-            document.getElementById("btnSaveItem").innerText = "تحديث التعديلات";
-            document.getElementById("btnCancelItem").style.display = "block";
-        }
+        function addNewItem() {
+            const title = document.getElementById('itemTitle').value.trim();
+            const category = document.getElementById('itemCategory').value;
+            const desc = document.getElementById('itemDesc').value.trim();
+            const url = document.getElementById('itemUrl').value.trim();
 
-        function resetItemForm() {
-            editingItemId = null;
-            document.getElementById("itemTitle").value = "";
-            document.getElementById("itemImg").value = "";
-            document.getElementById("itemUrl").value = "";
-            document.getElementById("itemDesc").value = "";
-            document.getElementById("btnSaveItem").innerText = "حفظ العنصر";
-            document.getElementById("btnCancelItem").style.display = "none";
-        }
-
-        function handleVideoSave(e) {
-            e.preventDefault();
-            if(editingVideoId) {
-                const vid = currentData.items.find(i => i.id === editingVideoId);
-                if(vid) {
-                    vid.title = document.getElementById("vidTitle").value;
-                    vid.image = document.getElementById("vidImg").value;
-                    vid.url = document.getElementById("vidUrl").value;
-                    vid.desc = document.getElementById("vidDesc").value;
-                }
-            } else {
-                currentData.items.unshift({
-                    id: Date.now(),
-                    title: document.getElementById("vidTitle").value,
-                    category: "videos",
-                    image: document.getElementById("vidImg").value,
-                    url: document.getElementById("vidUrl").value,
-                    desc: document.getElementById("vidDesc").value
-                });
+            if (!title || !url) {
+                alert("يرجى إدخال عنوان العنصر ورابط التحميل على الأقل!");
+                return;
             }
-            saveDataToGitHub();
-            resetVideoForm();
+
+            const newItem = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                desc: desc,
+                url: url,
+                image: base64ImageString || "https://cdn-icons-png.flaticon.com/512/686/686589.png"
+            };
+
+            storeData.items.unshift(newItem);
+            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
+
+            alert("✅ تم إضافة العنصر بنجاح! اضغط الآن على زر تحميل ملف data.json وارفعه في GitHub.");
+            
+            // تفريغ الحقول
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemDesc').value = '';
+            document.getElementById('itemUrl').value = '';
+            document.getElementById('itemImageFile').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            base64ImageString = "";
         }
 
-        function editVideo(id) {
-            const vid = currentData.items.find(i => i.id === id);
-            if(!vid) return;
-            editingVideoId = id;
-            document.getElementById("vidTitle").value = vid.title;
-            document.getElementById("vidImg").value = vid.image;
-            document.getElementById("vidUrl").value = vid.url;
-            document.getElementById("vidDesc").value = vid.desc || "";
-            document.getElementById("btnSaveVid").innerText = "تحديث الفيديو";
-            document.getElementById("btnCancelVid").style.display = "block";
-        }
-
-        function resetVideoForm() {
-            editingVideoId = null;
-            document.getElementById("vidTitle").value = "";
-            document.getElementById("vidImg").value = "";
-            document.getElementById("vidUrl").value = "";
-            document.getElementById("vidDesc").value = "";
-            document.getElementById("btnSaveVid").innerText = "حفظ الفيديو";
-            document.getElementById("btnCancelVid").style.display = "none";
-        }
-
-        function handleNewsSave(e) {
-            e.preventDefault();
-            currentData.newsTicker = document.getElementById("newsInput").value.trim();
-            saveDataToGitHub();
-        }
-
-        function handleCodeSave(e) {
-            e.preventDefault();
-            currentData.codes.unshift({ id: Date.now(), code: document.getElementById("cCode").value.trim(), url: document.getElementById("cUrl").value.trim() });
-            saveDataToGitHub();
-            document.getElementById("cCode").value = ""; document.getElementById("cUrl").value = "";
-        }
-
-        function handleWheelSave(e) {
-            e.preventDefault();
-            currentData.wheelPrizes.unshift(document.getElementById("wPrize").value.trim());
-            saveDataToGitHub();
-            document.getElementById("wPrize").value = "";
-        }
-
-        function handlePartnerSave(e) {
-            e.preventDefault();
-            currentData.partners.unshift({ id: Date.now(), name: document.getElementById("pName").value, image: document.getElementById("pImg").value, youtubeUrl: document.getElementById("pYt").value });
-            saveDataToGitHub();
-        }
-
-        function deleteItem(id) { currentData.items = currentData.items.filter(i => i.id !== id); saveDataToGitHub(); }
-        function deleteCode(index) { currentData.codes.splice(index, 1); saveDataToGitHub(); }
-        function deleteWheel(index) { currentData.wheelPrizes.splice(index, 1); saveDataToGitHub(); }
-        function deletePartner(index) { currentData.partners.splice(index, 1); saveDataToGitHub(); }
-
-        async function saveDataToGitHub() {
-            const token = document.getElementById("ghToken").value.trim();
-            if (!token) { alert("أدخل توكن GitHub أولاً!"); return; }
-            localStorage.setItem("ali_gh_token", token);
-
-            try {
-                const getRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, { headers: { "Authorization": `token ${token}` } });
-                if (getRes.ok) {
-                    const getData = await getRes.json();
-                    fileSha = getData.sha;
-                }
-
-                const jsonStr = JSON.stringify(currentData, null, 2);
-                const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
-
-                const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
-                    method: "PUT",
-                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: "تحديث شامل للمتجر", content: encoded, sha: fileSha })
-                });
-
-                if (res.ok) {
-                    alert("تم الحفظ بنجاح!");
-                    loadData();
-                } else { alert("خطأ أثناء الحفظ!"); }
-            } catch (e) { alert("تعذر الاتصال بالسيرفر!"); }
+        function downloadJsonFile() {
+            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(storeData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "data.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
         }
     </script>
 </body>

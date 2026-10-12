@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ALIOPZTE Store | عالم الـ RGB والألعاب</title>
+    
+    <!-- رابط ملف الـ Manifest لتحويل الموقع لتطبيق PWA / APK -->
+    <link rel="manifest" href="manifest.json">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -15,7 +19,7 @@
             --card-bg: rgba(13, 18, 30, 0.85);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --rgb-speed: 4s; /* السرعة الافتراضية للـ RGB */
+            --rgb-speed: 4s;
         }
 
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
@@ -29,7 +33,6 @@
 
         * { box-sizing: border-box; }
 
-        /* حركة الألوان الديناميكية السريعة للحدود والنصوص */
         @keyframes dynamicRgbGlow {
             0% { border-color: #ff007f; box-shadow: 0 0 15px #ff007f; }
             25% { border-color: #00f2fe; box-shadow: 0 0 15px #00f2fe; }
@@ -75,8 +78,6 @@
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
         .btn-device-select { background: rgba(255, 255, 255, 0.08); border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: bold; }
         .btn-admin { background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
-        
-        /* زر السرعة الجديد الـ RGB */
         .btn-speed { background: rgba(255, 255, 255, 0.08); border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: bold; }
 
         .news-ticker-bar { background: rgba(13, 18, 30, 0.9); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 8px 0; overflow: hidden; white-space: nowrap; width: 100%; font-size: 0.85rem; color: #cbd5e1; }
@@ -115,7 +116,6 @@
         .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        /* الأزرار بتدرج متحرك فخم */
         .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f, #00f2fe); background-size: 200% 200%; color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; animation: rgbTextAnimation var(--rgb-speed) infinite linear; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
@@ -193,10 +193,7 @@
                 <button class="btn-action wheel-btn" onclick="openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
                 <button class="btn-action code-btn" onclick="openCodeModal()"><i class="fa-solid fa-key"></i> كود</button>
                 <button class="btn-action fav-btn" onclick="toggleWishlistFilter()"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> (<span id="favCount">0</span>)</button>
-                
-                <!-- زر التحكم بسرعات ألوان RGB -->
                 <button class="btn-speed" onclick="cycleRgbSpeed()" title="سرعة حركة الألوان"><i class="fa-solid fa-bolt"></i> <span id="speedLabel">1x</span></button>
-                
                 <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i></a>
             </div>
         </div>
@@ -296,7 +293,6 @@
         let viewingWishlist = false;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
-        // قائمة سرعات ألوان النيون (0.5x = بطيء, 1x = عادي, 1.5x = سريع, 2x = خارق)
         const speeds = [
             { label: '0.5x', value: '8s' },
             { label: '1x',   value: '4s' },
@@ -313,7 +309,6 @@
             updateWishlistCount();
         });
 
-        /* الدوران بين سرعات ألوان النيون عند الضغط على الزر */
         function cycleRgbSpeed() {
             currentSpeedIdx = (currentSpeedIdx + 1) % speeds.length;
             localStorage.setItem("ali_speed_idx", currentSpeedIdx);

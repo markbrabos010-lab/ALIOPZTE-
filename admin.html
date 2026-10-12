@@ -46,7 +46,7 @@
         <div class="login-card">
             <i class="fa-solid fa-user-shield"></i>
             <h2 style="color:#fff; margin-bottom: 10px;">لوحة تحكم الأدمن</h2>
-            <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور (19861986):</p>
+            <p style="color:#94a3b8; font-size: 0.85rem; margin-bottom: 20px;">أدخل كلمة المرور الخاصة بك:</p>
             <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور..." style="text-align: center; font-size: 1.1rem; margin-bottom: 15px;">
             <button onclick="checkPassword()" class="btn-submit"><i class="fa-solid fa-key"></i> دخول اللوحة</button>
             <p id="loginError" style="color:#ff4d4d; font-weight:bold; display:none; margin-top:10px;">❌ كلمة المرور غير صحيحة!</p>
@@ -204,7 +204,6 @@
         }
 
         function renderLists() {
-            // العناصر
             document.getElementById('itemsList').innerHTML = storeData.items.map((item, i) => `
                 <div class="item-row">
                     <span><b>${item.title}</b> (${item.category})</span>
@@ -215,7 +214,6 @@
                 </div>
             `).join('');
 
-            // الشركاء
             document.getElementById('partnersList').innerHTML = (storeData.partners || []).map((p, i) => `
                 <div class="item-row">
                     <span>${p.name}</span>
@@ -223,7 +221,6 @@
                 </div>
             `).join('');
 
-            // الأكواد
             document.getElementById('codesList').innerHTML = (storeData.codes || []).map((c, i) => `
                 <div class="item-row">
                     <span>${c.code}</span>
@@ -231,7 +228,6 @@
                 </div>
             `).join('');
 
-            // العجلة
             document.getElementById('wheelList').innerHTML = (storeData.wheelPrizes || []).map((w, i) => `
                 <div class="item-row">
                     <span>${w}</span>
@@ -377,7 +373,6 @@
         function deleteCode(i) { storeData.codes.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
         function deletePrize(i) { storeData.wheelPrizes.splice(i, 1); saveToGitHub("🗑️ تم الحذف بنجاح!"); }
 
-        // التحديث التلقائي المباشر بـ GitHub
         async function saveToGitHub(successMsg) {
             const token = document.getElementById('githubToken').value.trim();
             storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();

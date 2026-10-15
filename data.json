@@ -94,9 +94,14 @@
     {
       "code": "Test",
       "url": "Testtt"
+    },
+    {
+      "code": "زوط",
+      "url": "زوط"
     }
   ],
   "wheelPrizes": [],
   "newsTicker": "لا تنسو الاشتراك في القناه والدخول الى قنات الديسكورد و قنات الشركاء✅ | حتا نقدر نستمر 🔥",
-  "featuredId": "1791903440519"
+  "featuredId": "1791903440519",
+  "wheelStatus": "locked"
 }

@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- OneSignal SDK المحدث مع مسار GitHub Pages الفرعي -->
+    <!-- OneSignal SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -133,7 +133,7 @@
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; position: relative; }
         .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
-        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; loading: lazy; }
         .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
         
         .btn-card-fav { position: absolute; top: 8px; left: 8px; background: rgba(5, 7, 14, 0.8); border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; font-size: 0.9rem; }
@@ -154,7 +154,6 @@
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
 
-        /* تنسيقات قسم التقييمات التلقائي المرتبط بـ Google Sheets وديسكورد */
         .review-section { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
         .review-header { color: #00f2fe; font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
         .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; margin-top: 15px; }
@@ -182,8 +181,8 @@
             <h2 style="font-size: 1.25rem; color: #fff; margin-bottom: 8px;">قوانين وحقوق النشر (ALIOPZTE)</h2>
             <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.6; text-align: right; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
                 مرحباً بك! يرجى العلم أن جميع المحتويات والمودات هنا محمية:<br><br>
-                • **يُمنع منعاً باتاً** إعادة نشر أو استخلاص محتوى الموقع دون **أخذ إذن مسبق**.<br>
-                • يجب **ذكر المصدر الأساسي (ALIOPZTE Store)** عند مشاركة أي محتوى.
+                • <b>يُمنع منعاً باتاً</b> إعادة نشر أو استخلاص محتوى الموقع دون <b>أخذ إذن مسبق</b>.<br>
+                • يجب <b>ذكر المصدر الأساسي (ALIOPZTE Store)</b> عند مشاركة أي محتوى.
             </p>
             <button onclick="acceptCopyright()" class="btn-card-view" style="font-size: 1rem; padding: 12px;">
                 <i class="fa-solid fa-check"></i> أوافق وأقر بالشروط
@@ -263,7 +262,7 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم تقييمات وآراء المتابعين المرتبط بـ Google Sheets وديسكورد -->
+                <!-- قسم تقييمات وآراء المتابعين -->
                 <section class="review-section">
                     <h2 class="review-header">
                         <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين
@@ -298,7 +297,6 @@
                         <p id="revMsg" style="margin-top: 8px; font-size: 0.82rem; font-weight: bold; text-align: center;"></p>
                     </div>
 
-                    <!-- قائمة عرض التقييمات الديناميكية من Google Sheets -->
                     <div id="reviewsList" class="reviews-list">
                         <p style="color: var(--text-muted); text-align: center; font-size: 0.85rem;">جاري تحميل التقييمات...</p>
                     </div>
@@ -359,11 +357,11 @@
         let currentCategory = 'all';
         let activeTargetUrl = '#';
         let viewingWishlist = false;
+        let downloadTimerInterval = null;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -383,7 +381,7 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             loadStoreData();
             checkWheelStatus();
             updateWishlistCount();
-            fetchReviews(); // تحميل وعرض التقييمات المخزنة فور فتح الموقع
+            fetchReviews();
         });
 
         function installPWA() {
@@ -417,7 +415,7 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
         }
 
         function applySpeed(idx) {
-            const spd = speeds[idx];
+            const spd = speeds[idx] || speeds[1];
             document.documentElement.style.setProperty('--rgb-speed', spd.value);
             document.getElementById("speedLabel").innerText = spd.label;
         }
@@ -462,8 +460,10 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
 
         async function loadStoreData() {
             try {
-                const res = await fetch('data.json?nocache=' + new Date().getTime());
+                const res = await fetch('data.json', { cache: 'no-cache' });
+                if (!res.ok) throw new Error("فشل تحميل ملف البيانات");
                 const data = await res.json();
+                
                 allItems = data.items || [];
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
@@ -473,44 +473,54 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
                 }
 
-                if(data.featuredId && allItems.length > 0) {
-                    const featItem = allItems.find(i => i.id == data.featuredId);
-                    if(featItem) {
-                        document.getElementById('featuredTitleText').innerText = featItem.title;
-                        document.getElementById('featuredDescText').innerText = featItem.desc || '';
-                        window.featuredItemObj = featItem;
-                    }
-                } else if(allItems.length > 0) {
-                    document.getElementById('featuredTitleText').innerText = allItems[0].title;
-                    document.getElementById('featuredDescText').innerText = allItems[0].desc || '';
-                    window.featuredItemObj = allItems[0];
+                // إصلاح مشكلة التعليق على "جاري التحميل..." في العنصر الرائج
+                const featItem = (data.featuredId && allItems.find(i => i.id == data.featuredId)) || allItems[0];
+                if (featItem) {
+                    document.getElementById('featuredTitleText').innerText = featItem.title;
+                    document.getElementById('featuredDescText').innerText = featItem.desc || '';
+                    window.featuredItemObj = featItem;
+                } else {
+                    document.getElementById('featuredTitleText').innerText = "أهلاً بك في متجر ALIOPZTE";
+                    document.getElementById('featuredDescText').innerText = "تصفح أحدث الألعاب والمودات والسكربتات الحصرية!";
                 }
 
                 renderItems(allItems);
                 renderPartners(allPartners);
-            } catch (e) {}
+            } catch (e) {
+                console.error("خطأ في قراءة data.json:", e);
+                document.getElementById('featuredTitleText').innerText = "متجر ALIOPZTE الرسمي";
+                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:#ff4d4d;">حدث خطأ أثناء تحميل العناصر، يرجى تحديث الصفحة (Ctrl + F5).</p>';
+            }
         }
 
         function renderPartners(partners) {
             const grid = document.getElementById('partnersGrid');
             grid.innerHTML = '';
+            if (!partners || partners.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-muted); font-size:0.8rem; text-align:center;">لا توجد شراكات حالياً.</p>';
+                return;
+            }
             partners.forEach(p => {
-                grid.innerHTML += `<div class="partner-card"><img src="${p.image}" class="partner-avatar"><div><div style="font-size:0.82rem; font-weight:bold;">${p.name}</div><a href="${p.youtubeUrl}" target="_blank" style="color:#ff4d4d; font-size:0.7rem;">يوتيوب</a></div></div>`;
+                grid.innerHTML += `<div class="partner-card"><img src="${p.image}" class="partner-avatar" loading="lazy"><div><div style="font-size:0.82rem; font-weight:bold;">${p.name}</div><a href="${p.youtubeUrl}" target="_blank" style="color:#ff4d4d; font-size:0.7rem;">يوتيوب</a></div></div>`;
             });
         }
 
         function renderItems(items) {
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = '';
+            const searchQuery = (document.getElementById('searchInput').value || '').trim().toLowerCase();
             
             let filtered = items.filter(i => {
                 const matchesCat = (currentCategory === 'all') || (i.category === currentCategory);
                 const matchesWishlist = !viewingWishlist || wishlist.includes(i.id);
-                return matchesCat && matchesWishlist;
+                const matchesSearch = !searchQuery || 
+                    (i.title && i.title.toLowerCase().includes(searchQuery)) || 
+                    (i.desc && i.desc.toLowerCase().includes(searchQuery));
+                return matchesCat && matchesWishlist && matchesSearch;
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:var(--text-muted);">لا توجد عناصر مطابقة.</p>';
+                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:var(--text-muted);">لا توجد عناصر مطابقة للبحث.</p>';
                 return;
             }
 
@@ -519,14 +529,19 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
                 grid.innerHTML += `
                     <div class="item-card">
                         <button class="btn-card-fav ${isFav ? 'active' : ''}" onclick="toggleWishlist(event, ${item.id})"><i class="fa-solid fa-heart"></i></button>
-                        <div class="card-thumb" onclick='openModal(${JSON.stringify(item)})'><img src="${item.image}"><span class="badge-tag">${item.category}</span></div>
-                        <div class="card-details" onclick='openModal(${JSON.stringify(item)})'>
+                        <div class="card-thumb" onclick="openModalById(${item.id})"><img src="${item.image}" loading="lazy"><span class="badge-tag">${item.category}</span></div>
+                        <div class="card-details" onclick="openModalById(${item.id})">
                             <h3 class="card-title">${item.title}</h3>
                             <p class="card-desc">${item.desc || '...'}</p>
                             <button class="btn-card-view"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
                         </div>
                     </div>`;
             });
+        }
+
+        function openModalById(id) {
+            const item = allItems.find(i => i.id == id);
+            if (item) openModal(item);
         }
 
         function toggleWishlist(e, id) {
@@ -572,9 +587,11 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             localStorage.setItem("ali_last_spin", now);
 
             setTimeout(() => {
-                const prize = allWheelPrizes[Math.floor(Math.random() * allWheelPrizes.length)];
+                const prize = (allWheelPrizes && allWheelPrizes.length > 0) 
+                    ? allWheelPrizes[Math.floor(Math.random() * allWheelPrizes.length)] 
+                    : "حظ أوفر في المرة القادمة!";
                 document.getElementById('wheelMsg').style.color = "#00ff88";
-                document.getElementById('wheelMsg').innerText = "🎉 مبروك! فزت بـ: " + prize;
+                document.getElementById('wheelMsg').innerText = "🎉 النتيجة: " + prize;
             }, 4000);
         }
 
@@ -583,10 +600,23 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             document.getElementById('mImg').src = item.image;
             document.getElementById('mTitle').innerText = item.title;
             document.getElementById('mDesc').innerText = item.desc || '';
+            
+            // إعادة ضبط زر التحميل والعداد
+            if (downloadTimerInterval) clearInterval(downloadTimerInterval);
+            const btn = document.getElementById('mDlBtn');
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-solid fa-download"></i> تجهيز رابط التحميل`;
+            btn.onclick = startDownloadTimer;
+
             document.getElementById('itemModal').classList.add('active');
         }
 
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) { 
+            if (id === 'itemModal' && downloadTimerInterval) {
+                clearInterval(downloadTimerInterval);
+            }
+            document.getElementById(id).classList.remove('active'); 
+        }
         function openWheelModal() { document.getElementById('wheelModal').classList.add('active'); }
         function openCodeModal() { document.getElementById('codeModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
@@ -609,12 +639,14 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             const btn = document.getElementById('mDlBtn');
             btn.disabled = true;
             let seconds = 5;
-            const timer = setInterval(() => {
+            if (downloadTimerInterval) clearInterval(downloadTimerInterval);
+            
+            downloadTimerInterval = setInterval(() => {
                 btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> تجهيز الرابط خلال ${seconds}ث...`;
                 seconds--;
                 if (seconds < 0) {
-                    clearInterval(timer);
-                    btn.innerHTML = `<i class="fa-solid fa-check"></i> جاهز للتحميل الان!`;
+                    clearInterval(downloadTimerInterval);
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> جاهز للتحميل الآن!`;
                     btn.disabled = false;
                     btn.onclick = () => { window.open(activeTargetUrl, '_blank'); };
                 }
@@ -631,7 +663,6 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
 
         function filterItems() { renderItems(allItems); }
 
-        // جلب وعرض التقييمات من جدول البيانات ديناميكياً مع معالجة إعادة التوجيه
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
@@ -665,7 +696,6 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             }
         }
 
-        // دالة إرسال التقييم إلى Google Sheets والديسكورد وتحديث الموقع فوراً
         async function sendReviewToDiscord() {
             const name = document.getElementById('revName').value.trim();
             const stars = document.getElementById('revStars').value;
@@ -682,20 +712,18 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
             msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
             try {
-                // 1. الإرسال إلى Google Sheets للحفظ الفوري عبر URLSearchParams
                 const formData = new URLSearchParams();
                 formData.append('name', name);
                 formData.append('stars', stars);
                 formData.append('comment', comment);
 
-                await fetch(GOOGLE_SCRIPT_URL, {
+                fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData.toString()
-                });
+                }).catch(() => {});
 
-                // 2. إرسال إشعار فوري إلى ديسكورد
                 await fetch(DISCORD_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -718,7 +746,7 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/155923109001796003
                 document.getElementById('revName').value = '';
                 document.getElementById('revComment').value = '';
 
-                setTimeout(fetchReviews, 2000); // تحديث القائمة بعد ثانيتين ليظهر التقييم المضاف تلقائياً
+                setTimeout(fetchReviews, 2000);
             } catch (e) {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";

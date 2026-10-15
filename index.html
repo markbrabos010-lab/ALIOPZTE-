@@ -40,10 +40,34 @@
     <style>
         :root {
             --bg-dark: #05070e;
-            --card-bg: rgba(13, 18, 30, 0.85);
+            --card-bg: rgba(13, 18, 30, 0.88);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --rgb-speed: 4s;
+            --theme-c1: #ff007f;
+            --theme-c2: #00f2fe;
+            --theme-c3: #7f00ff;
+            --theme-c4: #00ff88;
+        }
+
+        /* ثيمات المتجر المتعددة (الميزة 12) */
+        body.theme-matrix {
+            --theme-c1: #00ff41;
+            --theme-c2: #008f11;
+            --theme-c3: #00ff88;
+            --theme-c4: #39ff14;
+        }
+        body.theme-gold {
+            --theme-c1: #ffd700;
+            --theme-c2: #f59e0b;
+            --theme-c3: #fbbf24;
+            --theme-c4: #fffbeb;
+        }
+        body.theme-crimson {
+            --theme-c1: #ff003c;
+            --theme-c2: #ff4d00;
+            --theme-c3: #990024;
+            --theme-c4: #ff007f;
         }
 
         html, body { width: 100%; max-width: 100vw; overflow-x: hidden; margin: 0; padding: 0; }
@@ -58,11 +82,11 @@
         * { box-sizing: border-box; }
 
         @keyframes dynamicRgbGlow {
-            0% { border-color: #ff007f; box-shadow: 0 0 15px #ff007f; }
-            25% { border-color: #00f2fe; box-shadow: 0 0 15px #00f2fe; }
-            50% { border-color: #7f00ff; box-shadow: 0 0 15px #7f00ff; }
-            75% { border-color: #00ff88; box-shadow: 0 0 15px #00ff88; }
-            100% { border-color: #ff007f; box-shadow: 0 0 15px #ff007f; }
+            0% { border-color: var(--theme-c1); box-shadow: 0 0 15px var(--theme-c1); }
+            25% { border-color: var(--theme-c2); box-shadow: 0 0 15px var(--theme-c2); }
+            50% { border-color: var(--theme-c3); box-shadow: 0 0 15px var(--theme-c3); }
+            75% { border-color: var(--theme-c4); box-shadow: 0 0 15px var(--theme-c4); }
+            100% { border-color: var(--theme-c1); box-shadow: 0 0 15px var(--theme-c1); }
         }
 
         @keyframes rgbTextAnimation {
@@ -72,43 +96,42 @@
         }
 
         .rgb-text {
-            background: linear-gradient(90deg, #ff007f, #00f2fe, #7f00ff, #00ff88, #ff007f);
+            background: linear-gradient(90deg, var(--theme-c1), var(--theme-c2), var(--theme-c3), var(--theme-c4), var(--theme-c1));
             background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
             animation: rgbTextAnimation var(--rgb-speed) ease infinite;
         }
 
         .device-selector-overlay, .copyright-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 7, 14, 0.96); backdrop-filter: blur(15px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 15px; }
-        .device-selector-card, .copyright-card { background: var(--card-bg); border: 2px solid #00f2fe; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 20px; padding: 25px 20px; max-width: 450px; width: 100%; text-align: center; }
+        .device-selector-card, .copyright-card { background: var(--card-bg); border: 2px solid var(--theme-c2); animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 20px; padding: 25px 20px; max-width: 450px; width: 100%; text-align: center; }
         .device-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
         .device-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 15px 5px; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
-        .main-header { background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: relative; z-index: 1000; padding: 12px 15px; width: 100%; }
+        .main-header { background: rgba(5, 7, 14, 0.95); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); position: sticky; top: 0; z-index: 1000; padding: 12px 15px; width: 100%; }
         .header-container { max-width: 1380px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
         .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-        .brand-icon { font-size: 1.6rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
+        .brand-icon { font-size: 1.6rem; color: var(--theme-c2); filter: drop-shadow(0 0 8px var(--theme-c2)); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 260px; }
         .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; transition: transform 0.2s; }
+        .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; transition: transform 0.2s; font-family: inherit; }
         .btn-action:hover { transform: translateY(-2px); }
-        .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
-        .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
+        .btn-action.code-btn { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3)); }
+        .btn-action.wheel-btn { background: linear-gradient(90deg, var(--theme-c2), var(--theme-c4)); color: #000; font-weight: 900; }
         .btn-action.req-btn { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; font-weight: 900; }
         .btn-action.rank-btn { background: rgba(255, 215, 0, 0.12); border: 1px solid #ffd700; color: #ffd700; font-weight: 900; }
         .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
         .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; display: none; }
-        .btn-action.notif-btn { background: linear-gradient(90deg, #ff007f, #00f2fe); color: #fff; font-weight: 900; }
+        .btn-action.notif-btn { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c2)); color: #fff; font-weight: 900; }
         
         .btn-social { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; }
         .btn-social.youtube { background: rgba(255, 0, 0, 0.2); border: 1px solid rgba(255, 0, 0, 0.5); color: #ff4d4d; }
         .btn-social.discord { background: rgba(88, 101, 242, 0.2); border: 1px solid rgba(88, 101, 242, 0.5); color: #7289da; }
-        .btn-device-select { background: rgba(255, 255, 255, 0.08); border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: bold; }
-        .btn-admin { background: linear-gradient(90deg, #ff007f, #7f00ff, #00f2fe); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
-        .btn-speed { background: rgba(255, 255, 255, 0.08); border: 1px solid #00f2fe; color: #00f2fe; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: bold; }
+        .btn-device-select, .btn-speed { background: rgba(255, 255, 255, 0.08); border: 1px solid var(--theme-c2); color: var(--theme-c2); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: bold; font-family: inherit; }
+        .btn-admin { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3), var(--theme-c2)); color: #fff; border-radius: 8px; padding: 6px 10px; font-weight: 900; font-size: 0.78rem; text-decoration: none; }
 
         .news-ticker-bar { background: rgba(13, 18, 30, 0.9); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 8px 0; overflow: hidden; white-space: nowrap; width: 100%; font-size: 0.85rem; color: #cbd5e1; }
         .news-ticker-content { display: inline-block; animation: tickerScroll 25s linear infinite; padding-left: 100%; }
@@ -116,59 +139,186 @@
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
-        .featured-banner { background: rgba(13, 18, 30, 0.9); border: 2px solid #00f2fe; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 16px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
-        .featured-badge { display: inline-block; background: #ff007f; color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
+        /* شريط مكافأة الدخول اليومي المتتالي (الميزة 3) */
+        .streak-bar {
+            background: rgba(13, 18, 30, 0.92);
+            border: 1px solid rgba(255, 215, 0, 0.35);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .streak-days { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .streak-day-circle {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 900; color: var(--text-muted);
+        }
+        .streak-day-circle.active {
+            background: linear-gradient(135deg, #f59e0b, #ffd700);
+            color: #000; border-color: #fff; box-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+        }
+        .streak-day-circle.mystery { border-color: var(--theme-c1); color: #ffd700; }
+
+        .featured-banner { background: rgba(13, 18, 30, 0.9); border: 2px solid var(--theme-c2); animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 16px; padding: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+        .featured-badge { display: inline-block; background: var(--theme-c1); color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
         .featured-title { font-size: 1.2rem; font-weight: 900; color: #fff; }
+
+        /* شريط شاهدت مؤخراً (الميزة 14) */
+        .recent-box {
+            background: rgba(13, 18, 30, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .recent-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .recent-mini-card {
+            background: rgba(5, 7, 14, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 7px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .recent-mini-card:hover { border-color: var(--theme-c2); transform: translateY(-2px); }
+        .recent-mini-card img { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; }
 
         .main-layout { display: flex; gap: 16px; align-items: flex-start; width: 100%; }
         .main-content { flex: 1; min-width: 0; width: 100%; }
 
-        .partners-sidebar { width: 260px; background: rgba(13, 18, 30, 0.88); border: 1px solid #00f2fe; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 16px; padding: 14px; backdrop-filter: blur(12px); }
-        .partners-header { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 900; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff; }
-        .partners-list { display: flex; flex-direction: column; gap: 8px; max-height: 70vh; overflow-y: auto; }
+        .partners-sidebar { width: 280px; display: flex; flex-direction: column; gap: 14px; }
+        .sidebar-box {
+            background: rgba(13, 18, 30, 0.88);
+            border: 1px solid var(--theme-c2);
+            animation: dynamicRgbGlow var(--rgb-speed) infinite linear;
+            border-radius: 16px;
+            padding: 14px;
+            backdrop-filter: blur(12px);
+        }
+        .partners-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.95rem; font-weight: 900; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); color: #fff; }
+        .partners-list { display: flex; flex-direction: column; gap: 8px; max-height: 45vh; overflow-y: auto; }
         .partner-card { background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px; }
-        .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #00f2fe; }
+        .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--theme-c2); }
+
+        /* بطاقة تصويت الجمهور (الميزة 9) */
+        .poll-option {
+            background: rgba(5, 7, 14, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 9px 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+        .poll-option:hover { border-color: var(--theme-c2); }
+        .poll-bar-fill {
+            position: absolute; top: 0; right: 0; bottom: 0;
+            background: rgba(0, 242, 254, 0.18);
+            width: 0%; transition: width 0.5s ease; z-index: 0;
+        }
+        .poll-option-content { position: relative; z-index: 1; display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; }
 
         .categories-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; scrollbar-width: none; }
-        .cat-btn { background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
-        .cat-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f); color: #fff; border-color: transparent; font-weight: 900; }
+        .cat-btn { background: rgba(13, 18, 30, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-muted); padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; font-family: inherit; }
+        .cat-btn.active { background: linear-gradient(90deg, var(--theme-c2), var(--theme-c3), var(--theme-c1)); color: #fff; border-color: transparent; font-weight: 900; }
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; position: relative; }
-        .item-card:hover { transform: translateY(-4px); border-color: rgba(0, 242, 254, 0.4); }
+        .item-card:hover { transform: translateY(-4px); border-color: var(--theme-c2); }
         .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
         .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
+        .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); border: 1px solid rgba(255,255,255,0.15); }
         
+        /* شارات البطاقات المتوهجة (الميزة 6) */
+        .glow-status-badge {
+            position: absolute; bottom: 8px; right: 8px;
+            padding: 3px 9px; border-radius: 6px; font-size: 0.68rem; font-weight: 900;
+            color: #fff; background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3));
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+        }
+
         .btn-card-fav { position: absolute; top: 8px; left: 8px; background: rgba(5, 7, 14, 0.8); border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; font-size: 0.9rem; }
         .btn-card-fav.active { color: #ef4444; }
 
         .card-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
-        .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+        .card-title { font-size: 0.98rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .card-meta-bar {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+            font-size: 0.7rem; color: #38bdf8; margin-bottom: 8px;
+            background: rgba(0, 242, 254, 0.07); padding: 4px 8px; border-radius: 6px;
+        }
         .card-desc { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, #00f2fe, #7f00ff, #ff007f, #00f2fe); background-size: 200% 200%; color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; animation: rgbTextAnimation var(--rgb-speed) infinite linear; }
+        .btn-card-view { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 8px; background: linear-gradient(90deg, var(--theme-c2), var(--theme-c3), var(--theme-c1), var(--theme-c2)); background-size: 200% 200%; color: #fff; border-radius: 8px; font-weight: 900; font-size: 0.82rem; border: none; cursor: pointer; animation: rgbTextAnimation var(--rgb-speed) infinite linear; font-family: inherit; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 530px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
 
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--theme-c2); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
 
-        .modal-actions-row { display: flex; gap: 8px; margin-top: 10px; }
-        .btn-share-item { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid #00f2fe; background: rgba(0, 242, 254, 0.12); color: #00f2fe; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
+        .modal-actions-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+        .btn-share-item { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid var(--theme-c2); background: rgba(0, 242, 254, 0.12); color: var(--theme-c2); font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
         .btn-report-link { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.1); color: #fca5a5; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
+
+        /* متجر استبدال نقاط XP (الميزة 2) */
+        .xp-shop-item {
+            background: rgba(5, 7, 14, 0.75);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            text-align: right;
+        }
+        .btn-buy-xp {
+            background: linear-gradient(90deg, #ffd700, #f59e0b);
+            color: #000; border: none; padding: 6px 12px; border-radius: 8px;
+            font-weight: 900; font-size: 0.78rem; cursor: pointer; white-space: nowrap; font-family: inherit;
+        }
+
+        /* صندوق نسخ السكربت (الميزة 4) */
+        .script-copy-box {
+            background: #05070e;
+            border: 1px dashed var(--theme-c2);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            display: none;
+            text-align: right;
+        }
 
         .xp-toast { position: fixed; bottom: 20px; left: 20px; background: rgba(13, 18, 30, 0.95); border: 2px solid #ffd700; color: #fff; padding: 10px 16px; border-radius: 12px; font-weight: 900; font-size: 0.85rem; z-index: 99999; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); display: none; align-items: center; gap: 8px; }
 
         .xp-progress-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        .xp-progress-fill { height: 100%; background: linear-gradient(90deg, #00f2fe, #ffd700); width: 0%; transition: width 0.4s ease; }
+        .xp-progress-fill { height: 100%; background: linear-gradient(90deg, var(--theme-c2), #ffd700); width: 0%; transition: width 0.4s ease; }
 
-        .review-section { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
-        .review-header { color: #00f2fe; font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
+        .review-section { background: var(--card-bg); border: 2px solid var(--theme-c2); border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
+        .review-header { color: var(--theme-c2); font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
         .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; margin-top: 15px; }
         .review-card { background: rgba(5,7,14,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 12px; border-radius: 10px; }
 
@@ -232,19 +382,21 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-action rank-btn" onclick="openRankModal()" title="رتبتك ونقاطك في المتجر">
+                <button class="btn-action rank-btn" onclick="playSfx('click'); openRankModal()" title="رتبتك ومتجر استبدال النقاط">
                     <span id="headerRankIcon">🥉</span> <span id="headerRankTitle">مبتدئ</span> (<span id="headerXPCount">10</span> XP)
                 </button>
-                <button class="btn-action req-btn" onclick="openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
-                <button class="btn-action notif-btn" onclick="triggerPushPrompt()"><i class="fa-solid fa-bell"></i> الإشعارات</button>
+                <button class="btn-action req-btn" onclick="playSfx('click'); openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
+                <button class="btn-action notif-btn" onclick="playSfx('click'); triggerPushPrompt()"><i class="fa-solid fa-bell"></i> الإشعارات</button>
                 <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت</button>
+                <button class="btn-device-select" onclick="playSfx('click'); cycleTheme()" title="تغيير ثيم الموقع"><i class="fa-solid fa-palette"></i> <span id="themeLabel">RGB</span></button>
+                <button class="btn-device-select" onclick="toggleSoundMute()" id="soundToggleBtn" title="المؤثرات الصوتية"><i class="fa-solid fa-volume-high"></i></button>
                 <button class="btn-device-select" onclick="openDeviceSelector()"><i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span></button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i></a>
-                <button class="btn-action wheel-btn" id="headerWheelBtn" onclick="openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
-                <button class="btn-action code-btn" onclick="openCodeModal()"><i class="fa-solid fa-key"></i> كود</button>
-                <button class="btn-action fav-btn" onclick="toggleWishlistFilter()"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> (<span id="favCount">0</span>)</button>
-                <button class="btn-speed" onclick="cycleRgbSpeed()" title="سرعة حركة الألوان"><i class="fa-solid fa-bolt"></i> <span id="speedLabel">1x</span></button>
+                <button class="btn-action wheel-btn" id="headerWheelBtn" onclick="playSfx('click'); openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
+                <button class="btn-action code-btn" onclick="playSfx('click'); openCodeModal()"><i class="fa-solid fa-key"></i> كود</button>
+                <button class="btn-action fav-btn" onclick="playSfx('click'); toggleWishlistFilter()"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> (<span id="favCount">0</span>)</button>
+                <button class="btn-speed" onclick="playSfx('click'); cycleRgbSpeed()" title="سرعة حركة الألوان"><i class="fa-solid fa-bolt"></i> <span id="speedLabel">1x</span></button>
                 <a href="admin.html" class="btn-admin"><i class="fa-solid fa-gauge-high"></i></a>
             </div>
         </div>
@@ -252,18 +404,41 @@
 
     <div class="news-ticker-bar">
         <div class="news-ticker-content" id="newsTickerText">
-            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | لا تنسَ الانضمام لسيرفر الديسكورد والاشتراك في القناة!
+            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | اجمع نقاط XP وافتح التحميل الفوري VIP وصندوق الغموض!
         </div>
     </div>
 
     <div class="container">
+        <!-- شريط سلسلة الدخول اليومي وصندوق الغموض (الميزة 3) -->
+        <div class="streak-bar">
+            <div>
+                <div style="font-weight:900; font-size:0.92rem; color:#ffd700;">
+                    <i class="fa-solid fa-fire-flame-curved"></i> مكافأة الدخول اليومي المتتالي (Daily Streak)
+                </div>
+                <div style="font-size:0.76rem; color:var(--text-muted);">ادخل يومياً لتحصل على +10 XP، وفي اليوم الخامس افتح 🎁 صندوق الغموض (+50 XP)!</div>
+            </div>
+            <div class="streak-days" id="streakDaysContainer"></div>
+            <button id="claimStreakBtn" onclick="claimDailyStreak()" class="btn-buy-xp">
+                <i class="fa-solid fa-gift"></i> استلام مكافأة اليوم
+            </button>
+        </div>
+
         <div class="featured-banner">
             <div>
                 <span class="featured-badge"><i class="fa-solid fa-fire"></i> الأفضل والأكثر رواجاً</span>
                 <div class="featured-title" id="featuredTitleText">جاري التحميل...</div>
                 <p id="featuredDescText" style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;"></p>
             </div>
-            <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="openFeaturedModal()"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
+            <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="playSfx('click'); openFeaturedModal()"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
+        </div>
+
+        <!-- شريط شاهدت مؤخراً (الميزة 14) -->
+        <div id="recentlyViewedBox" class="recent-box">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.85rem; font-weight:900; color:var(--theme-c2);"><i class="fa-solid fa-clock-rotate-left"></i> شاهدت مؤخراً:</span>
+                <button onclick="clearRecentlyViewed()" style="background:none; border:none; color:var(--text-muted); font-size:0.72rem; cursor:pointer;">مسح السجل</button>
+            </div>
+            <div id="recentlyViewedList" class="recent-list"></div>
         </div>
 
         <div class="main-layout">
@@ -282,7 +457,7 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم تقييمات وآراء المتابعين (مقيد بتقييم واحد كل ساعة) -->
+                <!-- قسم تقييمات وآراء المتابعين -->
                 <section class="review-section">
                     <h2 class="review-header">
                         <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)
@@ -324,40 +499,92 @@
             </main>
 
             <aside class="partners-sidebar">
-                <div class="partners-header"><i class="fa-solid fa-handshake rgb-text"></i><span>روم الشراكات</span></div>
-                <div id="partnersGrid" class="partners-list"></div>
+                <!-- بطاقة حالة سيرفر الديسكورد الحية (الميزة 8) -->
+                <div class="sidebar-box">
+                    <div class="partners-header">
+                        <span><i class="fa-brands fa-discord" style="color:#5865F2;"></i> سيرفر الديسكورد الرسمي</span>
+                        <span style="font-size:0.72rem; background:rgba(16,185,129,0.18); color:#10b981; padding:2px 8px; border-radius:12px;">● متصل الآن</span>
+                    </div>
+                    <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px; line-height:1.5;">
+                        انضم لمجتمع <b>ALIOPZTE</b> للحصول على الأكواد السرية، التحديثات الفورية، والدعم الفني المباشر!
+                    </p>
+                    <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-card-view" style="text-decoration:none; background:linear-gradient(90deg, #5865F2, #4752C4);">
+                        <i class="fa-brands fa-discord"></i> انضم للسيرفر الآن
+                    </a>
+                </div>
+
+                <!-- بطاقة تصويت الجمهور للإضافة القادمة (الميزة 9) -->
+                <div class="sidebar-box">
+                    <div class="partners-header">
+                        <span><i class="fa-solid fa-chart-pie" style="color:var(--theme-c2);"></i> تصويت الجمهور (+5 XP)</span>
+                    </div>
+                    <p style="font-size:0.78rem; color:#cbd5e1; margin-bottom:10px;">ماذا تريدون أن ننزل في التحديث القادم للمتجر؟</p>
+                    <div id="pollOptionsContainer"></div>
+                    <p id="pollStatusMsg" style="font-size:0.74rem; color:#00ff88; text-align:center; margin-top:6px; display:none;"></p>
+                </div>
+
+                <!-- روم الشراكات -->
+                <div class="sidebar-box">
+                    <div class="partners-header">
+                        <span><i class="fa-solid fa-handshake rgb-text"></i> روم الشراكات</span>
+                    </div>
+                    <div id="partnersGrid" class="partners-list"></div>
+                </div>
             </aside>
         </div>
     </div>
 
-    <!-- نافذة رتبة المتابع ونقاط XP -->
+    <!-- نافذة رتبة المتابع + متجر استبدال نقاط XP (الميزة 1 و 2) -->
     <div id="rankModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('rankModal')"><i class="fa-solid fa-xmark"></i></button>
-            <div id="modalRankIcon" style="font-size: 3rem; margin-bottom: 5px;">🥉</div>
+            <div id="modalRankIcon" style="font-size: 2.8rem; margin-bottom: 4px;">🥉</div>
             <h2 id="modalRankTitle" style="color:#ffd700; margin: 0;">رتبتك: مبتدئ</h2>
-            <p id="modalXPText" style="font-size:0.9rem; color:#cbd5e1; margin-top:5px;">نقاطك الحالية: 10 XP</p>
+            <p id="modalXPText" style="font-size:0.9rem; color:#cbd5e1; margin-top:4px;">نقاطك الحالية: 10 XP</p>
             
             <div class="xp-progress-bg">
                 <div id="modalXPBar" class="xp-progress-fill"></div>
             </div>
-            <p id="modalNextRankText" style="font-size:0.78rem; color:#00f2fe; margin-bottom:15px;"></p>
+            <p id="modalNextRankText" style="font-size:0.78rem; color:var(--theme-c2); margin-bottom:12px;"></p>
 
-            <div style="text-align:right; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; font-size:0.8rem; line-height:1.7; color:#cbd5e1;">
-                <b style="color:#fff;"><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> كيف تجمع نقاط XP وتترقى؟</b><br>
-                • تحميل أي لعبة أو مود أو فيديو: <b style="color:#00ff88;">+15 XP</b><br>
-                • كتابة تقييم للمتجر: <b style="color:#00ff88;">+25 XP</b><br>
-                • مشاركة عنصر مع أصدقائك: <b style="color:#00ff88;">+10 XP</b><br><br>
-                <b style="color:#fff;"><i class="fa-solid fa-crown" style="color:#ffd700;"></i> قائمة الرتب:</b><br>
-                🥉 <b>مبتدئ:</b> 0 - 49 XP<br>
-                💎 <b>قيمر محترف:</b> 50 - 149 XP<br>
-                🔥 <b>نخبة المتجر:</b> 150 - 299 XP<br>
-                👑 <b>أسطورة ALIOPZTE:</b> +300 XP
+            <!-- متجر استبدال نقاط XP (الميزة 2) -->
+            <div style="text-align:right; background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,215,0,0.2);">
+                <div style="font-weight:900; color:#ffd700; font-size:0.9rem; margin-bottom:8px;">
+                    <i class="fa-solid fa-store"></i> متجر استبدال نقاط الـ XP:
+                </div>
+                <div class="xp-shop-item">
+                    <div>
+                        <div style="font-size:0.82rem; font-weight:bold; color:#fff;">🎡 تدويرة إضافية لعجلة الحظ</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">تصفير عداد العجلة لتدويرها الآن فوراً</div>
+                    </div>
+                    <button class="btn-buy-xp" onclick="buyWithXP('wheel', 40)">40 XP</button>
+                </div>
+                <div class="xp-shop-item">
+                    <div>
+                        <div style="font-size:0.82rem; font-weight:bold; color:#fff;">⚡ تذكرة التحميل الفوري VIP (24 ساعة)</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">تخطي عداد الانتظار 5 ثوانٍ في جميع التحميلات</div>
+                    </div>
+                    <button class="btn-buy-xp" onclick="buyWithXP('vip_dl', 60)">60 XP</button>
+                </div>
+                <div class="xp-shop-item" style="margin-bottom:0;">
+                    <div>
+                        <div style="font-size:0.82rem; font-weight:bold; color:#fff;">👑 التاج الملكي الذهبي + ثيم Gold</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">وسام ملكي بجانب اسمك في التقييمات وتفعيل الثيم الذهبي</div>
+                    </div>
+                    <button class="btn-buy-xp" onclick="buyWithXP('royal_badge', 100)">100 XP</button>
+                </div>
+                <p id="xpShopMsg" style="font-size:0.78rem; font-weight:bold; text-align:center; margin-top:8px; display:none;"></p>
+            </div>
+
+            <div style="text-align:right; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; font-size:0.78rem; line-height:1.65; color:#cbd5e1;">
+                <b style="color:#fff;"><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> مميزات الرتب وكسب النقاط:</b><br>
+                • أصحاب رتبة <b>نخبة المتجر (150+ XP)</b> و<b>الأسطورة (300+ XP)</b> يحصلون على <b>تحميل فوري VIP (0 ثانية) تلقائياً!</b><br>
+                • تحميل عنصر جديد: <b style="color:#00ff88;">+15 XP</b> | تقييم المتجر: <b style="color:#00ff88;">+25 XP</b> | أول مشاركة: <b style="color:#00ff88;">+10 XP (تُحسب مرة واحدة فقط)</b>
             </div>
         </div>
     </div>
 
-    <!-- نافذة اطلب إضافة (لعبة / مود / حلقة) -->
+    <!-- نافذة اطلب إضافة -->
     <div id="requestModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('requestModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -384,7 +611,7 @@
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:#00f2fe;"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
+            <h2 style="color:var(--theme-c2);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
             <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة مرة واحدة يومياً للحصول على الجوائز!</p>
             
             <div class="wheel-container">
@@ -401,29 +628,46 @@
     <div id="codeModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('codeModal')"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:#ff007f;"><i class="fa-solid fa-key"></i> أدخل كود الهدية</h2>
+            <h2 style="color:var(--theme-c1);"><i class="fa-solid fa-key"></i> أدخل كود الهدية</h2>
             <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">أدخل كود الخصم أو المود الخاص المحصل من القناة:</p>
             
-            <input type="text" id="codeInputValue" placeholder="أدخل الكود هنا (مثال: ALI2026)" style="width:100%; padding:10px; border-radius:10px; border:1px solid #00f2fe; background:#000; color:#fff; text-align:center; font-size:1.1rem; margin-bottom:12px;">
+            <input type="text" id="codeInputValue" placeholder="أدخل الكود هنا (مثال: ALI2026)" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--theme-c2); background:#000; color:#fff; text-align:center; font-size:1.1rem; margin-bottom:12px;">
             
             <button onclick="redeemCode()" class="btn-card-view" style="font-size:1rem; padding:10px;"><i class="fa-solid fa-unlock"></i> تفعيل الكود</button>
             <p id="codeMsg" style="margin-top:10px; font-weight:bold; font-size:0.85rem;"></p>
         </div>
     </div>
 
-    <!-- نافذة تفاصيل العنصر والتحميل والمشاركة والإبلاغ -->
+    <!-- نافذة تفاصيل العنصر + مشغل الفيديو المدمج + نسخ السكربت (الميزات 1، 4، 5) -->
     <div id="itemModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('itemModal')"><i class="fa-solid fa-xmark"></i></button>
+            
             <img id="mImg" src="" alt="" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
-            <h2 id="mTitle" style="font-size:1.1rem; color:#fff;"></h2>
-            <p id="mDesc" style="font-size:0.82rem; color:#cbd5e1; background:rgba(0,0,0,0.4); padding:8px; border-radius:8px; margin:10px 0;"></p>
+            
+            <!-- مشغل الفيديو المدمج (الميزة 5) -->
+            <div id="mVideoContainer" style="display:none; width:100%; margin-bottom:10px; border-radius:10px; overflow:hidden; background:#000;"></div>
+
+            <h2 id="mTitle" style="font-size:1.1rem; color:#fff; margin-bottom:4px;"></h2>
+            <div id="mVipHint" style="font-size:0.75rem; color:#ffd700; margin-bottom:6px;"></div>
+            <p id="mDesc" style="font-size:0.82rem; color:#cbd5e1; background:rgba(0,0,0,0.4); padding:8px; border-radius:8px; margin:8px 0;"></p>
+
+            <!-- صندوق نسخ السكربت السريع (الميزة 4) -->
+            <div id="mScriptBox" class="script-copy-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:0.76rem; color:var(--theme-c2); font-weight:bold;"><i class="fa-solid fa-terminal"></i> نسخ سريع للسكربت / الرابط:</span>
+                    <button onclick="copyItemScriptOrUrl()" class="btn-buy-xp" style="padding:4px 10px; font-size:0.74rem;">
+                        <i class="fa-solid fa-copy"></i> نسخ بضغطة زر
+                    </button>
+                </div>
+                <code id="mScriptCode" style="display:block; font-size:0.74rem; color:#00ff88; word-break:break-all; max-height:60px; overflow-y:auto;"></code>
+            </div>
             
             <button id="mDlBtn" onclick="startDownloadTimer()" class="btn-card-view"><i class="fa-solid fa-download"></i> تجهيز رابط التحميل (+15 XP)</button>
             
             <div class="modal-actions-row">
                 <button onclick="shareCurrentItem()" class="btn-share-item">
-                    <i class="fa-solid fa-share-nodes"></i> مشاركة العنصر (+10 XP)
+                    <i class="fa-solid fa-share-nodes"></i> <span id="shareBtnLabel">مشاركة العنصر</span>
                 </button>
                 <button id="reportBrokenBtn" onclick="reportBrokenLink()" class="btn-report-link">
                     <i class="fa-solid fa-triangle-exclamation"></i> الرابط لا يعمل؟ أبلغنا
@@ -438,7 +682,7 @@
         let allPartners = [];
         let allCodes = [];
         let allWheelPrizes = [];
-        let wheelStatus = 'locked'; // افتراضياً مقفلة حتى تفتحها من لوحة التحكم
+        let wheelStatus = 'locked';
         let currentCategory = 'all';
         let activeTargetUrl = '#';
         let activeItemObj = null;
@@ -446,11 +690,12 @@
         let downloadTimerInterval = null;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
         let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
+        let soundMuted = localStorage.getItem("ali_sound_muted") === "true";
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000; // ساعة كاملة (60 دقيقة)
-        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000; // 30 دقيقة بين الطلبات
+        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;
+        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000;
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -466,14 +711,152 @@
                 document.getElementById('installAppBtn').style.display = 'inline-flex';
             }
             applySpeed(currentSpeedIdx);
+            applyTheme(currentThemeIdx);
+            updateSoundBtnUI();
             updateRankUI();
+            initDailyStreakUI();
+            renderPollUI();
             checkCopyrightAgreement();
             loadStoreData();
             updateWishlistCount();
             fetchReviews();
         });
 
-        // ================= نظام الرتب والنقاط (ALIOPZTE XP) =================
+        // ================= 🔊 المؤثرات الصوتية التفاعلية (الميزة 11) =================
+        let audioCtx = null;
+        function playSfx(type) {
+            if (soundMuted) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(220, now + 0.06);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                } else if (type === 'xp') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(660, now + 0.08);
+                    osc.frequency.setValueAtTime(880, now + 0.16);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'win') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.5, now + 0.3);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.45);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                }
+            } catch (e) {}
+        }
+
+        function toggleSoundMute() {
+            soundMuted = !soundMuted;
+            localStorage.setItem("ali_sound_muted", soundMuted ? "true" : "false");
+            updateSoundBtnUI();
+            if (!soundMuted) playSfx('click');
+        }
+
+        function updateSoundBtnUI() {
+            const btn = document.getElementById('soundToggleBtn');
+            btn.innerHTML = soundMuted ? '<i class="fa-solid fa-volume-xmark" style="color:#ef4444;"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+        }
+
+        // ================= 🎨 مبدل الثيمات (الميزة 12) =================
+        const themes = [
+            { name: 'RGB', class: '' },
+            { name: 'Matrix', class: 'theme-matrix' },
+            { name: 'Gold', class: 'theme-gold' },
+            { name: 'Red', class: 'theme-crimson' }
+        ];
+        let currentThemeIdx = parseInt(localStorage.getItem("ali_theme_idx")) || 0;
+
+        function cycleTheme() {
+            currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+            localStorage.setItem("ali_theme_idx", currentThemeIdx);
+            applyTheme(currentThemeIdx);
+        }
+
+        function applyTheme(idx) {
+            const t = themes[idx] || themes[0];
+            document.body.classList.remove('theme-matrix', 'theme-gold', 'theme-crimson');
+            if (t.class) document.body.classList.add(t.class);
+            document.getElementById('themeLabel').innerText = t.name;
+        }
+
+        // ================= 🔥 مكافأة الدخول اليومي المتتالي وصندوق الغموض (الميزة 3) =================
+        function getTodayStr() {
+            const d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+        }
+
+        function initDailyStreakUI() {
+            let streak = parseInt(localStorage.getItem("ali_streak_count")) || 0;
+            const lastDate = localStorage.getItem("ali_streak_last_date") || "";
+            const today = getTodayStr();
+
+            const container = document.getElementById('streakDaysContainer');
+            container.innerHTML = '';
+            for (let i = 1; i <= 5; i++) {
+                const isDone = i <= streak;
+                const isBox = i === 5;
+                container.innerHTML += `
+                    <div class="streak-day-circle ${isDone ? 'active' : ''} ${isBox ? 'mystery' : ''}">
+                        <span>${isBox ? '🎁' : 'يوم ' + i}</span>
+                        <span style="font-size:0.6rem;">${isBox ? '+50XP' : '+10XP'}</span>
+                    </div>
+                `;
+            }
+
+            const btn = document.getElementById('claimStreakBtn');
+            if (lastDate === today) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> تم الاستلام اليوم`;
+            } else {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.innerHTML = `<i class="fa-solid fa-gift"></i> استلام مكافأة اليوم`;
+            }
+        }
+
+        function claimDailyStreak() {
+            const today = getTodayStr();
+            const lastDate = localStorage.getItem("ali_streak_last_date") || "";
+            if (lastDate === today) return;
+
+            let streak = (parseInt(localStorage.getItem("ali_streak_count")) || 0) + 1;
+            if (streak > 5) streak = 1;
+
+            localStorage.setItem("ali_streak_count", streak);
+            localStorage.setItem("ali_streak_last_date", today);
+
+            if (streak === 5) {
+                playSfx('win');
+                localStorage.removeItem("ali_last_spin");
+                addXP(50, "🎁 فتحت صندوق الغموض لليوم الخامس + تدويرة حظ مجانية!");
+            } else {
+                addXP(10, `مكافأة الدخول اليومي (اليوم ${streak})`);
+            }
+            initDailyStreakUI();
+        }
+
+        // ================= 🏆 نظام الرتب والنقاط ومتجر الاستبدال (الميزة 1 و 2) =================
         function getUserRank(xp) {
             if (xp >= 300) return { title: "أسطورة ALIOPZTE", icon: "👑", next: null, min: 300 };
             if (xp >= 150) return { title: "نخبة المتجر", icon: "🔥", next: 300, min: 150 };
@@ -481,15 +864,23 @@
             return { title: "مبتدئ", icon: "🥉", next: 50, min: 0 };
         }
 
+        function isUserVipInstant() {
+            const vipPassUntil = parseInt(localStorage.getItem("ali_vip_dl_until")) || 0;
+            return userXP >= 150 || Date.now() < vipPassUntil;
+        }
+
         function updateRankUI() {
             const rank = getUserRank(userXP);
+            const hasRoyal = localStorage.getItem("ali_royal_badge") === "true";
+            const badgePrefix = hasRoyal ? "👑 " : "";
+
             document.getElementById('headerRankIcon').innerText = rank.icon;
-            document.getElementById('headerRankTitle').innerText = rank.title;
+            document.getElementById('headerRankTitle').innerText = badgePrefix + rank.title;
             document.getElementById('headerXPCount').innerText = userXP;
 
             document.getElementById('modalRankIcon').innerText = rank.icon;
-            document.getElementById('modalRankTitle').innerText = "رتبتك: " + rank.title;
-            document.getElementById('modalXPText').innerText = `نقاطك الحالية: ${userXP} XP`;
+            document.getElementById('modalRankTitle').innerText = "رتبتك: " + badgePrefix + rank.title;
+            document.getElementById('modalXPText').innerText = `نقاطك المتاحة للاستبدال: ${userXP} XP`;
 
             if (rank.next) {
                 const percent = Math.min(100, Math.round(((userXP - rank.min) / (rank.next - rank.min)) * 100));
@@ -497,7 +888,7 @@
                 document.getElementById('modalNextRankText').innerText = `متبقي ${rank.next - userXP} XP للترقية إلى الرتبة التالية!`;
             } else {
                 document.getElementById('modalXPBar').style.width = "100%";
-                document.getElementById('modalNextRankText').innerText = "🎉 لقد وصلت إلى أعلى رتبة أسطورية في المتجر!";
+                document.getElementById('modalNextRankText').innerText = "🎉 لقد وصلت إلى أعلى رتبة أسطورية في المتجر (تحميل فوري VIP مفعل)!";
             }
         }
 
@@ -505,6 +896,7 @@
             userXP += amount;
             localStorage.setItem("ali_user_xp", userXP);
             updateRankUI();
+            playSfx('xp');
 
             const toast = document.getElementById('xpToast');
             toast.innerHTML = `<span>✨ +${amount} XP</span> <span style="color:#cbd5e1; font-weight:normal;">(${reason})</span>`;
@@ -512,9 +904,133 @@
             setTimeout(() => { toast.style.display = 'none'; }, 3500);
         }
 
+        function buyWithXP(itemType, cost) {
+            const msgEl = document.getElementById('xpShopMsg');
+            msgEl.style.display = 'block';
+
+            if (userXP < cost) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = `❌ نقاطك غير كافية! تحتاج إلى ${cost} XP.`;
+                return;
+            }
+
+            if (itemType === 'wheel') {
+                userXP -= cost;
+                localStorage.setItem("ali_user_xp", userXP);
+                localStorage.removeItem("ali_last_spin");
+                updateRankUI();
+                playSfx('win');
+                msgEl.style.color = '#00ff88';
+                msgEl.innerText = "🎉 تم تصفير عداد عجلة الحظ! يمكنك فتح العجلة وتدويرها الآن.";
+            } else if (itemType === 'vip_dl') {
+                userXP -= cost;
+                localStorage.setItem("ali_user_xp", userXP);
+                localStorage.setItem("ali_vip_dl_until", Date.now() + 24 * 60 * 60 * 1000);
+                updateRankUI();
+                playSfx('win');
+                msgEl.style.color = '#00ff88';
+                msgEl.innerText = "⚡ تم تفعيل تذكرة التحميل الفوري VIP بدون عداد لمدة 24 ساعة!";
+            } else if (itemType === 'royal_badge') {
+                if (localStorage.getItem("ali_royal_badge") === "true") {
+                    msgEl.style.color = '#f59e0b';
+                    msgEl.innerText = "👑 أنت تملك التاج الملكي الذهبي مسبقاً!";
+                    return;
+                }
+                userXP -= cost;
+                localStorage.setItem("ali_user_xp", userXP);
+                localStorage.setItem("ali_royal_badge", "true");
+                currentThemeIdx = 2;
+                localStorage.setItem("ali_theme_idx", 2);
+                applyTheme(2);
+                updateRankUI();
+                playSfx('win');
+                msgEl.style.color = '#ffd700';
+                msgEl.innerText = "👑 مبروك! حصلت على التاج الملكي الذهبي وتم تفعيل الثيم الذهبي!";
+            }
+        }
+
         function openRankModal() {
             updateRankUI();
+            document.getElementById('xpShopMsg').style.display = 'none';
             document.getElementById('rankModal').classList.add('active');
+        }
+
+        // ================= 📊 تصويت الجمهور التفاعلي (الميزة 9) =================
+        const pollChoices = [
+            { id: 'mc', title: '🎮 مودات وإضافات ماين كرافت', baseVotes: 46 },
+            { id: 'rb', title: '💻 سكربتات ومابات روبلكس', baseVotes: 38 },
+            { id: 'vid', title: '🎬 حلقات وفيديوهات حصرية', baseVotes: 29 }
+        ];
+
+        function renderPollUI() {
+            const votedId = localStorage.getItem("ali_poll_voted_choice");
+            const container = document.getElementById('pollOptionsContainer');
+            let total = pollChoices.reduce((acc, c) => acc + c.baseVotes + (votedId === c.id ? 1 : 0), 0);
+
+            container.innerHTML = pollChoices.map(c => {
+                const v = c.baseVotes + (votedId === c.id ? 1 : 0);
+                const pct = Math.round((v / total) * 100);
+                return `
+                    <div class="poll-option" onclick="voteInPoll('${c.id}')">
+                        <div class="poll-bar-fill" style="width:${votedId ? pct : 0}%;"></div>
+                        <div class="poll-option-content">
+                            <span>${c.title} ${votedId === c.id ? '✅' : ''}</span>
+                            <span style="color:var(--theme-c2);">${votedId ? pct + '%' : 'صوّت'}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function voteInPoll(choiceId) {
+            if (localStorage.getItem("ali_poll_voted_choice")) {
+                const msg = document.getElementById('pollStatusMsg');
+                msg.style.display = 'block';
+                msg.innerText = "✔️ تم تسجيل صوتك مسبقاً، شكراً لمشاركتك!";
+                return;
+            }
+            localStorage.setItem("ali_poll_voted_choice", choiceId);
+            addXP(5, "المشاركة في تصويت الجمهور");
+            renderPollUI();
+            const msg = document.getElementById('pollStatusMsg');
+            msg.style.display = 'block';
+            msg.innerText = "🎉 تم احتساب صوتك وحصلت على +5 XP!";
+        }
+
+        // ================= 🕒 شريط شاهدت مؤخراً (الميزة 14) =================
+        function addToRecentlyViewed(item) {
+            if (!item || !item.id) return;
+            let recent = JSON.parse(localStorage.getItem("ali_recent_items")) || [];
+            recent = recent.filter(r => String(r.id) !== String(item.id));
+            recent.unshift({ id: item.id, title: item.title, image: item.image, category: item.category });
+            if (recent.length > 4) recent = recent.slice(0, 4);
+            localStorage.setItem("ali_recent_items", JSON.stringify(recent));
+            renderRecentlyViewed();
+        }
+
+        function renderRecentlyViewed() {
+            const recent = JSON.parse(localStorage.getItem("ali_recent_items")) || [];
+            const box = document.getElementById('recentlyViewedBox');
+            const list = document.getElementById('recentlyViewedList');
+            if (recent.length === 0) {
+                box.style.display = 'none';
+                return;
+            }
+            box.style.display = 'block';
+            list.innerHTML = recent.map(r => `
+                <div class="recent-mini-card" onclick="openModalById('${r.id}')">
+                    <img src="${r.image}" loading="lazy">
+                    <div style="overflow:hidden;">
+                        <div style="font-size:0.78rem; font-weight:bold; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.title}</div>
+                        <div style="font-size:0.68rem; color:var(--text-muted);">${r.category}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearRecentlyViewed() {
+            localStorage.removeItem("ali_recent_items");
+            renderRecentlyViewed();
         }
 
         // ================= تثبيت التطبيق والإعدادات =================
@@ -587,12 +1103,13 @@
         }
 
         function applyDeviceMode(mode) {
-            document.body.className = `device-${mode}`;
+            const currentThemeClass = themes[currentThemeIdx]?.class || '';
+            document.body.className = `device-${mode} ${currentThemeClass}`.trim();
             const labels = { 'mobile': 'هاتف', 'tablet': 'تابلت', 'desktop': 'كمبيوتر' };
             document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
         }
 
-        // ================= تحميل بيانات المتجر والفتح التلقائي للرابط المشارك =================
+        // ================= تحميل بيانات المتجر =================
         async function loadStoreData() {
             try {
                 const res = await fetch('data.json', { cache: 'no-cache' });
@@ -603,16 +1120,14 @@
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
                 allWheelPrizes = data.wheelPrizes || [];
-                wheelStatus = data.wheelStatus || 'locked'; // قراءة حالة العجلة من لوحة التحكم
+                wheelStatus = data.wheelStatus || 'locked';
                 
                 if (data.newsTicker) {
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
                 }
 
-                // تطبيق حالة عجلة الحظ
                 checkWheelStatus();
 
-                // العنصر الرائج
                 const featItem = (data.featuredId && allItems.find(i => i.id == data.featuredId)) || allItems[0];
                 if (featItem) {
                     document.getElementById('featuredTitleText').innerText = featItem.title;
@@ -625,20 +1140,18 @@
 
                 renderItems(allItems);
                 renderPartners(allPartners);
+                renderRecentlyViewed();
 
-                // فحص إذا كان الزائر قادماً من رابط مشاركة عنصر (?id=...)
                 const urlParams = new URLSearchParams(window.location.search);
                 const sharedId = urlParams.get('id');
                 if (sharedId) {
                     const sharedItem = allItems.find(i => String(i.id) === String(sharedId));
-                    if (sharedItem) {
-                        openModal(sharedItem);
-                    }
+                    if (sharedItem) openModal(sharedItem);
                 }
             } catch (e) {
                 console.error("خطأ في قراءة data.json:", e);
                 document.getElementById('featuredTitleText').innerText = "متجر ALIOPZTE الرسمي";
-                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:#ff4d4d;">حدث خطأ أثناء تحميل العناصر، يرجى تحديث الصفحة (Ctrl + F5).</p>';
+                document.getElementById('itemsGrid').innerHTML = '<p style="text-align:center; grid-column:1/-1; padding:30px; color:#ff4d4d;">حدث خطأ أثناء تحميل العناصر، يرجى تحديث الصفحة.</p>';
             }
         }
 
@@ -673,14 +1186,33 @@
                 return;
             }
 
-            filtered.forEach(item => {
+            filtered.forEach((item, index) => {
                 const isFav = wishlist.includes(item.id);
+                // شارات البطاقات المتوهجة (الميزة 6)
+                let glowBadge = '';
+                if (window.featuredItemObj && item.id == window.featuredItemObj.id) {
+                    glowBadge = `<span class="glow-status-badge">🔥 رائج</span>`;
+                } else if (index < 2) {
+                    glowBadge = `<span class="glow-status-badge" style="background:linear-gradient(90deg,#10b981,#059669);">🆕 جديد</span>`;
+                } else if (item.category === 'scripts' || item.category === 'mods') {
+                    glowBadge = `<span class="glow-status-badge">💎 حصري</span>`;
+                }
+
                 grid.innerHTML += `
                     <div class="item-card">
                         <button class="btn-card-fav ${isFav ? 'active' : ''}" onclick="toggleWishlist(event, ${item.id})"><i class="fa-solid fa-heart"></i></button>
-                        <div class="card-thumb" onclick="openModalById(${item.id})"><img src="${item.image}" loading="lazy"><span class="badge-tag">${item.category}</span></div>
+                        <div class="card-thumb" onclick="openModalById(${item.id})">
+                            <img src="${item.image}" loading="lazy">
+                            <span class="badge-tag">${item.category}</span>
+                            ${glowBadge}
+                        </div>
                         <div class="card-details" onclick="openModalById(${item.id})">
                             <h3 class="card-title">${item.title}</h3>
+                            <div class="card-meta-bar">
+                                <span><i class="fa-solid fa-shield-check"></i> مفحوص وآمن</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-mobile-screen"></i> الجوال والكمبيوتر</span>
+                            </div>
                             <p class="card-desc">${item.desc || '...'}</p>
                             <button class="btn-card-view"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
                         </div>
@@ -689,12 +1221,14 @@
         }
 
         function openModalById(id) {
-            const item = allItems.find(i => i.id == id);
+            playSfx('click');
+            const item = allItems.find(i => String(i.id) === String(id));
             if (item) openModal(item);
         }
 
         function toggleWishlist(e, id) {
             e.stopPropagation();
+            playSfx('click');
             if (wishlist.includes(id)) {
                 wishlist = wishlist.filter(itemId => itemId !== id);
             } else {
@@ -712,7 +1246,7 @@
             renderItems(allItems);
         }
 
-        // ================= التحكم بعجلة الحظ (تفعيل / قفل / إخفاء) =================
+        // ================= التحكم بعجلة الحظ =================
         function checkWheelStatus() {
             const wheelBtn = document.getElementById('headerWheelBtn');
             const spinBtn = document.getElementById('spinBtn');
@@ -740,7 +1274,7 @@
                 spinBtn.disabled = true;
                 spinBtn.style.opacity = '0.5';
                 wheelMsg.style.color = "#ff4d4d";
-                wheelMsg.innerText = `🔒 لقد استخدمت العجلة اليوم! عد بعد ${hoursLeft} ساعة.`;
+                wheelMsg.innerText = `🔒 لقد استخدمت العجلة اليوم! عد بعد ${hoursLeft} ساعة (أو اشترِ تدويرة من متجر XP).`;
             } else {
                 spinBtn.disabled = false;
                 spinBtn.style.opacity = '1';
@@ -754,6 +1288,7 @@
             const now = new Date().getTime();
             if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) return;
 
+            playSfx('click');
             const wheel = document.getElementById('wheel');
             const deg = 1440 + Math.floor(Math.random() * 360);
             wheel.style.transform = `rotate(${deg}deg)`;
@@ -762,6 +1297,7 @@
             localStorage.setItem("ali_last_spin", now);
 
             setTimeout(() => {
+                playSfx('win');
                 const prize = (allWheelPrizes && allWheelPrizes.length > 0) 
                     ? allWheelPrizes[Math.floor(Math.random() * allWheelPrizes.length)] 
                     : "حظ أوفر في المرة القادمة!";
@@ -771,27 +1307,90 @@
             }, 4000);
         }
 
-        // ================= نافذة العنصر والمشاركة والإبلاغ =================
+        // ================= نافذة العنصر + الفيديو المدمج + نسخ السكربت + منع سبام المشاركة =================
+        function extractYouTubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         function openModal(item) {
             activeItemObj = item;
             activeTargetUrl = item.url;
-            document.getElementById('mImg').src = item.image;
+            addToRecentlyViewed(item);
+
             document.getElementById('mTitle').innerText = item.title;
             document.getElementById('mDesc').innerText = item.desc || '';
             document.getElementById('itemActionMsg').style.display = 'none';
-            
+
+            // تحديث نص زر المشاركة حسب هل أخذ المكافأة لأول مرة أم لا
+            const alreadyClaimedFirstShare = localStorage.getItem("ali_first_share_ever_claimed") === "true";
+            document.getElementById('shareBtnLabel').innerText = alreadyClaimedFirstShare ? "مشاركة العنصر" : "مشاركة العنصر (+10 XP لأول مرة)";
+
+            // مشغل الفيديو المدمج (الميزة 5)
+            const ytId = extractYouTubeId(item.url);
+            const vidContainer = document.getElementById('mVideoContainer');
+            const imgEl = document.getElementById('mImg');
+
+            if (ytId) {
+                imgEl.style.display = 'none';
+                vidContainer.style.display = 'block';
+                vidContainer.innerHTML = `<iframe width="100%" height="220" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe>`;
+            } else if (item.url && item.url.match(/\.(mp4|webm)(\?.*)?$/i)) {
+                imgEl.style.display = 'none';
+                vidContainer.style.display = 'block';
+                vidContainer.innerHTML = `<video width="100%" height="220" controls src="${item.url}"></video>`;
+            } else {
+                vidContainer.style.display = 'none';
+                vidContainer.innerHTML = '';
+                imgEl.style.display = 'block';
+                imgEl.src = item.image;
+            }
+
+            // صندوق نسخ السكربت السريع (الميزة 4)
+            const scriptBox = document.getElementById('mScriptBox');
+            if (item.category === 'scripts' || item.category === 'roblox' || item.script) {
+                scriptBox.style.display = 'block';
+                document.getElementById('mScriptCode').innerText = item.script || item.url;
+            } else {
+                scriptBox.style.display = 'none';
+            }
+
+            // التحقق من حالة الـ VIP للتحميل الفوري (الميزة 1)
+            const vipHint = document.getElementById('mVipHint');
+            if (isUserVipInstant()) {
+                vipHint.innerHTML = `👑 <b>ميزة VIP مفعلة لديك:</b> التحميل فوري (0 ثانية) بدون انتظار!`;
+            } else {
+                vipHint.innerHTML = `<span style="color:var(--text-muted);">💡 اجمع 150 XP لفتح التحميل الفوري VIP بدون عداد!</span>`;
+            }
+
             if (downloadTimerInterval) clearInterval(downloadTimerInterval);
             const btn = document.getElementById('mDlBtn');
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-download"></i> تجهيز رابط التحميل (+15 XP)`;
+            const dlClaimed = localStorage.getItem("ali_dl_" + item.id) === "true";
+            btn.innerHTML = `<i class="fa-solid fa-download"></i> ${isUserVipInstant() ? 'تحميل فوري VIP ⚡' : 'تجهيز رابط التحميل'} ${dlClaimed ? '' : '(+15 XP)'}`;
             btn.onclick = startDownloadTimer;
 
             document.getElementById('itemModal').classList.add('active');
         }
 
+        function copyItemScriptOrUrl() {
+            if (!activeItemObj) return;
+            const textToCopy = activeItemObj.script || activeItemObj.url;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                playSfx('win');
+                const msgEl = document.getElementById('itemActionMsg');
+                msgEl.style.display = 'block';
+                msgEl.style.color = '#00ff88';
+                msgEl.innerText = "📋 تم نسخ الكود / الرابط بنجاح!";
+            });
+        }
+
         function closeModal(id) { 
-            if (id === 'itemModal' && downloadTimerInterval) {
-                clearInterval(downloadTimerInterval);
+            if (id === 'itemModal') {
+                if (downloadTimerInterval) clearInterval(downloadTimerInterval);
+                document.getElementById('mVideoContainer').innerHTML = '';
             }
             document.getElementById(id).classList.remove('active'); 
         }
@@ -800,16 +1399,19 @@
         function openRequestModal() { document.getElementById('requestModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
 
-        // مشاركة الرابط المباشر للعنصر
+        // ================= 🛡️ مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
         async function shareCurrentItem() {
             if (!activeItemObj) return;
+            playSfx('click');
             const shareUrl = window.location.origin + window.location.pathname + '?id=' + activeItemObj.id;
             const msgEl = document.getElementById('itemActionMsg');
 
-            const sharedKey = "ali_shared_" + activeItemObj.id;
-            if (!localStorage.getItem(sharedKey)) {
-                localStorage.setItem(sharedKey, "true");
-                addXP(10, "مشاركة عنصر");
+            // تمنح نقاط XP في أول مشاركة فقط في الحساب بالكامل لمنع السبام نهائياً!
+            const firstShareEverClaimed = localStorage.getItem("ali_first_share_ever_claimed") === "true";
+            if (!firstShareEverClaimed) {
+                localStorage.setItem("ali_first_share_ever_claimed", "true");
+                document.getElementById('shareBtnLabel').innerText = "مشاركة العنصر";
+                addXP(10, "مكافأة أول مشاركة في المتجر");
             }
 
             if (navigator.share) {
@@ -827,7 +1429,9 @@
                 await navigator.clipboard.writeText(shareUrl);
                 msgEl.style.display = 'block';
                 msgEl.style.color = '#00ff88';
-                msgEl.innerText = "✅ تم نسخ رابط العنصر المباشر! أرسله لأصدقائك الآن.";
+                msgEl.innerText = firstShareEverClaimed
+                    ? "✅ تم نسخ رابط العنصر! (ملاحظة: نقاط XP المشاركة تُمنح في المرة الأولى فقط منعاً للسبام)."
+                    : "✅ تم نسخ رابط العنصر وحصلت على +10 XP لأول مشاركة!";
             } catch (e) {
                 prompt("انسخ رابط المشاركة المباشر:", shareUrl);
             }
@@ -935,16 +1539,36 @@
             const msg = document.getElementById('codeMsg');
 
             if (found) {
+                playSfx('win');
                 msg.style.color = "#00ff88";
-                msg.innerHTML = `✅ كود صحيح! <a href="${found.url}" target="_blank" style="color:#00f2fe; text-decoration:underline;">اضغط هنا لفتح الملف الخاص</a>`;
+                msg.innerHTML = `✅ كود صحيح! <a href="${found.url}" target="_blank" style="color:var(--theme-c2); text-decoration:underline;">اضغط هنا لفتح الملف الخاص</a>`;
             } else {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ الكود غير صحيح أو منتهي الصلاحية!";
             }
         }
 
+        // ================= ⚡ عداد التحميل (يدعم التحميل الفوري VIP لأصحاب الرتب العالية - الميزة 1) =================
+        function grantDownloadXPOnce() {
+            if (!activeItemObj || !activeItemObj.id) return;
+            const dlKey = "ali_dl_" + activeItemObj.id;
+            if (!localStorage.getItem(dlKey)) {
+                localStorage.setItem(dlKey, "true");
+                addXP(15, "تحميل عنصر جديد");
+            }
+        }
+
         function startDownloadTimer() {
             const btn = document.getElementById('mDlBtn');
+
+            // إذا كان العضو VIP (رتبة نخبة المتجر / أسطورة أو اشترى تذكرة VIP) يفتح الرابط فوراً بدون انتظار!
+            if (isUserVipInstant()) {
+                playSfx('win');
+                grantDownloadXPOnce();
+                window.open(activeTargetUrl, '_blank');
+                return;
+            }
+
             btn.disabled = true;
             let seconds = 5;
             if (downloadTimerInterval) clearInterval(downloadTimerInterval);
@@ -954,16 +1578,11 @@
                 seconds--;
                 if (seconds < 0) {
                     clearInterval(downloadTimerInterval);
+                    playSfx('win');
                     btn.innerHTML = `<i class="fa-solid fa-check"></i> جاهز للتحميل الآن!`;
                     btn.disabled = false;
                     btn.onclick = () => {
-                        if (activeItemObj) {
-                            const dlKey = "ali_dl_" + activeItemObj.id;
-                            if (!localStorage.getItem(dlKey)) {
-                                localStorage.setItem(dlKey, "true");
-                                addXP(15, "تحميل عنصر");
-                            }
-                        }
+                        grantDownloadXPOnce();
                         window.open(activeTargetUrl, '_blank');
                     };
                 }
@@ -971,6 +1590,7 @@
         }
 
         function selectCategory(cat, btn) {
+            playSfx('click');
             currentCategory = cat;
             viewingWishlist = false;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -980,7 +1600,7 @@
 
         function filterItems() { renderItems(allItems); }
 
-        // ================= التقييمات (مع تقييد تقييم واحد كل ساعة + عرض الرتبة) =================
+        // ================= التقييمات (مع تقييد تقييم واحد كل ساعة + عرض الرتبة والتاج الملكي) =================
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
@@ -1020,7 +1640,6 @@
             const comment = document.getElementById('revComment').value.trim();
             const msg = document.getElementById('revMsg');
 
-            // التحقق من مرور ساعة كاملة منذ آخر تقييم
             const lastRevTime = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
             const now = Date.now();
             if (now - lastRevTime < REVIEW_COOLDOWN_MS) {
@@ -1040,7 +1659,9 @@
             msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
             const rank = getUserRank(userXP);
-            const nameWithRank = `${name} [${rank.icon} ${rank.title}]`;
+            const hasRoyal = localStorage.getItem("ali_royal_badge") === "true";
+            const royalTag = hasRoyal ? "👑 VIP الملكي | " : "";
+            const nameWithRank = `${name} [${royalTag}${rank.icon} ${rank.title}]`;
 
             try {
                 const formData = new URLSearchParams();

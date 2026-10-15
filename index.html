@@ -88,14 +88,17 @@
         .brand-icon { font-size: 1.6rem; color: #00f2fe; filter: drop-shadow(0 0 8px #00f2fe); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 300px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 280px; }
         .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; }
+        .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; transition: transform 0.2s; }
+        .btn-action:hover { transform: translateY(-2px); }
         .btn-action.code-btn { background: linear-gradient(90deg, #ff007f, #7f00ff); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, #00f2fe, #00ff88); color: #000; font-weight: 900; }
+        .btn-action.req-btn { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; font-weight: 900; }
+        .btn-action.rank-btn { background: rgba(255, 215, 0, 0.12); border: 1px solid #ffd700; color: #ffd700; font-weight: 900; }
         .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
         .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; display: none; }
         .btn-action.notif-btn { background: linear-gradient(90deg, #ff007f, #00f2fe); color: #fff; font-weight: 900; }
@@ -132,8 +135,9 @@
 
         .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 15px; width: 100%; }
         .item-card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: all 0.3s ease; position: relative; }
+        .item-card:hover { transform: translateY(-4px); border-color: rgba(0, 242, 254, 0.4); }
         .card-thumb { width: 100%; height: 165px; position: relative; background: #000; overflow: hidden; }
-        .card-thumb img { width: 100%; height: 100%; object-fit: cover; loading: lazy; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); }
         
         .btn-card-fav { position: absolute; top: 8px; left: 8px; background: rgba(5, 7, 14, 0.8); border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 5; font-size: 0.9rem; }
@@ -147,12 +151,21 @@
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 16px; text-align: center; }
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
 
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid #00f2fe; position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
+
+        .modal-actions-row { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-share-item { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid #00f2fe; background: rgba(0, 242, 254, 0.12); color: #00f2fe; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
+        .btn-report-link { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.1); color: #fca5a5; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
+
+        .xp-toast { position: fixed; bottom: 20px; left: 20px; background: rgba(13, 18, 30, 0.95); border: 2px solid #ffd700; color: #fff; padding: 10px 16px; border-radius: 12px; font-weight: 900; font-size: 0.85rem; z-index: 99999; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); display: none; align-items: center; gap: 8px; }
+
+        .xp-progress-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .xp-progress-fill { height: 100%; background: linear-gradient(90deg, #00f2fe, #ffd700); width: 0%; transition: width 0.4s ease; }
 
         .review-section { background: var(--card-bg); border: 2px solid #00f2fe; border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
         .review-header { color: #00f2fe; font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
@@ -174,6 +187,9 @@
     </style>
 </head>
 <body>
+
+    <!-- إشعار نقاط XP العائم -->
+    <div id="xpToast" class="xp-toast"></div>
 
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
         <div class="copyright-card">
@@ -216,12 +232,16 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-action notif-btn" onclick="triggerPushPrompt()"><i class="fa-solid fa-bell"></i> تفعيل الإشعارات</button>
-                <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت التطبيق</button>
+                <button class="btn-action rank-btn" onclick="openRankModal()" title="رتبتك ونقاطك في المتجر">
+                    <span id="headerRankIcon">🥉</span> <span id="headerRankTitle">مبتدئ</span> (<span id="headerXPCount">10</span> XP)
+                </button>
+                <button class="btn-action req-btn" onclick="openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
+                <button class="btn-action notif-btn" onclick="triggerPushPrompt()"><i class="fa-solid fa-bell"></i> الإشعارات</button>
+                <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت</button>
                 <button class="btn-device-select" onclick="openDeviceSelector()"><i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span></button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i></a>
-                <button class="btn-action wheel-btn" onclick="openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
+                <button class="btn-action wheel-btn" id="headerWheelBtn" onclick="openWheelModal()"><i class="fa-solid fa-dharmachakra"></i> الحظ</button>
                 <button class="btn-action code-btn" onclick="openCodeModal()"><i class="fa-solid fa-key"></i> كود</button>
                 <button class="btn-action fav-btn" onclick="toggleWishlistFilter()"><i class="fa-solid fa-heart" style="color:#ef4444;"></i> (<span id="favCount">0</span>)</button>
                 <button class="btn-speed" onclick="cycleRgbSpeed()" title="سرعة حركة الألوان"><i class="fa-solid fa-bolt"></i> <span id="speedLabel">1x</span></button>
@@ -262,12 +282,12 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم تقييمات وآراء المتابعين -->
+                <!-- قسم تقييمات وآراء المتابعين (مقيد بتقييم واحد كل ساعة) -->
                 <section class="review-section">
                     <h2 class="review-header">
-                        <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين
+                        <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)
                     </h2>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك فوراً هنا وفي ديسكورد!</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك مع رتبتك فوراً هنا وفي ديسكورد! (يُسمح بتقييم واحد كل ساعة منعاً للسبام).</p>
                     
                     <div>
                         <div style="margin-bottom: 10px;">
@@ -291,8 +311,8 @@
                             <textarea id="revComment" rows="3" placeholder="اكتب تعليقك هنا..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,7,14,0.8); color: #fff; font-family: inherit; resize: none;"></textarea>
                         </div>
 
-                        <button onclick="sendReviewToDiscord()" class="btn-card-view" style="font-size: 0.95rem; padding: 10px; width: 100%;">
-                            <i class="fa-solid fa-paper-plane"></i> نشر التقييم الان
+                        <button id="submitRevBtn" onclick="sendReviewToDiscord()" class="btn-card-view" style="font-size: 0.95rem; padding: 10px; width: 100%;">
+                            <i class="fa-solid fa-paper-plane"></i> نشر التقييم الآن (+25 XP)
                         </button>
                         <p id="revMsg" style="margin-top: 8px; font-size: 0.82rem; font-weight: bold; text-align: center;"></p>
                     </div>
@@ -310,6 +330,57 @@
         </div>
     </div>
 
+    <!-- نافذة رتبة المتابع ونقاط XP -->
+    <div id="rankModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('rankModal')"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalRankIcon" style="font-size: 3rem; margin-bottom: 5px;">🥉</div>
+            <h2 id="modalRankTitle" style="color:#ffd700; margin: 0;">رتبتك: مبتدئ</h2>
+            <p id="modalXPText" style="font-size:0.9rem; color:#cbd5e1; margin-top:5px;">نقاطك الحالية: 10 XP</p>
+            
+            <div class="xp-progress-bg">
+                <div id="modalXPBar" class="xp-progress-fill"></div>
+            </div>
+            <p id="modalNextRankText" style="font-size:0.78rem; color:#00f2fe; margin-bottom:15px;"></p>
+
+            <div style="text-align:right; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; font-size:0.8rem; line-height:1.7; color:#cbd5e1;">
+                <b style="color:#fff;"><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> كيف تجمع نقاط XP وتترقى؟</b><br>
+                • تحميل أي لعبة أو مود أو فيديو: <b style="color:#00ff88;">+15 XP</b><br>
+                • كتابة تقييم للمتجر: <b style="color:#00ff88;">+25 XP</b><br>
+                • مشاركة عنصر مع أصدقائك: <b style="color:#00ff88;">+10 XP</b><br><br>
+                <b style="color:#fff;"><i class="fa-solid fa-crown" style="color:#ffd700;"></i> قائمة الرتب:</b><br>
+                🥉 <b>مبتدئ:</b> 0 - 49 XP<br>
+                💎 <b>قيمر محترف:</b> 50 - 149 XP<br>
+                🔥 <b>نخبة المتجر:</b> 150 - 299 XP<br>
+                👑 <b>أسطورة ALIOPZTE:</b> +300 XP
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة اطلب إضافة (لعبة / مود / حلقة) -->
+    <div id="requestModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('requestModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:#f59e0b;"><i class="fa-solid fa-lightbulb"></i> اطلب لعبة أو مود أو حلقة</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">اكتب طلبك وسيصل مباشرة إلى إدارة المتجر في ديسكورد!</p>
+            
+            <input type="text" id="reqUserName" placeholder="اسمك أو حسابك في ديسكورد..." style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+            
+            <select id="reqCategory" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+                <option value="لعبة / ماين كرافت / روبلكس">🎮 لعبة (ماين كرافت / روبلكس / غيرها)</option>
+                <option value="مود أو إضافة">🧩 مود أو إضافة</option>
+                <option value="سكربت">💻 سكربت</option>
+                <option value="حلقة أو فيديو">🎬 حلقة أو فيديو</option>
+            </select>
+
+            <textarea id="reqDetails" rows="3" placeholder="اكتب اسم اللعبة أو المود أو الحلقة التي تريد إضافتها..." style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; resize:none; margin-bottom:12px;"></textarea>
+            
+            <button onclick="sendRequestToDiscord()" class="btn-card-view" style="font-size:0.95rem; padding:10px;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للإدارة</button>
+            <p id="reqMsg" style="margin-top:10px; font-weight:bold; font-size:0.82rem;"></p>
+        </div>
+    </div>
+
+    <!-- نافذة عجلة الحظ -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -326,6 +397,7 @@
         </div>
     </div>
 
+    <!-- نافذة كود الهدية -->
     <div id="codeModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('codeModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -339,13 +411,25 @@
         </div>
     </div>
 
+    <!-- نافذة تفاصيل العنصر والتحميل والمشاركة والإبلاغ -->
     <div id="itemModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('itemModal')"><i class="fa-solid fa-xmark"></i></button>
             <img id="mImg" src="" alt="" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
             <h2 id="mTitle" style="font-size:1.1rem; color:#fff;"></h2>
             <p id="mDesc" style="font-size:0.82rem; color:#cbd5e1; background:rgba(0,0,0,0.4); padding:8px; border-radius:8px; margin:10px 0;"></p>
-            <button id="mDlBtn" onclick="startDownloadTimer()" class="btn-card-view"><i class="fa-solid fa-download"></i> تجهيز رابط التحميل</button>
+            
+            <button id="mDlBtn" onclick="startDownloadTimer()" class="btn-card-view"><i class="fa-solid fa-download"></i> تجهيز رابط التحميل (+15 XP)</button>
+            
+            <div class="modal-actions-row">
+                <button onclick="shareCurrentItem()" class="btn-share-item">
+                    <i class="fa-solid fa-share-nodes"></i> مشاركة العنصر (+10 XP)
+                </button>
+                <button id="reportBrokenBtn" onclick="reportBrokenLink()" class="btn-report-link">
+                    <i class="fa-solid fa-triangle-exclamation"></i> الرابط لا يعمل؟ أبلغنا
+                </button>
+            </div>
+            <p id="itemActionMsg" style="margin-top:8px; font-size:0.8rem; font-weight:bold; display:none;"></p>
         </div>
     </div>
 
@@ -354,14 +438,19 @@
         let allPartners = [];
         let allCodes = [];
         let allWheelPrizes = [];
+        let wheelStatus = 'locked'; // افتراضياً مقفلة حتى تفتحها من لوحة التحكم
         let currentCategory = 'all';
         let activeTargetUrl = '#';
+        let activeItemObj = null;
         let viewingWishlist = false;
         let downloadTimerInterval = null;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
+        let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
+        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000; // ساعة كاملة (60 دقيقة)
+        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000; // 30 دقيقة بين الطلبات
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -377,13 +466,58 @@
                 document.getElementById('installAppBtn').style.display = 'inline-flex';
             }
             applySpeed(currentSpeedIdx);
+            updateRankUI();
             checkCopyrightAgreement();
             loadStoreData();
-            checkWheelStatus();
             updateWishlistCount();
             fetchReviews();
         });
 
+        // ================= نظام الرتب والنقاط (ALIOPZTE XP) =================
+        function getUserRank(xp) {
+            if (xp >= 300) return { title: "أسطورة ALIOPZTE", icon: "👑", next: null, min: 300 };
+            if (xp >= 150) return { title: "نخبة المتجر", icon: "🔥", next: 300, min: 150 };
+            if (xp >= 50)  return { title: "قيمر محترف", icon: "💎", next: 150, min: 50 };
+            return { title: "مبتدئ", icon: "🥉", next: 50, min: 0 };
+        }
+
+        function updateRankUI() {
+            const rank = getUserRank(userXP);
+            document.getElementById('headerRankIcon').innerText = rank.icon;
+            document.getElementById('headerRankTitle').innerText = rank.title;
+            document.getElementById('headerXPCount').innerText = userXP;
+
+            document.getElementById('modalRankIcon').innerText = rank.icon;
+            document.getElementById('modalRankTitle').innerText = "رتبتك: " + rank.title;
+            document.getElementById('modalXPText').innerText = `نقاطك الحالية: ${userXP} XP`;
+
+            if (rank.next) {
+                const percent = Math.min(100, Math.round(((userXP - rank.min) / (rank.next - rank.min)) * 100));
+                document.getElementById('modalXPBar').style.width = percent + "%";
+                document.getElementById('modalNextRankText').innerText = `متبقي ${rank.next - userXP} XP للترقية إلى الرتبة التالية!`;
+            } else {
+                document.getElementById('modalXPBar').style.width = "100%";
+                document.getElementById('modalNextRankText').innerText = "🎉 لقد وصلت إلى أعلى رتبة أسطورية في المتجر!";
+            }
+        }
+
+        function addXP(amount, reason) {
+            userXP += amount;
+            localStorage.setItem("ali_user_xp", userXP);
+            updateRankUI();
+
+            const toast = document.getElementById('xpToast');
+            toast.innerHTML = `<span>✨ +${amount} XP</span> <span style="color:#cbd5e1; font-weight:normal;">(${reason})</span>`;
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 3500);
+        }
+
+        function openRankModal() {
+            updateRankUI();
+            document.getElementById('rankModal').classList.add('active');
+        }
+
+        // ================= تثبيت التطبيق والإعدادات =================
         function installPWA() {
             if (isIOS) {
                 alert("لتثبيت التطبيق على الآيفون (Safari):\n1. اضغط على زر المشاركة ⎋ في الأسفل.\n2. انزل لأسفل واضغط على 'إضافة إلى الشاشة الرئيسية'.");
@@ -458,6 +592,7 @@
             document.getElementById("currentDeviceLabel").innerText = labels[mode] || 'الجهاز';
         }
 
+        // ================= تحميل بيانات المتجر والفتح التلقائي للرابط المشارك =================
         async function loadStoreData() {
             try {
                 const res = await fetch('data.json', { cache: 'no-cache' });
@@ -468,12 +603,16 @@
                 allPartners = data.partners || [];
                 allCodes = data.codes || [];
                 allWheelPrizes = data.wheelPrizes || [];
+                wheelStatus = data.wheelStatus || 'locked'; // قراءة حالة العجلة من لوحة التحكم
                 
                 if (data.newsTicker) {
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
                 }
 
-                // إصلاح مشكلة التعليق على "جاري التحميل..." في العنصر الرائج
+                // تطبيق حالة عجلة الحظ
+                checkWheelStatus();
+
+                // العنصر الرائج
                 const featItem = (data.featuredId && allItems.find(i => i.id == data.featuredId)) || allItems[0];
                 if (featItem) {
                     document.getElementById('featuredTitleText').innerText = featItem.title;
@@ -486,6 +625,16 @@
 
                 renderItems(allItems);
                 renderPartners(allPartners);
+
+                // فحص إذا كان الزائر قادماً من رابط مشاركة عنصر (?id=...)
+                const urlParams = new URLSearchParams(window.location.search);
+                const sharedId = urlParams.get('id');
+                if (sharedId) {
+                    const sharedItem = allItems.find(i => String(i.id) === String(sharedId));
+                    if (sharedItem) {
+                        openModal(sharedItem);
+                    }
+                }
             } catch (e) {
                 console.error("خطأ في قراءة data.json:", e);
                 document.getElementById('featuredTitleText').innerText = "متجر ALIOPZTE الرسمي";
@@ -563,18 +712,44 @@
             renderItems(allItems);
         }
 
+        // ================= التحكم بعجلة الحظ (تفعيل / قفل / إخفاء) =================
         function checkWheelStatus() {
+            const wheelBtn = document.getElementById('headerWheelBtn');
+            const spinBtn = document.getElementById('spinBtn');
+            const wheelMsg = document.getElementById('wheelMsg');
+
+            if (wheelStatus === 'hidden') {
+                wheelBtn.style.display = 'none';
+                return;
+            } else {
+                wheelBtn.style.display = 'inline-flex';
+            }
+
+            if (wheelStatus === 'locked') {
+                spinBtn.disabled = true;
+                spinBtn.style.opacity = '0.5';
+                wheelMsg.style.color = "#f59e0b";
+                wheelMsg.innerText = "🔒 عجلة الحظ مقفلة مؤقتاً من قِبل الإدارة، انتظروا الفعاليات القادمة!";
+                return;
+            }
+
             const lastSpin = localStorage.getItem("ali_last_spin");
             const now = new Date().getTime();
             if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) {
                 const hoursLeft = Math.ceil((24 * 60 * 60 * 1000 - (now - lastSpin)) / (1000 * 60 * 60));
-                document.getElementById('spinBtn').disabled = true;
-                document.getElementById('wheelMsg').style.color = "#ff4d4d";
-                document.getElementById('wheelMsg').innerText = `🔒 لقد استخدمت العجلة اليوم! عد بعد ${hoursLeft} ساعة.`;
+                spinBtn.disabled = true;
+                spinBtn.style.opacity = '0.5';
+                wheelMsg.style.color = "#ff4d4d";
+                wheelMsg.innerText = `🔒 لقد استخدمت العجلة اليوم! عد بعد ${hoursLeft} ساعة.`;
+            } else {
+                spinBtn.disabled = false;
+                spinBtn.style.opacity = '1';
+                wheelMsg.innerText = "";
             }
         }
 
         function spinWheel() {
+            if (wheelStatus === 'locked' || wheelStatus === 'hidden') return;
             const lastSpin = localStorage.getItem("ali_last_spin");
             const now = new Date().getTime();
             if (lastSpin && (now - lastSpin < 24 * 60 * 60 * 1000)) return;
@@ -592,20 +767,23 @@
                     : "حظ أوفر في المرة القادمة!";
                 document.getElementById('wheelMsg').style.color = "#00ff88";
                 document.getElementById('wheelMsg').innerText = "🎉 النتيجة: " + prize;
+                addXP(10, "تدوير عجلة الحظ");
             }, 4000);
         }
 
+        // ================= نافذة العنصر والمشاركة والإبلاغ =================
         function openModal(item) {
+            activeItemObj = item;
             activeTargetUrl = item.url;
             document.getElementById('mImg').src = item.image;
             document.getElementById('mTitle').innerText = item.title;
             document.getElementById('mDesc').innerText = item.desc || '';
+            document.getElementById('itemActionMsg').style.display = 'none';
             
-            // إعادة ضبط زر التحميل والعداد
             if (downloadTimerInterval) clearInterval(downloadTimerInterval);
             const btn = document.getElementById('mDlBtn');
             btn.disabled = false;
-            btn.innerHTML = `<i class="fa-solid fa-download"></i> تجهيز رابط التحميل`;
+            btn.innerHTML = `<i class="fa-solid fa-download"></i> تجهيز رابط التحميل (+15 XP)`;
             btn.onclick = startDownloadTimer;
 
             document.getElementById('itemModal').classList.add('active');
@@ -617,9 +795,139 @@
             }
             document.getElementById(id).classList.remove('active'); 
         }
-        function openWheelModal() { document.getElementById('wheelModal').classList.add('active'); }
+        function openWheelModal() { checkWheelStatus(); document.getElementById('wheelModal').classList.add('active'); }
         function openCodeModal() { document.getElementById('codeModal').classList.add('active'); }
+        function openRequestModal() { document.getElementById('requestModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
+
+        // مشاركة الرابط المباشر للعنصر
+        async function shareCurrentItem() {
+            if (!activeItemObj) return;
+            const shareUrl = window.location.origin + window.location.pathname + '?id=' + activeItemObj.id;
+            const msgEl = document.getElementById('itemActionMsg');
+
+            const sharedKey = "ali_shared_" + activeItemObj.id;
+            if (!localStorage.getItem(sharedKey)) {
+                localStorage.setItem(sharedKey, "true");
+                addXP(10, "مشاركة عنصر");
+            }
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: activeItemObj.title + " | ALIOPZTE Store",
+                        text: "حمل الآن من متجر ALIOPZTE: " + activeItemObj.title,
+                        url: shareUrl
+                    });
+                    return;
+                } catch (e) {}
+            }
+
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                msgEl.style.display = 'block';
+                msgEl.style.color = '#00ff88';
+                msgEl.innerText = "✅ تم نسخ رابط العنصر المباشر! أرسله لأصدقائك الآن.";
+            } catch (e) {
+                prompt("انسخ رابط المشاركة المباشر:", shareUrl);
+            }
+        }
+
+        // الإبلاغ عن رابط معطل للديسكورد
+        async function reportBrokenLink() {
+            if (!activeItemObj) return;
+            const msgEl = document.getElementById('itemActionMsg');
+            const reportKey = "ali_reported_" + activeItemObj.id;
+
+            if (localStorage.getItem(reportKey)) {
+                msgEl.style.display = 'block';
+                msgEl.style.color = '#f59e0b';
+                msgEl.innerText = "⚠️ لقد قمت بالإبلاغ عن هذا الرابط مسبقاً، جاري العمل على تحديثه!";
+                return;
+            }
+
+            msgEl.style.display = 'block';
+            msgEl.style.color = '#00f2fe';
+            msgEl.innerText = "⏳ جاري إرسال البلاغ للإدارة...";
+
+            try {
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "🚨 بلاغ عن رابط لا يعمل!",
+                            color: 15548997,
+                            fields: [
+                                { name: "📦 اسم العنصر:", value: activeItemObj.title, inline: false },
+                                { name: "📂 القسم:", value: activeItemObj.category, inline: true },
+                                { name: "🔗 الرابط الحالي:", value: activeItemObj.url, inline: false }
+                            ],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+                localStorage.setItem(reportKey, "true");
+                msgEl.style.color = '#00ff88';
+                msgEl.innerText = "✅ تم إبلاغ الإدارة بنجاح! سيتم فحص وتحديث الرابط قريباً.";
+            } catch (e) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = "❌ تعذر إرسال البلاغ حالياً.";
+            }
+        }
+
+        // إرسال طلب إضافة لعبة/مود/حلقة للديسكورد
+        async function sendRequestToDiscord() {
+            const userName = document.getElementById('reqUserName').value.trim();
+            const category = document.getElementById('reqCategory').value;
+            const details = document.getElementById('reqDetails').value.trim();
+            const msg = document.getElementById('reqMsg');
+
+            if (!userName || !details) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "❌ يرجى كتابة اسمك وتفاصيل الطلب!";
+                return;
+            }
+
+            const lastReq = parseInt(localStorage.getItem("ali_last_request_time")) || 0;
+            const now = Date.now();
+            if (now - lastReq < REQUEST_COOLDOWN_MS) {
+                const minsLeft = Math.ceil((REQUEST_COOLDOWN_MS - (now - lastReq)) / 60000);
+                msg.style.color = "#f59e0b";
+                msg.innerText = `⏳ منعاً للسبام، يمكنك إرسال طلب جديد بعد ${minsLeft} دقيقة.`;
+                return;
+            }
+
+            msg.style.color = "#00f2fe";
+            msg.innerText = "⏳ جاري إرسال طلبك للإدارة...";
+
+            const rank = getUserRank(userXP);
+            try {
+                await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "💡 طلب إضافة جديد للمتجر!",
+                            color: 16098851,
+                            fields: [
+                                { name: "👤 مقدم الطلب:", value: `${userName} (${rank.icon} ${rank.title})`, inline: true },
+                                { name: "📂 نوع الطلب:", value: category, inline: true },
+                                { name: "📝 تفاصيل الطلب:", value: details, inline: false }
+                            ],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+                localStorage.setItem("ali_last_request_time", now);
+                msg.style.color = "#00ff88";
+                msg.innerText = "✅ وصل طلبك للإدارة بنجاح!";
+                document.getElementById('reqDetails').value = '';
+            } catch (e) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";
+            }
+        }
 
         function redeemCode() {
             const val = document.getElementById('codeInputValue').value.trim();
@@ -648,7 +956,16 @@
                     clearInterval(downloadTimerInterval);
                     btn.innerHTML = `<i class="fa-solid fa-check"></i> جاهز للتحميل الآن!`;
                     btn.disabled = false;
-                    btn.onclick = () => { window.open(activeTargetUrl, '_blank'); };
+                    btn.onclick = () => {
+                        if (activeItemObj) {
+                            const dlKey = "ali_dl_" + activeItemObj.id;
+                            if (!localStorage.getItem(dlKey)) {
+                                localStorage.setItem(dlKey, "true");
+                                addXP(15, "تحميل عنصر");
+                            }
+                        }
+                        window.open(activeTargetUrl, '_blank');
+                    };
                 }
             }, 1000);
         }
@@ -663,6 +980,7 @@
 
         function filterItems() { renderItems(allItems); }
 
+        // ================= التقييمات (مع تقييد تقييم واحد كل ساعة + عرض الرتبة) =================
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
@@ -702,6 +1020,16 @@
             const comment = document.getElementById('revComment').value.trim();
             const msg = document.getElementById('revMsg');
 
+            // التحقق من مرور ساعة كاملة منذ آخر تقييم
+            const lastRevTime = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
+            const now = Date.now();
+            if (now - lastRevTime < REVIEW_COOLDOWN_MS) {
+                const minsLeft = Math.ceil((REVIEW_COOLDOWN_MS - (now - lastRevTime)) / 60000);
+                msg.style.color = "#f59e0b";
+                msg.innerText = `⏳ منعاً للسبام، يمكنك نشر تقييم جديد بعد ${minsLeft} دقيقة!`;
+                return;
+            }
+
             if (!name || !comment) {
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ يرجى كتابة الاسم ورأيك قبل الإرسال!";
@@ -711,9 +1039,12 @@
             msg.style.color = "#00f2fe";
             msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
+            const rank = getUserRank(userXP);
+            const nameWithRank = `${name} [${rank.icon} ${rank.title}]`;
+
             try {
                 const formData = new URLSearchParams();
-                formData.append('name', name);
+                formData.append('name', nameWithRank);
                 formData.append('stars', stars);
                 formData.append('comment', comment);
 
@@ -732,7 +1063,7 @@
                             title: "🌟 تقييم جديد وصل للمتجر!",
                             color: 65280,
                             fields: [
-                                { name: "👤 اسم العضو:", value: name, inline: true },
+                                { name: "👤 اسم العضو والرتبة:", value: nameWithRank, inline: true },
                                 { name: "⭐ التقييم:", value: stars, inline: true },
                                 { name: "💬 التعليق:", value: comment, inline: false }
                             ],
@@ -741,8 +1072,11 @@
                     })
                 });
 
+                localStorage.setItem("ali_last_review_time", now);
+                addXP(25, "نشر تقييم للمتجر");
+
                 msg.style.color = "#00ff88";
-                msg.innerText = "✅ تم نشر تقييمك بنجاح وسيظهر للجميع فوراً!";
+                msg.innerText = "✅ تم نشر تقييمك بنجاح وحصلت على +25 XP!";
                 document.getElementById('revName').value = '';
                 document.getElementById('revComment').value = '';
 

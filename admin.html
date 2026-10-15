@@ -77,6 +77,14 @@
                     <option value="">-- اختر العنصر الرائج --</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label><i class="fa-solid fa-dharmachakra" style="color:#f59e0b;"></i> حالة عجلة الحظ في المتجر:</label>
+                <select id="wheelStatusSelect">
+                    <option value="locked">🔒 مقفلة مؤقتاً (تظهر رسالة: مقفلة من الإدارة)</option>
+                    <option value="hidden">👁️‍🗨️ مخفية تماماً من الشريط العلوي</option>
+                    <option value="open">✅ مفعلة ومفتوحة للجميع</option>
+                </select>
+            </div>
             <button onclick="saveGeneralSettings()" class="btn-submit" style="padding:8px; font-size:0.9rem;"><i class="fa-solid fa-floppy-disk"></i> حفظ الإعدادات العامة وضغط البيانات</button>
         </div>
 
@@ -142,6 +150,7 @@
         <!-- تبويب عجلة الحظ -->
         <div id="tab-wheel" class="tab-content">
             <h3 style="color:#00f2fe; margin-top:0;">إدارة جوائز عجلة الحظ</h3>
+            <p style="font-size:0.82rem; color:#f59e0b;">💡 يمكنك قفل العجلة أو إخفاؤها من صندوق "إعدادات المتجر العامة" بالأعلى.</p>
             <div class="form-group"><input type="text" id="prizeName" placeholder="اسم الجائزة..."></div>
             <button onclick="addPrize()" class="btn-submit"><i class="fa-solid fa-dharmachakra"></i> إضافة الجائزة</button>
             <div id="wheelList" class="items-list" style="margin-top:15px;"></div>
@@ -169,10 +178,9 @@
             btn.classList.add('active');
         }
 
-        let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "", featuredId: null };
+        let storeData = { items: [], partners: [], codes: [], wheelPrizes: [], newsTicker: "", featuredId: null, wheelStatus: "locked" };
         let currentImgBase64 = "", partnerImgBase64 = "";
 
-        // دالة ضغط وتصغير الصور تلقائياً لمنع ثقل ملف data.json
         function compressImage(file, maxWidth, quality, callback) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -214,8 +222,10 @@
                     if(!storeData.partners) storeData.partners = [];
                     if(!storeData.codes) storeData.codes = [];
                     if(!storeData.wheelPrizes) storeData.wheelPrizes = [];
+                    if(!storeData.wheelStatus) storeData.wheelStatus = "locked";
 
                     if(storeData.newsTicker) document.getElementById('newsTickerInput').value = storeData.newsTicker;
+                    document.getElementById('wheelStatusSelect').value = storeData.wheelStatus;
                     renderLists();
                     updateFeaturedDropdown();
                 }).catch(() => {});
@@ -236,7 +246,8 @@
 
             storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
             storeData.featuredId = document.getElementById('featuredSelect').value;
-            saveToGitHub(token, "✅ تم حفظ الإعدادات العامة بنجاح!");
+            storeData.wheelStatus = document.getElementById('wheelStatusSelect').value;
+            saveToGitHub(token, "✅ تم حفظ الإعدادات العامة وحالة العجلة بنجاح!");
         }
 
         function renderLists() {
@@ -443,6 +454,7 @@
         async function saveToGitHub(token, successMsg) {
             storeData.newsTicker = document.getElementById('newsTickerInput').value.trim();
             storeData.featuredId = document.getElementById('featuredSelect').value;
+            storeData.wheelStatus = document.getElementById('wheelStatusSelect').value;
 
             try {
                 const getSha = await fetch('https://api.github.com/repos/markbrabos010-lab/ALIOPZTE-/contents/data.json', {

@@ -50,6 +50,7 @@
             --theme-c4: #00ff88;
         }
 
+        /* ثيمات المتجر المتعددة */
         body.theme-matrix {
             --theme-c1: #00ff41;
             --theme-c2: #008f11;
@@ -597,7 +598,7 @@
 
             <textarea id="reqDetails" rows="3" placeholder="اكتب اسم اللعبة أو المود أو الحلقة التي تريد إضافتها..." style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; resize:none; margin-bottom:12px;"></textarea>
             
-            <button onclick="sendRequestToDiscord()" class="btn-card-view" style="font-size:0.95rem; padding:10px;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للإدارة</button>
+            <button id="submitReqBtn" onclick="sendRequestToDiscord()" class="btn-card-view" style="font-size:0.95rem; padding:10px;"><i class="fa-solid fa-paper-plane"></i> إرسال الطلب للإدارة</button>
             <p id="reqMsg" style="margin-top:10px; font-weight:bold; font-size:0.82rem;"></p>
         </div>
     </div>
@@ -677,7 +678,6 @@
         let allPartners = [];
         let allCodes = [];
         let allWheelPrizes = [];
-        // الجوائز الافتراضية للعجلة إذا لم تحدد جوائز في لوحة التحكم
         const DEFAULT_XP_WHEEL_PRIZES = ["15 XP ⚡", "25 XP 💎", "50 XP 🔥", "100 XP 👑", "20 XP ✨", "5 XP 🎁"];
         let wheelStatus = 'locked';
         let currentCategory = 'all';
@@ -690,10 +690,16 @@
         let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
         let soundMuted = localStorage.getItem("ali_sound_muted") === "true";
 
+        // أقفال فورية لمنع الضغط المزدوج والسبام
+        let isSubmittingReport = false;
+        let isSubmittingRequest = false;
+        let isSubmittingReview = false;
+
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;
-        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000;
+        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;  // ساعة كاملة بين التقييمات
+        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000; // 30 دقيقة بين الطلبات
+        const REPORT_COOLDOWN_MS = 15 * 60 * 1000;  // 15 دقيقة بين البلاغات
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1243,7 +1249,7 @@
             renderItems(allItems);
         }
 
-        // ================= 🎡 التحكم بعجلة الحظ الذكية لنقاط الـ XP =================
+        // ================= التحكم بعجلة الحظ الذكية لنقاط الـ XP =================
         function getActiveWheelPrizes() {
             return (allWheelPrizes && allWheelPrizes.length > 0) ? allWheelPrizes : DEFAULT_XP_WHEEL_PRIZES;
         }
@@ -1314,7 +1320,6 @@
                 const prizesPool = getActiveWheelPrizes();
                 const prize = String(prizesPool[Math.floor(Math.random() * prizesPool.length)]).trim();
 
-                // استخراج رقم الـ XP تلقائياً إذا كانت الجائزة تحتوي على رقم (مثال: "50 XP" أو "100 XP")
                 const xpMatch = prize.match(/(\d+)/);
 
                 if (xpMatch) {
@@ -1334,7 +1339,7 @@
             }, 4000);
         }
 
-        // ================= نافذة العنصر + الفيديو المدمج + نسخ السكربت + منع سبام المشاركة =================
+        // ================= نافذة العنصر + الفيديو المدمج + نسخ السكربت =================
         function extractYouTubeId(url) {
             if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
@@ -1422,7 +1427,7 @@
         function openRequestModal() { document.getElementById('requestModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
 
-        // مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!)
+        // ================= 🛡️ مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
         async function shareCurrentItem() {
             if (!activeItemObj) return;
             playSfx('click');
@@ -1459,10 +1464,14 @@
             }
         }
 
+        // ================= 🛡️ البلاغات والطلبات والتقييمات (مقفولة ضد الضغط المزدوج والسبام نهائياً) =================
         async function reportBrokenLink() {
-            if (!activeItemObj) return;
+            if (!activeItemObj || isSubmittingReport) return;
             const msgEl = document.getElementById('itemActionMsg');
+            const reportBtn = document.getElementById('reportBrokenBtn');
             const reportKey = "ali_reported_" + activeItemObj.id;
+            const lastGlobalReport = parseInt(localStorage.getItem("ali_last_global_report_time")) || 0;
+            const now = Date.now();
 
             if (localStorage.getItem(reportKey)) {
                 msgEl.style.display = 'block';
@@ -1470,6 +1479,20 @@
                 msgEl.innerText = "⚠️ لقد قمت بالإبلاغ عن هذا الرابط مسبقاً، جاري العمل على تحديثه!";
                 return;
             }
+
+            if (now - lastGlobalReport < REPORT_COOLDOWN_MS) {
+                const minsLeft = Math.ceil((REPORT_COOLDOWN_MS - (now - lastGlobalReport)) / 60000);
+                msgEl.style.display = 'block';
+                msgEl.style.color = '#f59e0b';
+                msgEl.innerText = `⏳ منعاً للسبام، يمكنك إرسال بلاغ آخر بعد ${minsLeft} دقيقة.`;
+                return;
+            }
+
+            isSubmittingReport = true;
+            reportBtn.disabled = true;
+            reportBtn.style.opacity = '0.5';
+            localStorage.setItem(reportKey, "true");
+            localStorage.setItem("ali_last_global_report_time", now);
 
             msgEl.style.display = 'block';
             msgEl.style.color = '#00f2fe';
@@ -1492,20 +1515,27 @@
                         }]
                     })
                 });
-                localStorage.setItem(reportKey, "true");
                 msgEl.style.color = '#00ff88';
                 msgEl.innerText = "✅ تم إبلاغ الإدارة بنجاح! سيتم فحص وتحديث الرابط قريباً.";
             } catch (e) {
+                localStorage.removeItem(reportKey);
+                localStorage.removeItem("ali_last_global_report_time");
                 msgEl.style.color = '#ef4444';
                 msgEl.innerText = "❌ تعذر إرسال البلاغ حالياً.";
+            } finally {
+                isSubmittingReport = false;
+                reportBtn.disabled = false;
+                reportBtn.style.opacity = '1';
             }
         }
 
         async function sendRequestToDiscord() {
+            if (isSubmittingRequest) return;
             const userName = document.getElementById('reqUserName').value.trim();
             const category = document.getElementById('reqCategory').value;
             const details = document.getElementById('reqDetails').value.trim();
             const msg = document.getElementById('reqMsg');
+            const reqBtn = document.getElementById('submitReqBtn');
 
             if (!userName || !details) {
                 msg.style.color = "#ef4444";
@@ -1521,6 +1551,11 @@
                 msg.innerText = `⏳ منعاً للسبام، يمكنك إرسال طلب جديد بعد ${minsLeft} دقيقة.`;
                 return;
             }
+
+            isSubmittingRequest = true;
+            reqBtn.disabled = true;
+            reqBtn.style.opacity = '0.5';
+            localStorage.setItem("ali_last_request_time", now);
 
             msg.style.color = "#00f2fe";
             msg.innerText = "⏳ جاري إرسال طلبك للإدارة...";
@@ -1543,13 +1578,17 @@
                         }]
                     })
                 });
-                localStorage.setItem("ali_last_request_time", now);
                 msg.style.color = "#00ff88";
                 msg.innerText = "✅ وصل طلبك للإدارة بنجاح!";
                 document.getElementById('reqDetails').value = '';
             } catch (e) {
+                localStorage.removeItem("ali_last_request_time");
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";
+            } finally {
+                isSubmittingRequest = false;
+                reqBtn.disabled = false;
+                reqBtn.style.opacity = '1';
             }
         }
 
@@ -1652,10 +1691,12 @@
         }
 
         async function sendReviewToDiscord() {
+            if (isSubmittingReview) return;
             const name = document.getElementById('revName').value.trim();
             const stars = document.getElementById('revStars').value;
             const comment = document.getElementById('revComment').value.trim();
             const msg = document.getElementById('revMsg');
+            const submitBtn = document.getElementById('submitRevBtn');
 
             const lastRevTime = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
             const now = Date.now();
@@ -1671,6 +1712,12 @@
                 msg.innerText = "❌ يرجى كتابة الاسم ورأيك قبل الإرسال!";
                 return;
             }
+
+            // قفل فوري للزر وحفظ وقت التقييم قبل بدء الاتصال لمنع التكرار عند الضغط السريع
+            isSubmittingReview = true;
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            localStorage.setItem("ali_last_review_time", now);
 
             msg.style.color = "#00f2fe";
             msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
@@ -1710,7 +1757,6 @@
                     })
                 });
 
-                localStorage.setItem("ali_last_review_time", now);
                 addXP(25, "نشر تقييم للمتجر");
 
                 msg.style.color = "#00ff88";
@@ -1720,8 +1766,13 @@
 
                 setTimeout(fetchReviews, 2000);
             } catch (e) {
+                localStorage.removeItem("ali_last_review_time");
                 msg.style.color = "#ef4444";
                 msg.innerText = "❌ حدث خطأ أثناء الإرسال، حاول لاحقاً.";
+            } finally {
+                isSubmittingReview = false;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
             }
         }
     </script>

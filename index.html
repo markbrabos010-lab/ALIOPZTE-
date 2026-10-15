@@ -50,7 +50,6 @@
             --theme-c4: #00ff88;
         }
 
-        /* ثيمات المتجر المتعددة (الميزة 12) */
         body.theme-matrix {
             --theme-c1: #00ff41;
             --theme-c2: #008f11;
@@ -139,7 +138,6 @@
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
-        /* شريط مكافأة الدخول اليومي المتتالي (الميزة 3) */
         .streak-bar {
             background: rgba(13, 18, 30, 0.92);
             border: 1px solid rgba(255, 215, 0, 0.35);
@@ -170,7 +168,6 @@
         .featured-badge { display: inline-block; background: var(--theme-c1); color: #fff; font-size: 0.7rem; font-weight: 900; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; }
         .featured-title { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        /* شريط شاهدت مؤخراً (الميزة 14) */
         .recent-box {
             background: rgba(13, 18, 30, 0.75);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -216,7 +213,6 @@
         .partner-card { background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 8px; display: flex; align-items: center; gap: 8px; }
         .partner-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--theme-c2); }
 
-        /* بطاقة تصويت الجمهور (الميزة 9) */
         .poll-option {
             background: rgba(5, 7, 14, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.12);
@@ -247,7 +243,6 @@
         .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .badge-tag { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 6px; font-size: 0.68rem; font-weight: 800; color: #fff; background: rgba(5, 7, 14, 0.85); border: 1px solid rgba(255,255,255,0.15); }
         
-        /* شارات البطاقات المتوهجة (الميزة 6) */
         .glow-status-badge {
             position: absolute; bottom: 8px; right: 8px;
             padding: 3px 9px; border-radius: 6px; font-size: 0.68rem; font-weight: 900;
@@ -275,14 +270,23 @@
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
 
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
-        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--theme-c2); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 90deg, #7f00ff 90deg 180deg, #00f2fe 180deg 270deg, #00ff88 270deg 360deg); }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--theme-c2); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 60deg, #7f00ff 60deg 120deg, #00f2fe 120deg 180deg, #00ff88 180deg 240deg, #f59e0b 240deg 300deg, #ec4899 300deg 360deg); display: flex; align-items: center; justify-content: center; }
+        .wheel::after { content: "XP 🎯"; width: 54px; height: 54px; border-radius: 50%; background: #05070e; border: 3px solid #ffd700; color: #ffd700; font-weight: 900; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0,0,0,0.8); }
         .wheel-pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 18px solid #fff; z-index: 10; }
+
+        .wheel-prizes-badges {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+            margin: 10px 0 14px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 10px;
+        }
+        .wheel-prize-pill {
+            background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700; padding: 3px 9px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;
+        }
 
         .modal-actions-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
         .btn-share-item { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid var(--theme-c2); background: rgba(0, 242, 254, 0.12); color: var(--theme-c2); font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
         .btn-report-link { flex: 1; padding: 9px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.5); background: rgba(239, 68, 68, 0.1); color: #fca5a5; font-weight: 700; font-size: 0.78rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; }
 
-        /* متجر استبدال نقاط XP (الميزة 2) */
         .xp-shop-item {
             background: rgba(5, 7, 14, 0.75);
             border: 1px solid rgba(255, 215, 0, 0.25);
@@ -301,7 +305,6 @@
             font-weight: 900; font-size: 0.78rem; cursor: pointer; white-space: nowrap; font-family: inherit;
         }
 
-        /* صندوق نسخ السكربت (الميزة 4) */
         .script-copy-box {
             background: #05070e;
             border: 1px dashed var(--theme-c2);
@@ -338,7 +341,6 @@
 </head>
 <body>
 
-    <!-- إشعار نقاط XP العائم -->
     <div id="xpToast" class="xp-toast"></div>
 
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
@@ -404,12 +406,11 @@
 
     <div class="news-ticker-bar">
         <div class="news-ticker-content" id="newsTickerText">
-            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | اجمع نقاط XP وافتح التحميل الفوري VIP وصندوق الغموض!
+            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | دور عجلة الحظ واجمع نقاط XP لفتح التحميل الفوري VIP وصندوق الغموض!
         </div>
     </div>
 
     <div class="container">
-        <!-- شريط سلسلة الدخول اليومي وصندوق الغموض (الميزة 3) -->
         <div class="streak-bar">
             <div>
                 <div style="font-weight:900; font-size:0.92rem; color:#ffd700;">
@@ -432,7 +433,6 @@
             <button class="btn-card-view" style="width:auto; padding:8px 16px;" onclick="playSfx('click'); openFeaturedModal()"><i class="fa-solid fa-eye"></i> التفاصيل والتحميل</button>
         </div>
 
-        <!-- شريط شاهدت مؤخراً (الميزة 14) -->
         <div id="recentlyViewedBox" class="recent-box">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.85rem; font-weight:900; color:var(--theme-c2);"><i class="fa-solid fa-clock-rotate-left"></i> شاهدت مؤخراً:</span>
@@ -457,7 +457,6 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم تقييمات وآراء المتابعين -->
                 <section class="review-section">
                     <h2 class="review-header">
                         <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)
@@ -499,7 +498,6 @@
             </main>
 
             <aside class="partners-sidebar">
-                <!-- بطاقة حالة سيرفر الديسكورد الحية (الميزة 8) -->
                 <div class="sidebar-box">
                     <div class="partners-header">
                         <span><i class="fa-brands fa-discord" style="color:#5865F2;"></i> سيرفر الديسكورد الرسمي</span>
@@ -513,7 +511,6 @@
                     </a>
                 </div>
 
-                <!-- بطاقة تصويت الجمهور للإضافة القادمة (الميزة 9) -->
                 <div class="sidebar-box">
                     <div class="partners-header">
                         <span><i class="fa-solid fa-chart-pie" style="color:var(--theme-c2);"></i> تصويت الجمهور (+5 XP)</span>
@@ -523,7 +520,6 @@
                     <p id="pollStatusMsg" style="font-size:0.74rem; color:#00ff88; text-align:center; margin-top:6px; display:none;"></p>
                 </div>
 
-                <!-- روم الشراكات -->
                 <div class="sidebar-box">
                     <div class="partners-header">
                         <span><i class="fa-solid fa-handshake rgb-text"></i> روم الشراكات</span>
@@ -534,7 +530,7 @@
         </div>
     </div>
 
-    <!-- نافذة رتبة المتابع + متجر استبدال نقاط XP (الميزة 1 و 2) -->
+    <!-- نافذة رتبة المتابع + متجر استبدال نقاط XP -->
     <div id="rankModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('rankModal')"><i class="fa-solid fa-xmark"></i></button>
@@ -547,7 +543,6 @@
             </div>
             <p id="modalNextRankText" style="font-size:0.78rem; color:var(--theme-c2); margin-bottom:12px;"></p>
 
-            <!-- متجر استبدال نقاط XP (الميزة 2) -->
             <div style="text-align:right; background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,215,0,0.2);">
                 <div style="font-weight:900; color:#ffd700; font-size:0.9rem; margin-bottom:8px;">
                     <i class="fa-solid fa-store"></i> متجر استبدال نقاط الـ XP:
@@ -579,7 +574,7 @@
             <div style="text-align:right; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; font-size:0.78rem; line-height:1.65; color:#cbd5e1;">
                 <b style="color:#fff;"><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> مميزات الرتب وكسب النقاط:</b><br>
                 • أصحاب رتبة <b>نخبة المتجر (150+ XP)</b> و<b>الأسطورة (300+ XP)</b> يحصلون على <b>تحميل فوري VIP (0 ثانية) تلقائياً!</b><br>
-                • تحميل عنصر جديد: <b style="color:#00ff88;">+15 XP</b> | تقييم المتجر: <b style="color:#00ff88;">+25 XP</b> | أول مشاركة: <b style="color:#00ff88;">+10 XP (تُحسب مرة واحدة فقط)</b>
+                • تدوير عجلة الحظ: <b style="color:#00ff88;">يربح جوائز XP مباشرة</b> | تحميل عنصر: <b style="color:#00ff88;">+15 XP</b> | تقييم المتجر: <b style="color:#00ff88;">+25 XP</b>
             </div>
         </div>
     </div>
@@ -607,20 +602,23 @@
         </div>
     </div>
 
-    <!-- نافذة عجلة الحظ -->
+    <!-- نافذة عجلة الحظ الذكية لنقاط XP -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('wheelModal')"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:var(--theme-c2);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ اليومية</h2>
-            <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة مرة واحدة يومياً للحصول على الجوائز!</p>
+            <h2 style="color:var(--theme-c2);"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ وجوائز الـ XP</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">دور العجلة واربح نقاط XP تضاف لرصيدك وترقي رتبتك فوراً!</p>
             
             <div class="wheel-container">
                 <div class="wheel-pointer"></div>
                 <div id="wheel" class="wheel"></div>
             </div>
 
+            <div style="font-size:0.76rem; color:#cbd5e1; margin-bottom:4px;">🎁 الجوائز المتاحة في العجلة حالياً:</div>
+            <div id="wheelPrizesPreview" class="wheel-prizes-badges"></div>
+
             <button id="spinBtn" onclick="spinWheel()" class="btn-card-view" style="font-size:1rem; padding:12px;"><i class="fa-solid fa-play"></i> تدوير العجلة الآن</button>
-            <p id="wheelMsg" style="margin-top:10px; font-weight:bold; font-size:0.85rem;"></p>
+            <p id="wheelMsg" style="margin-top:10px; font-weight:bold; font-size:0.88rem;"></p>
         </div>
     </div>
 
@@ -638,21 +636,18 @@
         </div>
     </div>
 
-    <!-- نافذة تفاصيل العنصر + مشغل الفيديو المدمج + نسخ السكربت (الميزات 1، 4، 5) -->
+    <!-- نافذة تفاصيل العنصر -->
     <div id="itemModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('itemModal')"><i class="fa-solid fa-xmark"></i></button>
             
             <img id="mImg" src="" alt="" style="width:100%; max-height:200px; object-fit:cover; border-radius:10px; margin-bottom:10px;">
-            
-            <!-- مشغل الفيديو المدمج (الميزة 5) -->
             <div id="mVideoContainer" style="display:none; width:100%; margin-bottom:10px; border-radius:10px; overflow:hidden; background:#000;"></div>
 
             <h2 id="mTitle" style="font-size:1.1rem; color:#fff; margin-bottom:4px;"></h2>
             <div id="mVipHint" style="font-size:0.75rem; color:#ffd700; margin-bottom:6px;"></div>
             <p id="mDesc" style="font-size:0.82rem; color:#cbd5e1; background:rgba(0,0,0,0.4); padding:8px; border-radius:8px; margin:8px 0;"></p>
 
-            <!-- صندوق نسخ السكربت السريع (الميزة 4) -->
             <div id="mScriptBox" class="script-copy-box">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <span style="font-size:0.76rem; color:var(--theme-c2); font-weight:bold;"><i class="fa-solid fa-terminal"></i> نسخ سريع للسكربت / الرابط:</span>
@@ -682,12 +677,15 @@
         let allPartners = [];
         let allCodes = [];
         let allWheelPrizes = [];
+        // الجوائز الافتراضية للعجلة إذا لم تحدد جوائز في لوحة التحكم
+        const DEFAULT_XP_WHEEL_PRIZES = ["15 XP ⚡", "25 XP 💎", "50 XP 🔥", "100 XP 👑", "20 XP ✨", "5 XP 🎁"];
         let wheelStatus = 'locked';
         let currentCategory = 'all';
         let activeTargetUrl = '#';
         let activeItemObj = null;
         let viewingWishlist = false;
         let downloadTimerInterval = null;
+        let currentWheelRotation = 0;
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
         let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
         let soundMuted = localStorage.getItem("ali_sound_muted") === "true";
@@ -722,7 +720,7 @@
             fetchReviews();
         });
 
-        // ================= 🔊 المؤثرات الصوتية التفاعلية (الميزة 11) =================
+        // ================= المؤثرات الصوتية التفاعلية =================
         let audioCtx = null;
         function playSfx(type) {
             if (soundMuted) return;
@@ -777,7 +775,7 @@
             btn.innerHTML = soundMuted ? '<i class="fa-solid fa-volume-xmark" style="color:#ef4444;"></i>' : '<i class="fa-solid fa-volume-high"></i>';
         }
 
-        // ================= 🎨 مبدل الثيمات (الميزة 12) =================
+        // ================= مبدل الثيمات =================
         const themes = [
             { name: 'RGB', class: '' },
             { name: 'Matrix', class: 'theme-matrix' },
@@ -799,7 +797,7 @@
             document.getElementById('themeLabel').innerText = t.name;
         }
 
-        // ================= 🔥 مكافأة الدخول اليومي المتتالي وصندوق الغموض (الميزة 3) =================
+        // ================= مكافأة الدخول اليومي المتتالي وصندوق الغموض =================
         function getTodayStr() {
             const d = new Date();
             return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -856,7 +854,7 @@
             initDailyStreakUI();
         }
 
-        // ================= 🏆 نظام الرتب والنقاط ومتجر الاستبدال (الميزة 1 و 2) =================
+        // ================= نظام الرتب والنقاط ومتجر الاستبدال =================
         function getUserRank(xp) {
             if (xp >= 300) return { title: "أسطورة ALIOPZTE", icon: "👑", next: null, min: 300 };
             if (xp >= 150) return { title: "نخبة المتجر", icon: "🔥", next: 300, min: 150 };
@@ -955,7 +953,7 @@
             document.getElementById('rankModal').classList.add('active');
         }
 
-        // ================= 📊 تصويت الجمهور التفاعلي (الميزة 9) =================
+        // ================= تصويت الجمهور التفاعلي =================
         const pollChoices = [
             { id: 'mc', title: '🎮 مودات وإضافات ماين كرافت', baseVotes: 46 },
             { id: 'rb', title: '💻 سكربتات ومابات روبلكس', baseVotes: 38 },
@@ -997,7 +995,7 @@
             msg.innerText = "🎉 تم احتساب صوتك وحصلت على +5 XP!";
         }
 
-        // ================= 🕒 شريط شاهدت مؤخراً (الميزة 14) =================
+        // ================= شريط شاهدت مؤخراً =================
         function addToRecentlyViewed(item) {
             if (!item || !item.id) return;
             let recent = JSON.parse(localStorage.getItem("ali_recent_items")) || [];
@@ -1188,7 +1186,6 @@
 
             filtered.forEach((item, index) => {
                 const isFav = wishlist.includes(item.id);
-                // شارات البطاقات المتوهجة (الميزة 6)
                 let glowBadge = '';
                 if (window.featuredItemObj && item.id == window.featuredItemObj.id) {
                     glowBadge = `<span class="glow-status-badge">🔥 رائج</span>`;
@@ -1246,11 +1243,24 @@
             renderItems(allItems);
         }
 
-        // ================= التحكم بعجلة الحظ =================
+        // ================= 🎡 التحكم بعجلة الحظ الذكية لنقاط الـ XP =================
+        function getActiveWheelPrizes() {
+            return (allWheelPrizes && allWheelPrizes.length > 0) ? allWheelPrizes : DEFAULT_XP_WHEEL_PRIZES;
+        }
+
+        function renderWheelPrizesPreview() {
+            const box = document.getElementById('wheelPrizesPreview');
+            if (!box) return;
+            const prizes = getActiveWheelPrizes();
+            box.innerHTML = prizes.map(p => `<span class="wheel-prize-pill">${p}</span>`).join('');
+        }
+
         function checkWheelStatus() {
             const wheelBtn = document.getElementById('headerWheelBtn');
             const spinBtn = document.getElementById('spinBtn');
             const wheelMsg = document.getElementById('wheelMsg');
+
+            renderWheelPrizesPreview();
 
             if (wheelStatus === 'hidden') {
                 wheelBtn.style.display = 'none';
@@ -1290,20 +1300,37 @@
 
             playSfx('click');
             const wheel = document.getElementById('wheel');
-            const deg = 1440 + Math.floor(Math.random() * 360);
-            wheel.style.transform = `rotate(${deg}deg)`;
+            currentWheelRotation += 1440 + Math.floor(Math.random() * 360);
+            wheel.style.transform = `rotate(${currentWheelRotation}deg)`;
             document.getElementById('spinBtn').disabled = true;
+            document.getElementById('spinBtn').style.opacity = '0.5';
+            document.getElementById('wheelMsg').style.color = "#00f2fe";
+            document.getElementById('wheelMsg').innerText = "⏳ جاري تدوير العجلة...";
 
             localStorage.setItem("ali_last_spin", now);
 
             setTimeout(() => {
                 playSfx('win');
-                const prize = (allWheelPrizes && allWheelPrizes.length > 0) 
-                    ? allWheelPrizes[Math.floor(Math.random() * allWheelPrizes.length)] 
-                    : "حظ أوفر في المرة القادمة!";
-                document.getElementById('wheelMsg').style.color = "#00ff88";
-                document.getElementById('wheelMsg').innerText = "🎉 النتيجة: " + prize;
-                addXP(10, "تدوير عجلة الحظ");
+                const prizesPool = getActiveWheelPrizes();
+                const prize = String(prizesPool[Math.floor(Math.random() * prizesPool.length)]).trim();
+
+                // استخراج رقم الـ XP تلقائياً إذا كانت الجائزة تحتوي على رقم (مثال: "50 XP" أو "100 XP")
+                const xpMatch = prize.match(/(\d+)/);
+
+                if (xpMatch) {
+                    const wonXP = parseInt(xpMatch[1], 10);
+                    document.getElementById('wheelMsg').style.color = "#00ff88";
+                    document.getElementById('wheelMsg').innerText = `🎉 مبروك! ربحت (${prize}) وتمت إضافة +${wonXP} XP لرصيدك فوراً!`;
+                    addXP(wonXP, `ربح من عجلة الحظ (${prize})`);
+                } else if (prize.includes("حظ أوفر")) {
+                    document.getElementById('wheelMsg').style.color = "#f59e0b";
+                    document.getElementById('wheelMsg').innerText = `😅 ${prize} — حصلت على +5 XP ترضية!`;
+                    addXP(5, "ترضية عجلة الحظ");
+                } else {
+                    document.getElementById('wheelMsg').style.color = "#00ff88";
+                    document.getElementById('wheelMsg').innerText = `🎉 مبروك! ربحت: ${prize} (+15 XP إضافية)`;
+                    addXP(15, `جائزة عجلة الحظ (${prize})`);
+                }
             }, 4000);
         }
 
@@ -1324,11 +1351,9 @@
             document.getElementById('mDesc').innerText = item.desc || '';
             document.getElementById('itemActionMsg').style.display = 'none';
 
-            // تحديث نص زر المشاركة حسب هل أخذ المكافأة لأول مرة أم لا
             const alreadyClaimedFirstShare = localStorage.getItem("ali_first_share_ever_claimed") === "true";
             document.getElementById('shareBtnLabel').innerText = alreadyClaimedFirstShare ? "مشاركة العنصر" : "مشاركة العنصر (+10 XP لأول مرة)";
 
-            // مشغل الفيديو المدمج (الميزة 5)
             const ytId = extractYouTubeId(item.url);
             const vidContainer = document.getElementById('mVideoContainer');
             const imgEl = document.getElementById('mImg');
@@ -1348,7 +1373,6 @@
                 imgEl.src = item.image;
             }
 
-            // صندوق نسخ السكربت السريع (الميزة 4)
             const scriptBox = document.getElementById('mScriptBox');
             if (item.category === 'scripts' || item.category === 'roblox' || item.script) {
                 scriptBox.style.display = 'block';
@@ -1357,7 +1381,6 @@
                 scriptBox.style.display = 'none';
             }
 
-            // التحقق من حالة الـ VIP للتحميل الفوري (الميزة 1)
             const vipHint = document.getElementById('mVipHint');
             if (isUserVipInstant()) {
                 vipHint.innerHTML = `👑 <b>ميزة VIP مفعلة لديك:</b> التحميل فوري (0 ثانية) بدون انتظار!`;
@@ -1399,14 +1422,13 @@
         function openRequestModal() { document.getElementById('requestModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
 
-        // ================= 🛡️ مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
+        // مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!)
         async function shareCurrentItem() {
             if (!activeItemObj) return;
             playSfx('click');
             const shareUrl = window.location.origin + window.location.pathname + '?id=' + activeItemObj.id;
             const msgEl = document.getElementById('itemActionMsg');
 
-            // تمنح نقاط XP في أول مشاركة فقط في الحساب بالكامل لمنع السبام نهائياً!
             const firstShareEverClaimed = localStorage.getItem("ali_first_share_ever_claimed") === "true";
             if (!firstShareEverClaimed) {
                 localStorage.setItem("ali_first_share_ever_claimed", "true");
@@ -1437,7 +1459,6 @@
             }
         }
 
-        // الإبلاغ عن رابط معطل للديسكورد
         async function reportBrokenLink() {
             if (!activeItemObj) return;
             const msgEl = document.getElementById('itemActionMsg');
@@ -1480,7 +1501,6 @@
             }
         }
 
-        // إرسال طلب إضافة لعبة/مود/حلقة للديسكورد
         async function sendRequestToDiscord() {
             const userName = document.getElementById('reqUserName').value.trim();
             const category = document.getElementById('reqCategory').value;
@@ -1548,7 +1568,6 @@
             }
         }
 
-        // ================= ⚡ عداد التحميل (يدعم التحميل الفوري VIP لأصحاب الرتب العالية - الميزة 1) =================
         function grantDownloadXPOnce() {
             if (!activeItemObj || !activeItemObj.id) return;
             const dlKey = "ali_dl_" + activeItemObj.id;
@@ -1561,7 +1580,6 @@
         function startDownloadTimer() {
             const btn = document.getElementById('mDlBtn');
 
-            // إذا كان العضو VIP (رتبة نخبة المتجر / أسطورة أو اشترى تذكرة VIP) يفتح الرابط فوراً بدون انتظار!
             if (isUserVipInstant()) {
                 playSfx('win');
                 grantDownloadXPOnce();
@@ -1600,7 +1618,6 @@
 
         function filterItems() { renderItems(allItems); }
 
-        // ================= التقييمات (مع تقييد تقييم واحد كل ساعة + عرض الرتبة والتاج الملكي) =================
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {

@@ -76,6 +76,7 @@
                 radial-gradient(circle at 20% 20%, rgba(255, 0, 128, 0.08) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.08) 0%, transparent 50%);
             background-attachment: fixed; color: var(--text-main); font-family: 'Tajawal', sans-serif; min-height: 100vh;
+            padding-bottom: 70px;
         }
 
         * { box-sizing: border-box; }
@@ -118,7 +119,7 @@
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; transition: transform 0.2s; font-family: inherit; }
         .btn-action:hover { transform: translateY(-2px); }
-        .btn-action.auth-btn { background: linear-gradient(90deg, #3b82f6, #1d4ed8); color: #fff; font-weight: 900; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-action.arcade-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; box-shadow: 0 0 10px rgba(16, 185, 129, 0.35); }
         .btn-action.code-btn { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3)); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, var(--theme-c2), var(--theme-c4)); color: #000; font-weight: 900; }
         .btn-action.req-btn { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; font-weight: 900; }
@@ -140,7 +141,7 @@
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
 
-        /* الميزة 7: شريط العداد التنازلي للحدث القادم */
+        /* شريط العداد التنازلي للحدث القادم */
         .countdown-banner {
             background: linear-gradient(90deg, rgba(13, 18, 30, 0.95), rgba(127, 0, 255, 0.18), rgba(13, 18, 30, 0.95));
             border: 1px solid var(--theme-c2);
@@ -296,7 +297,7 @@
         .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
 
-        /* الميزة 5: بطاقة هوية القيمر (Gamer ID Card) */
+        /* بطاقة هوية القيمر (Gamer ID Card) */
         .gamer-id-card {
             background: linear-gradient(135deg, #090d1a 0%, #161f38 50%, #090d1a 100%);
             border: 2px solid var(--theme-c2);
@@ -324,7 +325,7 @@
             color: #ffd700; font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
         }
 
-        /* الميزة 6: صندوق الكنز المخفي العائم (Treasure Hunt) */
+        /* صندوق الكنز المخفي العائم (Treasure Hunt) */
         #floatingTreasure {
             position: fixed;
             z-index: 1500;
@@ -342,6 +343,89 @@
         @keyframes treasureBounce {
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-10px) scale(1.1); }
+        }
+
+        /* الميزة 2: أركيد ALIOPZTE (Mini-Game) */
+        .arcade-arena {
+            width: 100%;
+            height: 270px;
+            background: radial-gradient(circle at center, #111827 0%, #05070e 100%);
+            border: 2px solid var(--theme-c2);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+            margin: 12px 0;
+            user-select: none;
+        }
+        .arcade-target-item {
+            position: absolute;
+            font-size: 2.1rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+        }
+        .arcade-target-item:active { transform: scale(0.75); }
+
+        /* الميزة 3: راديو المتجر العائم (Gaming/Lofi Player) */
+        .lofi-radio-widget {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(9, 13, 26, 0.95);
+            border: 1.5px solid var(--theme-c2);
+            border-radius: 16px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1600;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+        }
+        .radio-btn-circle {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, var(--theme-c2), var(--theme-c3));
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .radio-eq-bars {
+            display: flex; align-items: flex-end; gap: 2px; height: 14px;
+        }
+        .radio-eq-bars span {
+            width: 3px; height: 4px; background: var(--theme-c4); border-radius: 2px;
+            transition: height 0.2s;
+        }
+        .lofi-radio-widget.playing .radio-eq-bars span:nth-child(1) { animation: eqAnim 0.6s infinite alternate; }
+        .lofi-radio-widget.playing .radio-eq-bars span:nth-child(2) { animation: eqAnim 0.4s infinite alternate 0.2s; }
+        .lofi-radio-widget.playing .radio-eq-bars span:nth-child(3) { animation: eqAnim 0.7s infinite alternate 0.1s; }
+        @keyframes eqAnim { 0% { height: 4px; } 100% { height: 14px; } }
+
+        /* الميزة 4: شاشة الكود السري المخفي للكيبورد (Easter Egg Matrix) */
+        #secretHackerOverlay {
+            position: fixed; inset: 0;
+            background: rgba(0, 10, 0, 0.96);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .hacker-box {
+            background: #020b04;
+            border: 2px solid #00ff41;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.45);
+            border-radius: 20px;
+            padding: 28px 22px;
+            max-width: 460px;
+            width: 100%;
+            color: #00ff41;
+            font-family: 'Tajawal', monospace;
         }
 
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
@@ -390,7 +474,7 @@
             text-align: right;
         }
 
-        .xp-toast { position: fixed; bottom: 20px; left: 20px; background: rgba(13, 18, 30, 0.95); border: 2px solid #ffd700; color: #fff; padding: 10px 16px; border-radius: 12px; font-weight: 900; font-size: 0.85rem; z-index: 99999; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); display: none; align-items: center; gap: 8px; }
+        .xp-toast { position: fixed; bottom: 75px; left: 20px; background: rgba(13, 18, 30, 0.95); border: 2px solid #ffd700; color: #fff; padding: 10px 16px; border-radius: 12px; font-weight: 900; font-size: 0.85rem; z-index: 99999; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); display: none; align-items: center; gap: 8px; }
 
         .xp-progress-bg { width: 100%; height: 12px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; margin: 10px 0; }
         .xp-progress-fill { height: 100%; background: linear-gradient(90deg, var(--theme-c2), #ffd700); width: 0%; transition: width 0.4s ease; }
@@ -400,7 +484,7 @@
         .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 450px; overflow-y: auto; margin-top: 15px; }
         .review-card { background: rgba(5,7,14,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 12px; border-radius: 10px; position: relative; }
 
-        /* الميزة 8: تمييز أساطير التقييمات بإطار ذهبي مضيء */
+        /* تمييز أساطير التقييمات بإطار ذهبي مضيء */
         .review-card.legendary-review {
             background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(5, 7, 14, 0.92));
             border: 2px solid #ffd700;
@@ -415,16 +499,6 @@
             padding: 2px 8px;
             border-radius: 6px;
             margin-bottom: 6px;
-        }
-
-        /* صندوق قفل التعليقات لغير المسجلين */
-        .review-auth-lock {
-            background: rgba(5, 7, 14, 0.85);
-            border: 1px dashed #3b82f6;
-            border-radius: 14px;
-            padding: 22px 15px;
-            text-align: center;
-            margin-bottom: 15px;
         }
 
         body.device-tablet .main-layout { flex-direction: column; }
@@ -446,8 +520,41 @@
     <!-- إشعار نقاط XP العائم -->
     <div id="xpToast" class="xp-toast"></div>
 
-    <!-- الميزة 6: صندوق الكنز المخفي اليومي -->
+    <!-- صندوق الكنز المخفي اليومي -->
     <div id="floatingTreasure" onclick="claimTreasureChest()" title="صندوق كنز سري! اضغط لفتحه (+30 XP)">🎁</div>
+
+    <!-- الميزة 3: راديو المتجر العائم (Gaming/Lofi Player) -->
+    <div id="lofiRadioWidget" class="lofi-radio-widget">
+        <button id="radioPlayBtn" class="radio-btn-circle" onclick="toggleStoreRadio()" title="تشغيل / إيقاف راديو المتجر">
+            <i class="fa-solid fa-play"></i>
+        </button>
+        <div style="text-align:right;">
+            <div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-size:0.78rem; font-weight:900; color:#fff;">🎧 راديو ALIOPZTE</span>
+                <div class="radio-eq-bars"><span></span><span></span><span></span></div>
+            </div>
+            <div id="radioTrackName" style="font-size:0.68rem; color:var(--theme-c2);">Lofi Gaming Beats #1</div>
+        </div>
+        <button onclick="nextRadioTrack()" style="background:rgba(255,255,255,0.08); border:none; color:#cbd5e1; width:28px; height:28px; border-radius:8px; cursor:pointer;" title="المقطع التالي">
+            <i class="fa-solid fa-forward-step"></i>
+        </button>
+        <audio id="storeRadioAudio" preload="none"></audio>
+    </div>
+
+    <!-- الميزة 4: نافذة الكود السري المخفي في الكيبورد (Easter Egg) -->
+    <div id="secretHackerOverlay">
+        <div class="hacker-box">
+            <div style="font-size:3rem; margin-bottom:8px;">🥷💻</div>
+            <h2 style="color:#00ff41; margin-bottom:6px; font-size:1.3rem;">SYSTEM BREACHED: ALIOPZTE SECRET!</h2>
+            <p style="color:#a7f3d0; font-size:0.88rem; line-height:1.6; margin-bottom:16px;">
+                مذهل! لقد اكتشفت الكود السري المخفي لمتجر <b>ALIOPZTE</b>!<br>
+                تم تفعيل ثيم الهاكر السري ومنحك <b>وسام الهاكر الخفي 🥷 + 100 XP</b>!
+            </p>
+            <button onclick="closeSecretHackerOverlay()" class="btn-buy-xp" style="background:#00ff41; color:#000; padding:10px 24px; font-size:0.95rem;">
+                <i class="fa-solid fa-terminal"></i> استلام المكافأة السرية ومتابعة التصفح
+            </button>
+        </div>
+    </div>
 
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
         <div class="copyright-card">
@@ -490,11 +597,11 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-action auth-btn" id="headerAuthBtn" onclick="playSfx('click'); openAuthModal()">
-                    <i class="fa-solid fa-user-check"></i> <span id="headerAuthText">تسجيل دخول</span>
-                </button>
                 <button class="btn-action rank-btn" onclick="playSfx('click'); openRankModal()" title="هوية القيمر ومتجر النقاط">
                     <span id="headerRankIcon">🥉</span> <span id="headerRankTitle">مبتدئ</span> (<span id="headerXPCount">10</span> XP)
+                </button>
+                <button class="btn-action arcade-btn" onclick="playSfx('click'); openArcadeModal()" title="العب واربح نقاط XP">
+                    <i class="fa-solid fa-joystick"></i> أركيد XP
                 </button>
                 <button class="btn-action req-btn" onclick="playSfx('click'); openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
                 <button class="btn-action comp-btn" onclick="playSfx('click'); openComplaintModal()"><i class="fa-solid fa-triangle-exclamation"></i> الشكاوي</button>
@@ -516,12 +623,12 @@
 
     <div class="news-ticker-bar">
         <div class="news-ticker-content" id="newsTickerText">
-            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | ابحث عن صندوق الكنز المخفي 🎁 ودور عجلة الحظ لترقية هويتك!
+            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | العب أركيد XP 🕹️ واستمع لراديو المتجر 🎧 وابحث عن الكود السري!
         </div>
     </div>
 
     <div class="container">
-        <!-- الميزة 7: شريط العداد التنازلي للحدث القادم -->
+        <!-- شريط العداد التنازلي للحدث القادم -->
         <div id="eventCountdownBanner" class="countdown-banner">
             <div>
                 <span style="background:var(--theme-c1); color:#fff; font-size:0.68rem; font-weight:900; padding:2px 8px; border-radius:6px;">⏳ الحدث القادم</span>
@@ -581,29 +688,18 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
-                <!-- قسم التقييمات المحمي بتسجيل الدخول الإجباري + الإطار الذهبي للأساطير -->
+                <!-- قسم التقييمات المفتوح للجميع بدون تسجيل دخول + الإطار الذهبي للأساطير -->
                 <section class="review-section">
                     <div class="review-header">
                         <span><i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)</span>
                         <span style="font-size:0.75rem; color:#ffd700; font-weight:bold;">👑 أصحاب الرتب العالية يظهر تقييمهم بإطار ذهبي!</span>
                     </div>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك مع رتبتك وهويتك فوراً هنا وفي ديسكورد! (يُسمح بتقييم واحد كل ساعة).</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك مع رتبتك فوراً هنا وفي ديسكورد! (يُسمح بتقييم واحد كل ساعة منعاً للسبام).</p>
                     
-                    <!-- شاشة قفل التعليقات لمن لم يسجل دخوله -->
-                    <div id="reviewLockedBox" class="review-auth-lock">
-                        <i class="fa-solid fa-user-lock" style="font-size:2.2rem; color:#3b82f6; margin-bottom:8px;"></i>
-                        <h3 style="font-size:1rem; color:#fff; margin-bottom:4px;">تسجيل الدخول مطلوب لإرسال تقييم!</h3>
-                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">لحماية المتجر من الحسابات الوهمية وحفظ نقاط الـ XP والرتبة باسمك، يرجى تسجيل دخولك أولاً.</p>
-                        <button onclick="openAuthModal()" class="btn-card-view" style="max-width:260px; margin:0 auto; padding:10px;">
-                            <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول / إنشاء حساب
-                        </button>
-                    </div>
-
-                    <!-- نموذج التقييم (يفتح فقط بعد تسجيل الدخول) -->
-                    <div id="reviewFormBox" style="display:none;">
+                    <div id="reviewFormBox">
                         <div style="margin-bottom: 10px;">
-                            <label style="display: block; font-size: 0.82rem; margin-bottom: 5px; color: #fff;">حسابك المسجل (مرتبط بهويتك تلقائياً 🔒):</label>
-                            <input type="text" id="revName" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.4); background: rgba(0,242,254,0.08); color: #00f2fe; font-weight:bold; font-family: inherit; cursor:not-allowed;">
+                            <label style="display: block; font-size: 0.82rem; margin-bottom: 5px; color: #fff;">اسمك أو لقبك:</label>
+                            <input type="text" id="revName" placeholder="مثال: علي / ProGamer" oninput="saveCustomGamerName(this.value)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,7,14,0.8); color: #fff; font-family: inherit;">
                         </div>
 
                         <div style="margin-bottom: 10px;">
@@ -667,46 +763,36 @@
         </div>
     </div>
 
-    <!-- نافذة تسجيل الدخول وإنشاء حساب القيمر -->
-    <div id="authModal" class="modal-overlay">
+    <!-- الميزة 2: نافذة أركيد ALIOPZTE (Mini-Game) -->
+    <div id="arcadeModal" class="modal-overlay">
         <div class="modal-box">
-            <button class="modal-close" onclick="closeModal('authModal')"><i class="fa-solid fa-xmark"></i></button>
-            <i class="fa-solid fa-id-badge rgb-text" style="font-size:2.6rem; margin-bottom:8px;"></i>
-            <h2 style="color:#fff; font-size:1.2rem; margin-bottom:4px;">حساب وهوية القيمر (ALIOPZTE Account)</h2>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px;">سجّل حسابك لتتمكن من نشر التقييمات، وإصدار بطاقة هويتك، وحفظ نقاط الـ XP!</p>
+            <button class="modal-close" onclick="closeArcadeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:#10b981; margin-bottom:4px;"><i class="fa-solid fa-joystick"></i> أركيد ALIOPZTE: صائد الصناديق</h2>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">اضغط على الصناديق 🎁 والماسات 💎 بسرعة وتجنب القنابل 💣! كل جولة تعطيك نقاط XP حقيقية.</p>
 
-            <div style="text-align:right;">
-                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">اسمك أو لقبك في المتجر:</label>
-                <input type="text" id="authUsername" placeholder="مثال: علي / ProGamer" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
-
-                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">يوزرك في ديسكورد (لتوثيق هويتك):</label>
-                <input type="text" id="authDiscord" placeholder="مثال: @aliopzte" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
-
-                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">اختر رمزية بطاقة هويتك:</label>
-                <select id="authAvatar" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:14px;">
-                    <option value="🎮">🎮 قيمر محترف</option>
-                    <option value="🐉">🐉 التنين الأسطوري</option>
-                    <option value="⚡">⚡ الهاكر السريع</option>
-                    <option value="👑">👑 الملك الذهبي</option>
-                    <option value="🥷">🥷 النينجا الخفي</option>
-                </select>
+            <div style="display:flex; justify-content:space-around; background:rgba(0,0,0,0.5); padding:8px; border-radius:10px; font-weight:900; font-size:0.9rem;">
+                <span>⏱️ الوقت: <strong id="arcadeTimeLeft" style="color:#00f2fe;">20</strong> ثانية</span>
+                <span>🎯 النقاط: <strong id="arcadeScoreVal" style="color:#ffd700;">0</strong></span>
             </div>
 
-            <button onclick="saveUserAccountLogin()" class="btn-card-view" style="font-size:0.95rem; padding:11px;">
-                <i class="fa-solid fa-check-circle"></i> حفظ وتسجيل الدخول الآن
-            </button>
-            <button id="logoutBtnModal" onclick="logoutUserAccount()" style="display:none; margin-top:10px; width:100%; padding:8px; border-radius:8px; border:1px solid rgba(239,68,68,0.4); background:rgba(239,68,68,0.1); color:#fca5a5; cursor:pointer; font-family:inherit; font-weight:bold;">
-                تسجيل الخروج من الحساب
-            </button>
+            <div id="arcadeArena" class="arcade-arena" onclick="arcadeMissClick()">
+                <div id="arcadeStartOverlay" style="position:absolute; inset:0; background:rgba(5,7,14,0.88); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:15px; z-index:5;">
+                    <div style="font-size:2.6rem; margin-bottom:8px;">🕹️🎁</div>
+                    <p id="arcadeStatusText" style="font-size:0.85rem; color:#cbd5e1; margin-bottom:12px;">جاهز لاختبار سرعتك وكسب نقاط XP؟</p>
+                    <button onclick="startArcadeGame(event)" class="btn-card-view" style="max-width:220px; padding:10px;">
+                        <i class="fa-solid fa-play"></i> ابدأ اللعب الآن!
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- نافذة رتبة المتابع + بطاقة هوية القيمر (الميزة 5) + متجر استبدال نقاط XP -->
+    <!-- نافذة رتبة المتابع + بطاقة هوية القيمر + متجر استبدال نقاط XP -->
     <div id="rankModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('rankModal')"><i class="fa-solid fa-xmark"></i></button>
             
-            <!-- الميزة 5: بطاقة هوية القيمر (ALIOPZTE Gamer ID) -->
+            <!-- بطاقة هوية القيمر (ALIOPZTE Gamer ID) بدون الحاجة لتسجيل دخول -->
             <div class="gamer-id-card">
                 <div class="gamer-id-header">
                     <span style="font-size:0.75rem; font-weight:900; color:var(--theme-c2); letter-spacing:1px;">🪪 ALIOPZTE GAMER ID</span>
@@ -715,9 +801,10 @@
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div id="idCardAvatar" class="gamer-avatar-circle">🎮</div>
                     <div style="flex:1;">
-                        <div id="idCardName" style="font-size:1.05rem; font-weight:900; color:#fff;">زائر المتجر</div>
-                        <div id="idCardDiscord" style="font-size:0.76rem; color:var(--text-muted);">غير مسجل بالديسكورد</div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <input type="text" id="idCardCustomNameInput" placeholder="اكتب لقبك في البطاقة..." oninput="saveCustomGamerName(this.value)" style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.18); color:#fff; border-radius:6px; padding:4px 8px; font-family:inherit; font-weight:900; font-size:0.9rem; width:100%;">
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-top:6px;">
                             <span id="modalRankIcon" style="font-size:1rem;">🥉</span>
                             <strong id="modalRankTitle" style="color:#ffd700; font-size:0.85rem;">رتبتك: مبتدئ</strong>
                             <span id="modalXPText" style="font-size:0.8rem; color:var(--theme-c2); font-weight:900;">(10 XP)</span>
@@ -902,7 +989,14 @@
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
         let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
         let soundMuted = localStorage.getItem("ali_sound_muted") === "true";
-        let currentUser = JSON.parse(localStorage.getItem("ali_logged_user")) || null;
+
+        // حفظ رقم هوية فريد واسم اختياري للمتابع بدون إجباره على تسجيل دخول
+        let myGamerId = localStorage.getItem("ali_my_gamer_id");
+        if (!myGamerId) {
+            myGamerId = "#ALI-" + Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem("ali_my_gamer_id", myGamerId);
+        }
+        let myCustomName = localStorage.getItem("ali_my_custom_name") || "";
 
         let isSubmittingReport = false;
         let isSubmittingRequest = false;
@@ -931,14 +1025,18 @@
             if (isIOS) {
                 document.getElementById('installAppBtn').style.display = 'inline-flex';
             }
+            if (myCustomName) {
+                document.getElementById('revName').value = myCustomName;
+                document.getElementById('idCardCustomNameInput').value = myCustomName;
+            }
             applySpeed(currentSpeedIdx);
             applyTheme(currentThemeIdx);
             updateSoundBtnUI();
-            updateAuthUI();
             updateRankUI();
             initDailyStreakUI();
             initTreasureHunt();
             startEventCountdown();
+            initSecretKeyboardListener();
             renderPollUI();
             checkCopyrightAgreement();
             loadStoreData();
@@ -946,104 +1044,205 @@
             fetchReviews();
         });
 
-        // ================= 👤 نظام تسجيل الدخول الإجباري للتعليقات + هوية القيمر =================
-        function openAuthModal() {
-            if (currentUser) {
-                document.getElementById('authUsername').value = currentUser.name || '';
-                document.getElementById('authDiscord').value = currentUser.discord || '';
-                document.getElementById('authAvatar').value = currentUser.avatar || '🎮';
-                document.getElementById('logoutBtnModal').style.display = 'block';
-            } else {
-                document.getElementById('logoutBtnModal').style.display = 'none';
-            }
-            document.getElementById('authModal').classList.add('active');
-        }
-
-        function saveUserAccountLogin() {
-            const name = document.getElementById('authUsername').value.trim();
-            const discord = document.getElementById('authDiscord').value.trim();
-            const avatar = document.getElementById('authAvatar').value;
-
-            if (!name || name.length < 2) {
-                alert("⚠️ يرجى كتابة اسمك أو لقبك في المتجر (حرفين على الأقل)!");
-                return;
-            }
-
-            const existingId = currentUser?.gamerId || ("#ALI-" + Math.floor(1000 + Math.random() * 9000));
-            const isFirstLogin = !localStorage.getItem("ali_account_bonus_claimed");
-
-            currentUser = {
-                name: name,
-                discord: discord || "عضو المتجر",
-                avatar: avatar,
-                gamerId: existingId
-            };
-
-            localStorage.setItem("ali_logged_user", JSON.stringify(currentUser));
-            if (isFirstLogin) {
-                localStorage.setItem("ali_account_bonus_claimed", "true");
-                addXP(20, "مكافأة توثيق حسابك في المتجر");
-            } else {
-                playSfx('win');
-            }
-
-            updateAuthUI();
-            updateRankUI();
-            closeModal('authModal');
-        }
-
-        function logoutUserAccount() {
-            currentUser = null;
-            localStorage.removeItem("ali_logged_user");
-            updateAuthUI();
-            updateRankUI();
-            closeModal('authModal');
-        }
-
-        function updateAuthUI() {
-            const authBtnText = document.getElementById('headerAuthText');
-            const lockedBox = document.getElementById('reviewLockedBox');
-            const formBox = document.getElementById('reviewFormBox');
-            const revNameInput = document.getElementById('revName');
-
-            if (currentUser && currentUser.name) {
-                authBtnText.innerText = `${currentUser.avatar} ${currentUser.name}`;
-                lockedBox.style.display = 'none';
-                formBox.style.display = 'block';
-                revNameInput.value = `${currentUser.name} (${currentUser.gamerId})`;
-                if (document.getElementById('reqUserName')) {
-                    document.getElementById('reqUserName').value = `${currentUser.name} (${currentUser.discord})`;
-                }
-                if (document.getElementById('compUserName')) {
-                    document.getElementById('compUserName').value = `${currentUser.name} (${currentUser.discord})`;
-                }
-            } else {
-                authBtnText.innerText = "تسجيل دخول";
-                lockedBox.style.display = 'block';
-                formBox.style.display = 'none';
-                revNameInput.value = "";
-            }
+        function saveCustomGamerName(val) {
+            myCustomName = val.trim();
+            localStorage.setItem("ali_my_custom_name", myCustomName);
+            const revInput = document.getElementById('revName');
+            const idInput = document.getElementById('idCardCustomNameInput');
+            if (revInput && revInput.value !== val) revInput.value = val;
+            if (idInput && idInput.value !== val) idInput.value = val;
         }
 
         function copyGamerIdCard() {
             const rank = getUserRank(userXP);
-            const name = currentUser ? currentUser.name : "زائر المتجر";
-            const idNum = currentUser ? currentUser.gamerId : "#ALI-0000";
-            const text = `🪪 **بطاقة هوية متجر ALIOPZTE**\n👤 الاسم: **${name}** (${idNum})\n🏆 الرتبة: **${rank.icon} ${rank.title}**\n⚡ النقاط: **${userXP} XP**\n🔗 المتجر: ${window.location.origin}${window.location.pathname}`;
+            const name = myCustomName || "بطل المتجر";
+            const text = `🪪 **بطاقة هوية متجر ALIOPZTE**\n👤 الاسم: **${name}** (${myGamerId})\n🏆 الرتبة: **${rank.icon} ${rank.title}**\n⚡ النقاط: **${userXP} XP**\n🔗 المتجر: ${window.location.origin}${window.location.pathname}`;
             navigator.clipboard.writeText(text).then(() => {
                 playSfx('win');
                 alert("✅ تم نسخ بطاقة هويتك! الصقها الآن في شات الديسكورد.");
             });
         }
 
-        // ================= 🎁 الميزة 6: صندوق الكنز المخفي اليومي =================
+        // ================= 🕹️ الميزة 2: أركيد ALIOPZTE (Mini-Game) =================
+        let arcadeTimer = null;
+        let arcadeSpawnTimer = null;
+        let arcadeTimeRemaining = 20;
+        let arcadeScore = 0;
+
+        function openArcadeModal() {
+            document.getElementById('arcadeModal').classList.add('active');
+        }
+
+        function closeArcadeModal() {
+            clearInterval(arcadeTimer);
+            clearInterval(arcadeSpawnTimer);
+            document.querySelectorAll('.arcade-target-item').forEach(el => el.remove());
+            document.getElementById('arcadeStartOverlay').style.display = 'flex';
+            document.getElementById('arcadeModal').classList.remove('active');
+        }
+
+        function startArcadeGame(e) {
+            if (e) e.stopPropagation();
+            playSfx('click');
+            document.getElementById('arcadeStartOverlay').style.display = 'none';
+            arcadeScore = 0;
+            arcadeTimeRemaining = 20;
+            document.getElementById('arcadeScoreVal').innerText = arcadeScore;
+            document.getElementById('arcadeTimeLeft').innerText = arcadeTimeRemaining;
+
+            arcadeTimer = setInterval(() => {
+                arcadeTimeRemaining--;
+                document.getElementById('arcadeTimeLeft').innerText = arcadeTimeRemaining;
+                if (arcadeTimeRemaining <= 0) {
+                    finishArcadeGame();
+                }
+            }, 1000);
+
+            spawnArcadeTarget();
+        }
+
+        function spawnArcadeTarget() {
+            clearInterval(arcadeSpawnTimer);
+            const arena = document.getElementById('arcadeArena');
+            document.querySelectorAll('.arcade-target-item').forEach(el => el.remove());
+
+            const isBomb = Math.random() < 0.22;
+            const isDiamond = !isBomb && Math.random() < 0.3;
+            const target = document.createElement('div');
+            target.className = 'arcade-target-item';
+            target.innerText = isBomb ? '💣' : (isDiamond ? '💎' : '🎁');
+            target.style.top = Math.floor(10 + Math.random() * 72) + '%';
+            target.style.right = Math.floor(10 + Math.random() * 78) + '%';
+
+            target.onpointerdown = (ev) => {
+                ev.stopPropagation();
+                if (isBomb) {
+                    arcadeScore = Math.max(0, arcadeScore - 15);
+                    playSfx('click');
+                } else {
+                    arcadeScore += isDiamond ? 20 : 10;
+                    playSfx('xp');
+                }
+                document.getElementById('arcadeScoreVal').innerText = arcadeScore;
+                target.remove();
+                spawnArcadeTarget();
+            };
+
+            arena.appendChild(target);
+            arcadeSpawnTimer = setInterval(spawnArcadeTarget, 850);
+        }
+
+        function arcadeMissClick() {
+            if (arcadeTimeRemaining > 0 && document.getElementById('arcadeStartOverlay').style.display === 'none') {
+                arcadeScore = Math.max(0, arcadeScore - 5);
+                document.getElementById('arcadeScoreVal').innerText = arcadeScore;
+            }
+        }
+
+        function finishArcadeGame() {
+            clearInterval(arcadeTimer);
+            clearInterval(arcadeSpawnTimer);
+            document.querySelectorAll('.arcade-target-item').forEach(el => el.remove());
+
+            const earnedXP = Math.min(35, Math.floor(arcadeScore / 10));
+            const overlay = document.getElementById('arcadeStartOverlay');
+            const statusText = document.getElementById('arcadeStatusText');
+            overlay.style.display = 'flex';
+
+            if (earnedXP > 0) {
+                playSfx('win');
+                addXP(earnedXP, `الفوز في أركيد المتجر (${arcadeScore} نقطة)`);
+                statusText.innerHTML = `🎉 انتهى الوقت! جمعت <b>${arcadeScore} نقطة</b> وحصلت على <b style="color:#00ff88;">+${earnedXP} XP</b>!`;
+            } else {
+                statusText.innerHTML = `😅 انتهى الوقت! حاول مرة أخرى لتجمع نقاطاً أعلى.`;
+            }
+        }
+
+        // ================= 🎧 الميزة 3: راديو المتجر العائم (Gaming/Lofi Player) =================
+        const radioTracks = [
+            { name: "Lofi Gaming Beats #1", url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
+            { name: "Cyberpunk Synthwave #2", url: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" },
+            { name: "Chill Night Coding #3", url: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" }
+        ];
+        let currentRadioIdx = 0;
+        let isRadioPlaying = false;
+
+        function toggleStoreRadio() {
+            const audio = document.getElementById('storeRadioAudio');
+            const btn = document.getElementById('radioPlayBtn');
+            const widget = document.getElementById('lofiRadioWidget');
+
+            if (!audio.src) {
+                audio.src = radioTracks[currentRadioIdx].url;
+                audio.volume = 0.4;
+            }
+
+            if (isRadioPlaying) {
+                audio.pause();
+                isRadioPlaying = false;
+                btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                widget.classList.remove('playing');
+            } else {
+                audio.play().then(() => {
+                    isRadioPlaying = true;
+                    btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    widget.classList.add('playing');
+                }).catch(() => {});
+            }
+        }
+
+        function nextRadioTrack() {
+            const audio = document.getElementById('storeRadioAudio');
+            currentRadioIdx = (currentRadioIdx + 1) % radioTracks.length;
+            document.getElementById('radioTrackName').innerText = radioTracks[currentRadioIdx].name;
+            audio.src = radioTracks[currentRadioIdx].url;
+            audio.volume = 0.4;
+            if (isRadioPlaying) {
+                audio.play().catch(() => {});
+            } else {
+                toggleStoreRadio();
+            }
+        }
+
+        // ================= 🕵️ الميزة 4: الكود السري المخفي في الكيبورد والبحث (Easter Egg: ALIOPZTE) =================
+        let secretKeyBuffer = "";
+        function initSecretKeyboardListener() {
+            window.addEventListener('keydown', (e) => {
+                if (!e.key || e.key.length !== 1) return;
+                secretKeyBuffer = (secretKeyBuffer + e.key.toUpperCase()).slice(-8);
+                if (secretKeyBuffer === "ALIOPZTE") {
+                    triggerSecretHackerEasterEgg();
+                    secretKeyBuffer = "";
+                }
+            });
+        }
+
+        function triggerSecretHackerEasterEgg() {
+            playSfx('win');
+            currentThemeIdx = 1; // Matrix Theme
+            localStorage.setItem("ali_theme_idx", 1);
+            applyTheme(1);
+            document.getElementById('secretHackerOverlay').style.display = 'flex';
+
+            if (localStorage.getItem("ali_secret_hacker_claimed") !== "true") {
+                localStorage.setItem("ali_secret_hacker_claimed", "true");
+                addXP(100, "🥷 اكتشاف الكود السري المخفي (ALIOPZTE)!");
+            }
+        }
+
+        function closeSecretHackerOverlay() {
+            document.getElementById('secretHackerOverlay').style.display = 'none';
+            updateRankUI();
+        }
+
+        // ================= 🎁 صندوق الكنز المخفي اليومي =================
         function initTreasureHunt() {
             const today = getTodayStr();
             if (localStorage.getItem("ali_treasure_claimed_date") === today) return;
 
             setTimeout(() => {
                 const chest = document.getElementById('floatingTreasure');
-                const randomTop = Math.floor(20 + Math.random() * 60);
+                const randomTop = Math.floor(20 + Math.random() * 55);
                 const randomSide = Math.floor(8 + Math.random() * 75);
                 chest.style.top = randomTop + "vh";
                 chest.style.right = randomSide + "vw";
@@ -1062,10 +1261,9 @@
             addXP(30, "🎁 عثرت على صندوق الكنز المخفي اليومي!");
         }
 
-        // ================= ⏳ الميزة 7: العداد التنازلي للحدث القادم =================
+        // ================= ⏳ العداد التنازلي للحدث القادم =================
         let customEventTargetMs = null;
         function startEventCountdown() {
-            // إذا لم يحدد الأدمن تاريخاً في data.json، يضع عداداً تشويقياً تلقائياً لنهاية الأسبوع
             let savedTarget = parseInt(localStorage.getItem("ali_default_event_target")) || 0;
             if (!savedTarget || savedTarget < Date.now()) {
                 savedTarget = Date.now() + (2 * 24 * 60 * 60 * 1000) + (14 * 60 * 60 * 1000);
@@ -1221,7 +1419,7 @@
             initDailyStreakUI();
         }
 
-        // ================= نظام الرتب والنقاط وبطاقة الهوية (الميزة 5) =================
+        // ================= نظام الرتب والنقاط وبطاقة الهوية =================
         function getUserRank(xp) {
             if (xp >= 300) return { title: "أسطورة ALIOPZTE", icon: "👑", next: null, min: 300 };
             if (xp >= 150) return { title: "نخبة المتجر", icon: "🔥", next: 300, min: 150 };
@@ -1246,26 +1444,14 @@
             document.getElementById('modalRankIcon').innerText = rank.icon;
             document.getElementById('modalRankTitle').innerText = badgePrefix + rank.title;
             document.getElementById('modalXPText').innerText = `(${userXP} XP)`;
+            document.getElementById('idCardNumber').innerText = myGamerId;
 
-            // تحديث بيانات بطاقة هوية القيمر
-            if (currentUser) {
-                document.getElementById('idCardName').innerText = currentUser.name;
-                document.getElementById('idCardDiscord').innerText = "Discord: " + currentUser.discord;
-                document.getElementById('idCardAvatar').innerText = currentUser.avatar || '🎮';
-                document.getElementById('idCardNumber').innerText = currentUser.gamerId;
-            } else {
-                document.getElementById('idCardName').innerText = "زائر المتجر (غير مسجل)";
-                document.getElementById('idCardDiscord').innerText = "اضغط على (تسجيل دخول) بالأعلى لتوثيق هويتك";
-                document.getElementById('idCardAvatar').innerText = "👤";
-                document.getElementById('idCardNumber').innerText = "#ALI-GUEST";
-            }
-
-            // أوسمة بطاقة الهوية
             const badgesBox = document.getElementById('idCardBadges');
             let badgesHtml = `<span class="gamer-badge-pill">${rank.icon} ${rank.title}</span>`;
             if (isUserVipInstant()) badgesHtml += `<span class="gamer-badge-pill">⚡ VIP تحميل فوري</span>`;
             if (hasRoyal) badgesHtml += `<span class="gamer-badge-pill">👑 الملكي الذهبي</span>`;
             if (localStorage.getItem("ali_badge_treasure") === "true") badgesHtml += `<span class="gamer-badge-pill">🗺️ صائد الكنوز</span>`;
+            if (localStorage.getItem("ali_secret_hacker_claimed") === "true") badgesHtml += `<span class="gamer-badge-pill">🥷 الهاكر السري</span>`;
             badgesBox.innerHTML = badgesHtml;
 
             if (rank.next) {
@@ -1562,7 +1748,13 @@
         function renderItems(items) {
             const grid = document.getElementById('itemsGrid');
             grid.innerHTML = '';
-            const searchQuery = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            const rawSearch = (document.getElementById('searchInput').value || '').trim();
+            // تفعيل الكود السري أيضاً إذا كتب ALIOPZTE في مربع البحث (للجوال والتابلت)
+            if (rawSearch.toUpperCase() === "ALIOPZTE") {
+                document.getElementById('searchInput').value = '';
+                triggerSecretHackerEasterEgg();
+            }
+            const searchQuery = rawSearch.toLowerCase();
             
             let filtered = items.filter(i => {
                 const matchesCat = (currentCategory === 'all') || (i.category === currentCategory);
@@ -2110,7 +2302,7 @@
 
         function filterItems() { renderItems(allItems); }
 
-        // ================= الميزة 8: عرض التقييمات مع الإطار الذهبي لأساطير المتجر =================
+        // ================= عرض التقييمات مع الإطار الذهبي لأساطير المتجر =================
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
@@ -2150,17 +2342,10 @@
 
         async function sendReviewToDiscord() {
             if (isSubmittingReview) return;
-            const msg = document.getElementById('revMsg');
-
-            // التحقق الإجباري من تسجيل الدخول قبل السماح بإرسال أي تقييم
-            if (!currentUser || !currentUser.name) {
-                openAuthModal();
-                return;
-            }
-
-            const name = `${currentUser.avatar} ${currentUser.name} (${currentUser.gamerId})`;
+            const rawName = document.getElementById('revName').value.trim();
             const stars = document.getElementById('revStars').value;
             const comment = document.getElementById('revComment').value.trim();
+            const msg = document.getElementById('revMsg');
             const submitBtn = document.getElementById('submitRevBtn');
 
             const lastRevTime = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
@@ -2172,11 +2357,13 @@
                 return;
             }
 
-            if (!comment) {
+            if (!rawName || !comment) {
                 msg.style.color = "#ef4444";
-                msg.innerText = "❌ يرجى كتابة تعليقك أو رأيك قبل الإرسال!";
+                msg.innerText = "❌ يرجى كتابة اسمك وتعليقك قبل الإرسال!";
                 return;
             }
+
+            saveCustomGamerName(rawName);
 
             isSubmittingReview = true;
             submitBtn.disabled = true;
@@ -2184,12 +2371,12 @@
             localStorage.setItem("ali_last_review_time", now);
 
             msg.style.color = "#00f2fe";
-            msg.innerText = "⏳ جاري إرسال ونشر تقييمك الموثق...";
+            msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
 
             const rank = getUserRank(userXP);
             const hasRoyal = localStorage.getItem("ali_royal_badge") === "true";
             const royalTag = hasRoyal ? "👑 VIP الملكي | " : "";
-            const nameWithRank = `${name} [${royalTag}${rank.icon} ${rank.title}]`;
+            const nameWithRank = `${rawName} (${myGamerId}) [${royalTag}${rank.icon} ${rank.title}]`;
 
             try {
                 const formData = new URLSearchParams();
@@ -2209,11 +2396,10 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         embeds: [{
-                            title: "🌟 تقييم جديد موثق وصل للمتجر!",
+                            title: "🌟 تقييم جديد وصل للمتجر!",
                             color: 65280,
                             fields: [
-                                { name: "👤 العضو الموثق والرتبة:", value: nameWithRank, inline: true },
-                                { name: "💬 يوزر الديسكورد:", value: currentUser.discord || "غير محدد", inline: true },
+                                { name: "👤 اسم العضو والرتبة:", value: nameWithRank, inline: true },
                                 { name: "⭐ التقييم:", value: stars, inline: true },
                                 { name: "📝 التعليق:", value: comment, inline: false }
                             ],
@@ -2222,10 +2408,10 @@
                     })
                 });
 
-                addXP(25, "نشر تقييم موثق للمتجر");
+                addXP(25, "نشر تقييم للمتجر");
 
                 msg.style.color = "#00ff88";
-                msg.innerText = "✅ تم نشر تقييمك الموثق بنجاح وحصلت على +25 XP!";
+                msg.innerText = "✅ تم نشر تقييمك بنجاح وحصلت على +25 XP!";
                 document.getElementById('revComment').value = '';
 
                 setTimeout(fetchReviews, 2000);

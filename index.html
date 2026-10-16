@@ -111,13 +111,14 @@
         .brand-icon { font-size: 1.6rem; color: var(--theme-c2); filter: drop-shadow(0 0 8px var(--theme-c2)); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 250px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 240px; }
         .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
         .header-actions { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 8px; font-weight: 700; font-size: 0.78rem; text-decoration: none; color: #fff; border: none; cursor: pointer; transition: transform 0.2s; font-family: inherit; }
         .btn-action:hover { transform: translateY(-2px); }
+        .btn-action.auth-btn { background: linear-gradient(90deg, #3b82f6, #1d4ed8); color: #fff; font-weight: 900; border: 1px solid rgba(255,255,255,0.2); }
         .btn-action.code-btn { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3)); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, var(--theme-c2), var(--theme-c4)); color: #000; font-weight: 900; }
         .btn-action.req-btn { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; font-weight: 900; }
@@ -138,6 +139,31 @@
         @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
         .container { max-width: 1380px; margin: 0 auto; padding: 15px 12px; width: 100%; }
+
+        /* الميزة 7: شريط العداد التنازلي للحدث القادم */
+        .countdown-banner {
+            background: linear-gradient(90deg, rgba(13, 18, 30, 0.95), rgba(127, 0, 255, 0.18), rgba(13, 18, 30, 0.95));
+            border: 1px solid var(--theme-c2);
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .countdown-boxes { display: flex; align-items: center; gap: 8px; }
+        .cd-box {
+            background: rgba(5, 7, 14, 0.9);
+            border: 1px solid rgba(0, 242, 254, 0.35);
+            border-radius: 10px;
+            padding: 6px 10px;
+            min-width: 54px;
+            text-align: center;
+        }
+        .cd-num { font-size: 1.05rem; font-weight: 900; color: var(--theme-c2); display: block; line-height: 1.1; }
+        .cd-lbl { font-size: 0.65rem; color: var(--text-muted); }
 
         .streak-bar {
             background: rgba(13, 18, 30, 0.92);
@@ -267,8 +293,56 @@
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px; }
         .modal-overlay.active { display: flex; }
-        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 530px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
+        .modal-box { background: #0d121e; border: 2px solid transparent; animation: dynamicRgbGlow var(--rgb-speed) infinite linear; border-radius: 18px; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; padding: 18px; text-align: center; }
         .modal-close { position: absolute; top: 10px; left: 10px; background: rgba(255, 255, 255, 0.1); border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
+
+        /* الميزة 5: بطاقة هوية القيمر (Gamer ID Card) */
+        .gamer-id-card {
+            background: linear-gradient(135deg, #090d1a 0%, #161f38 50%, #090d1a 100%);
+            border: 2px solid var(--theme-c2);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 14px;
+            text-align: right;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.18);
+        }
+        .gamer-id-header {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px;
+        }
+        .gamer-avatar-circle {
+            width: 54px; height: 54px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--theme-c1), var(--theme-c3));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem; border: 2px solid #ffd700;
+        }
+        .gamer-badges-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+        .gamer-badge-pill {
+            background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700; font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;
+        }
+
+        /* الميزة 6: صندوق الكنز المخفي العائم (Treasure Hunt) */
+        #floatingTreasure {
+            position: fixed;
+            z-index: 1500;
+            width: 58px; height: 58px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffd700, #f59e0b);
+            border: 3px solid #fff;
+            box-shadow: 0 0 25px #ffd700;
+            display: none;
+            align-items: center; justify-content: center;
+            font-size: 1.7rem;
+            cursor: pointer;
+            animation: treasureBounce 1.8s infinite ease-in-out;
+        }
+        @keyframes treasureBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
 
         .wheel-container { position: relative; width: 220px; height: 220px; margin: 15px auto; }
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--theme-c2); position: relative; overflow: hidden; transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99); background: conic-gradient(#ff007f 0deg 60deg, #7f00ff 60deg 120deg, #00f2fe 120deg 180deg, #00ff88 180deg 240deg, #f59e0b 240deg 300deg, #ec4899 300deg 360deg); display: flex; align-items: center; justify-content: center; }
@@ -322,9 +396,36 @@
         .xp-progress-fill { height: 100%; background: linear-gradient(90deg, var(--theme-c2), #ffd700); width: 0%; transition: width 0.4s ease; }
 
         .review-section { background: var(--card-bg); border: 2px solid var(--theme-c2); border-radius: 16px; padding: 20px; margin-top: 20px; width: 100%; text-align: right; }
-        .review-header { color: var(--theme-c2); font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; font-weight: 900; }
-        .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto; margin-top: 15px; }
-        .review-card { background: rgba(5,7,14,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 12px; border-radius: 10px; }
+        .review-header { color: var(--theme-c2); font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-weight: 900; }
+        .reviews-list { display: flex; flex-direction: column; gap: 10px; max-height: 450px; overflow-y: auto; margin-top: 15px; }
+        .review-card { background: rgba(5,7,14,0.8); border: 1px solid rgba(0,242,254,0.3); padding: 12px; border-radius: 10px; position: relative; }
+
+        /* الميزة 8: تمييز أساطير التقييمات بإطار ذهبي مضيء */
+        .review-card.legendary-review {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(5, 7, 14, 0.92));
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 18px rgba(255, 215, 0, 0.25);
+        }
+        .legendary-tag {
+            display: inline-block;
+            background: linear-gradient(90deg, #ffd700, #f59e0b);
+            color: #000;
+            font-size: 0.68rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        /* صندوق قفل التعليقات لغير المسجلين */
+        .review-auth-lock {
+            background: rgba(5, 7, 14, 0.85);
+            border: 1px dashed #3b82f6;
+            border-radius: 14px;
+            padding: 22px 15px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
 
         body.device-tablet .main-layout { flex-direction: column; }
         body.device-tablet .partners-sidebar { width: 100%; }
@@ -342,7 +443,11 @@
 </head>
 <body>
 
+    <!-- إشعار نقاط XP العائم -->
     <div id="xpToast" class="xp-toast"></div>
+
+    <!-- الميزة 6: صندوق الكنز المخفي اليومي -->
+    <div id="floatingTreasure" onclick="claimTreasureChest()" title="صندوق كنز سري! اضغط لفتحه (+30 XP)">🎁</div>
 
     <div id="copyrightOverlay" class="copyright-overlay" style="display:none;">
         <div class="copyright-card">
@@ -385,7 +490,10 @@
             </div>
 
             <div class="header-actions">
-                <button class="btn-action rank-btn" onclick="playSfx('click'); openRankModal()" title="رتبتك ومتجر استبدال النقاط">
+                <button class="btn-action auth-btn" id="headerAuthBtn" onclick="playSfx('click'); openAuthModal()">
+                    <i class="fa-solid fa-user-check"></i> <span id="headerAuthText">تسجيل دخول</span>
+                </button>
+                <button class="btn-action rank-btn" onclick="playSfx('click'); openRankModal()" title="هوية القيمر ومتجر النقاط">
                     <span id="headerRankIcon">🥉</span> <span id="headerRankTitle">مبتدئ</span> (<span id="headerXPCount">10</span> XP)
                 </button>
                 <button class="btn-action req-btn" onclick="playSfx('click'); openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
@@ -408,11 +516,25 @@
 
     <div class="news-ticker-bar">
         <div class="news-ticker-content" id="newsTickerText">
-            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | دور عجلة الحظ واجمع نقاط XP لفتح التحميل الفوري VIP وصندوق الغموض!
+            🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | ابحث عن صندوق الكنز المخفي 🎁 ودور عجلة الحظ لترقية هويتك!
         </div>
     </div>
 
     <div class="container">
+        <!-- الميزة 7: شريط العداد التنازلي للحدث القادم -->
+        <div id="eventCountdownBanner" class="countdown-banner">
+            <div>
+                <span style="background:var(--theme-c1); color:#fff; font-size:0.68rem; font-weight:900; padding:2px 8px; border-radius:6px;">⏳ الحدث القادم</span>
+                <div id="eventTitleText" style="font-weight:900; font-size:0.95rem; color:#fff; margin-top:4px;">🔥 العد التنازلي للفعالية والتحديث القادم في المتجر!</div>
+            </div>
+            <div class="countdown-boxes">
+                <div class="cd-box"><span id="cdDays" class="cd-num">02</span><span class="cd-lbl">يوم</span></div>
+                <div class="cd-box"><span id="cdHours" class="cd-num">14</span><span class="cd-lbl">ساعة</span></div>
+                <div class="cd-box"><span id="cdMins" class="cd-num">35</span><span class="cd-lbl">دقيقة</span></div>
+                <div class="cd-box"><span id="cdSecs" class="cd-num">00</span><span class="cd-lbl">ثانية</span></div>
+            </div>
+        </div>
+
         <div class="streak-bar">
             <div>
                 <div style="font-weight:900; font-size:0.92rem; color:#ffd700;">
@@ -459,16 +581,29 @@
                     <div id="itemsGrid" class="items-grid"></div>
                 </section>
 
+                <!-- قسم التقييمات المحمي بتسجيل الدخول الإجباري + الإطار الذهبي للأساطير -->
                 <section class="review-section">
-                    <h2 class="review-header">
-                        <i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)
-                    </h2>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك مع رتبتك فوراً هنا وفي ديسكورد! (يُسمح بتقييم واحد كل ساعة منعاً للسبام).</p>
+                    <div class="review-header">
+                        <span><i class="fa-solid fa-star" style="color: #ffd700;"></i> آراء وتقييمات المتابعين (+25 XP)</span>
+                        <span style="font-size:0.75rem; color:#ffd700; font-weight:bold;">👑 أصحاب الرتب العالية يظهر تقييمهم بإطار ذهبي!</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px;">شاركنا رأيك، وسيظهر تقييمك مع رتبتك وهويتك فوراً هنا وفي ديسكورد! (يُسمح بتقييم واحد كل ساعة).</p>
                     
-                    <div>
+                    <!-- شاشة قفل التعليقات لمن لم يسجل دخوله -->
+                    <div id="reviewLockedBox" class="review-auth-lock">
+                        <i class="fa-solid fa-user-lock" style="font-size:2.2rem; color:#3b82f6; margin-bottom:8px;"></i>
+                        <h3 style="font-size:1rem; color:#fff; margin-bottom:4px;">تسجيل الدخول مطلوب لإرسال تقييم!</h3>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">لحماية المتجر من الحسابات الوهمية وحفظ نقاط الـ XP والرتبة باسمك، يرجى تسجيل دخولك أولاً.</p>
+                        <button onclick="openAuthModal()" class="btn-card-view" style="max-width:260px; margin:0 auto; padding:10px;">
+                            <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول / إنشاء حساب
+                        </button>
+                    </div>
+
+                    <!-- نموذج التقييم (يفتح فقط بعد تسجيل الدخول) -->
+                    <div id="reviewFormBox" style="display:none;">
                         <div style="margin-bottom: 10px;">
-                            <label style="display: block; font-size: 0.82rem; margin-bottom: 5px; color: #fff;">اسمك أو لقبك:</label>
-                            <input type="text" id="revName" placeholder="مثال: علي / Gamer" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(5,7,14,0.8); color: #fff; font-family: inherit;">
+                            <label style="display: block; font-size: 0.82rem; margin-bottom: 5px; color: #fff;">حسابك المسجل (مرتبط بهويتك تلقائياً 🔒):</label>
+                            <input type="text" id="revName" readonly style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,242,254,0.4); background: rgba(0,242,254,0.08); color: #00f2fe; font-weight:bold; font-family: inherit; cursor:not-allowed;">
                         </div>
 
                         <div style="margin-bottom: 10px;">
@@ -532,18 +667,72 @@
         </div>
     </div>
 
-    <!-- نافذة رتبة المتابع + متجر استبدال نقاط XP -->
+    <!-- نافذة تسجيل الدخول وإنشاء حساب القيمر -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('authModal')"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-solid fa-id-badge rgb-text" style="font-size:2.6rem; margin-bottom:8px;"></i>
+            <h2 style="color:#fff; font-size:1.2rem; margin-bottom:4px;">حساب وهوية القيمر (ALIOPZTE Account)</h2>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px;">سجّل حسابك لتتمكن من نشر التقييمات، وإصدار بطاقة هويتك، وحفظ نقاط الـ XP!</p>
+
+            <div style="text-align:right;">
+                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">اسمك أو لقبك في المتجر:</label>
+                <input type="text" id="authUsername" placeholder="مثال: علي / ProGamer" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+
+                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">يوزرك في ديسكورد (لتوثيق هويتك):</label>
+                <input type="text" id="authDiscord" placeholder="مثال: @aliopzte" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+
+                <label style="font-size:0.8rem; color:#cbd5e1; display:block; margin-bottom:4px;">اختر رمزية بطاقة هويتك:</label>
+                <select id="authAvatar" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:#000; color:#fff; font-family:inherit; margin-bottom:14px;">
+                    <option value="🎮">🎮 قيمر محترف</option>
+                    <option value="🐉">🐉 التنين الأسطوري</option>
+                    <option value="⚡">⚡ الهاكر السريع</option>
+                    <option value="👑">👑 الملك الذهبي</option>
+                    <option value="🥷">🥷 النينجا الخفي</option>
+                </select>
+            </div>
+
+            <button onclick="saveUserAccountLogin()" class="btn-card-view" style="font-size:0.95rem; padding:11px;">
+                <i class="fa-solid fa-check-circle"></i> حفظ وتسجيل الدخول الآن
+            </button>
+            <button id="logoutBtnModal" onclick="logoutUserAccount()" style="display:none; margin-top:10px; width:100%; padding:8px; border-radius:8px; border:1px solid rgba(239,68,68,0.4); background:rgba(239,68,68,0.1); color:#fca5a5; cursor:pointer; font-family:inherit; font-weight:bold;">
+                تسجيل الخروج من الحساب
+            </button>
+        </div>
+    </div>
+
+    <!-- نافذة رتبة المتابع + بطاقة هوية القيمر (الميزة 5) + متجر استبدال نقاط XP -->
     <div id="rankModal" class="modal-overlay">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal('rankModal')"><i class="fa-solid fa-xmark"></i></button>
-            <div id="modalRankIcon" style="font-size: 2.8rem; margin-bottom: 4px;">🥉</div>
-            <h2 id="modalRankTitle" style="color:#ffd700; margin: 0;">رتبتك: مبتدئ</h2>
-            <p id="modalXPText" style="font-size:0.9rem; color:#cbd5e1; margin-top:4px;">نقاطك الحالية: 10 XP</p>
             
-            <div class="xp-progress-bg">
-                <div id="modalXPBar" class="xp-progress-fill"></div>
+            <!-- الميزة 5: بطاقة هوية القيمر (ALIOPZTE Gamer ID) -->
+            <div class="gamer-id-card">
+                <div class="gamer-id-header">
+                    <span style="font-size:0.75rem; font-weight:900; color:var(--theme-c2); letter-spacing:1px;">🪪 ALIOPZTE GAMER ID</span>
+                    <span id="idCardNumber" style="font-family:monospace; font-size:0.8rem; color:#ffd700; background:rgba(255,215,0,0.12); padding:2px 8px; border-radius:6px;">#ALI-0001</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div id="idCardAvatar" class="gamer-avatar-circle">🎮</div>
+                    <div style="flex:1;">
+                        <div id="idCardName" style="font-size:1.05rem; font-weight:900; color:#fff;">زائر المتجر</div>
+                        <div id="idCardDiscord" style="font-size:0.76rem; color:var(--text-muted);">غير مسجل بالديسكورد</div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+                            <span id="modalRankIcon" style="font-size:1rem;">🥉</span>
+                            <strong id="modalRankTitle" style="color:#ffd700; font-size:0.85rem;">رتبتك: مبتدئ</strong>
+                            <span id="modalXPText" style="font-size:0.8rem; color:var(--theme-c2); font-weight:900;">(10 XP)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-progress-bg" style="margin-top:10px;">
+                    <div id="modalXPBar" class="xp-progress-fill"></div>
+                </div>
+                <p id="modalNextRankText" style="font-size:0.74rem; color:#cbd5e1; margin:0;"></p>
+                <div id="idCardBadges" class="gamer-badges-row"></div>
+                <button onclick="copyGamerIdCard()" class="btn-share-item" style="width:100%; margin-top:10px; padding:7px; font-size:0.78rem;">
+                    <i class="fa-solid fa-copy"></i> نسخ بطاقة هويتي لمشاركتها في الديسكورد
+                </button>
             </div>
-            <p id="modalNextRankText" style="font-size:0.78rem; color:var(--theme-c2); margin-bottom:12px;"></p>
 
             <div style="text-align:right; background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; margin-bottom:12px; border:1px solid rgba(255,215,0,0.2);">
                 <div style="font-weight:900; color:#ffd700; font-size:0.9rem; margin-bottom:8px;">
@@ -565,18 +754,18 @@
                 </div>
                 <div class="xp-shop-item" style="margin-bottom:0;">
                     <div>
-                        <div style="font-size:0.82rem; font-weight:bold; color:#fff;">👑 التاج الملكي الذهبي + ثيم Gold</div>
-                        <div style="font-size:0.72rem; color:var(--text-muted);">وسام ملكي بجانب اسمك في التقييمات وتفعيل الثيم الذهبي</div>
+                        <div style="font-size:0.82rem; font-weight:bold; color:#fff;">👑 التاج الملكي الذهبي + الإطار الذهبي للتقييم</div>
+                        <div style="font-size:0.72rem; color:var(--text-muted);">وسام ملكي وإطار ذهبي مضيء لتعليقاتك في المتجر</div>
                     </div>
                     <button class="btn-buy-xp" onclick="buyWithXP('royal_badge', 100)">100 XP</button>
                 </div>
                 <p id="xpShopMsg" style="font-size:0.78rem; font-weight:bold; text-align:center; margin-top:8px; display:none;"></p>
             </div>
 
-            <div style="text-align:right; background:rgba(0,0,0,0.4); padding:12px; border-radius:10px; font-size:0.78rem; line-height:1.65; color:#cbd5e1;">
+            <div style="text-align:right; background:rgba(0,0,0,0.4); padding:10px; border-radius:10px; font-size:0.75rem; line-height:1.6; color:#cbd5e1;">
                 <b style="color:#fff;"><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> مميزات الرتب وكسب النقاط:</b><br>
-                • أصحاب رتبة <b>نخبة المتجر (150+ XP)</b> و<b>الأسطورة (300+ XP)</b> يحصلون على <b>تحميل فوري VIP (0 ثانية) تلقائياً!</b><br>
-                • تدوير عجلة الحظ: <b style="color:#00ff88;">يربح جوائز XP مباشرة</b> | تحميل عنصر: <b style="color:#00ff88;">+15 XP</b> | تقييم المتجر: <b style="color:#00ff88;">+25 XP</b>
+                • أصحاب رتبة <b>نخبة المتجر (150+ XP)</b> و<b>الأسطورة (300+ XP)</b> يحصلون على <b>تحميل فوري VIP (0 ثانية) + إطار ذهبي للتقييمات!</b><br>
+                • صندوق الكنز المخفي: <b style="color:#00ff88;">+30 XP</b> | تحميل عنصر: <b style="color:#00ff88;">+15 XP</b> | تقييم المتجر: <b style="color:#00ff88;">+25 XP</b>
             </div>
         </div>
     </div>
@@ -713,23 +902,21 @@
         let wishlist = JSON.parse(localStorage.getItem("ali_wishlist")) || [];
         let userXP = parseInt(localStorage.getItem("ali_user_xp")) || 10;
         let soundMuted = localStorage.getItem("ali_sound_muted") === "true";
+        let currentUser = JSON.parse(localStorage.getItem("ali_logged_user")) || null;
 
-        // أقفال فورية لمنع الضغط المزدوج والسبام
         let isSubmittingReport = false;
         let isSubmittingRequest = false;
         let isSubmittingReview = false;
         let isSubmittingComplaint = false;
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
-        // ويب هوك التقييمات والطلبات العام
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-        // ويب هوك مخصص للشكاوي والبلاغات فقط
         const COMPLAINTS_WEBHOOK_URL = "https://discord.com/api/webhooks/1560533115036766268/9UqhSouafzK7Nn3zxxcC03V-zBI1qPzLljDogAk17IWIOGCDgppHXIukhmw8CPiScI3F";
 
-        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;    // ساعة كاملة بين التقييمات
-        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000;   // 30 دقيقة بين الطلبات
-        const REPORT_COOLDOWN_MS = 15 * 60 * 1000;    // 15 دقيقة بين بلاغات الروابط
-        const COMPLAINT_COOLDOWN_MS = 15 * 60 * 1000; // 15 دقيقة بين الشكاوي
+        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;
+        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000;
+        const REPORT_COOLDOWN_MS = 15 * 60 * 1000;
+        const COMPLAINT_COOLDOWN_MS = 15 * 60 * 1000;
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -747,14 +934,158 @@
             applySpeed(currentSpeedIdx);
             applyTheme(currentThemeIdx);
             updateSoundBtnUI();
+            updateAuthUI();
             updateRankUI();
             initDailyStreakUI();
+            initTreasureHunt();
+            startEventCountdown();
             renderPollUI();
             checkCopyrightAgreement();
             loadStoreData();
             updateWishlistCount();
             fetchReviews();
         });
+
+        // ================= 👤 نظام تسجيل الدخول الإجباري للتعليقات + هوية القيمر =================
+        function openAuthModal() {
+            if (currentUser) {
+                document.getElementById('authUsername').value = currentUser.name || '';
+                document.getElementById('authDiscord').value = currentUser.discord || '';
+                document.getElementById('authAvatar').value = currentUser.avatar || '🎮';
+                document.getElementById('logoutBtnModal').style.display = 'block';
+            } else {
+                document.getElementById('logoutBtnModal').style.display = 'none';
+            }
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function saveUserAccountLogin() {
+            const name = document.getElementById('authUsername').value.trim();
+            const discord = document.getElementById('authDiscord').value.trim();
+            const avatar = document.getElementById('authAvatar').value;
+
+            if (!name || name.length < 2) {
+                alert("⚠️ يرجى كتابة اسمك أو لقبك في المتجر (حرفين على الأقل)!");
+                return;
+            }
+
+            const existingId = currentUser?.gamerId || ("#ALI-" + Math.floor(1000 + Math.random() * 9000));
+            const isFirstLogin = !localStorage.getItem("ali_account_bonus_claimed");
+
+            currentUser = {
+                name: name,
+                discord: discord || "عضو المتجر",
+                avatar: avatar,
+                gamerId: existingId
+            };
+
+            localStorage.setItem("ali_logged_user", JSON.stringify(currentUser));
+            if (isFirstLogin) {
+                localStorage.setItem("ali_account_bonus_claimed", "true");
+                addXP(20, "مكافأة توثيق حسابك في المتجر");
+            } else {
+                playSfx('win');
+            }
+
+            updateAuthUI();
+            updateRankUI();
+            closeModal('authModal');
+        }
+
+        function logoutUserAccount() {
+            currentUser = null;
+            localStorage.removeItem("ali_logged_user");
+            updateAuthUI();
+            updateRankUI();
+            closeModal('authModal');
+        }
+
+        function updateAuthUI() {
+            const authBtnText = document.getElementById('headerAuthText');
+            const lockedBox = document.getElementById('reviewLockedBox');
+            const formBox = document.getElementById('reviewFormBox');
+            const revNameInput = document.getElementById('revName');
+
+            if (currentUser && currentUser.name) {
+                authBtnText.innerText = `${currentUser.avatar} ${currentUser.name}`;
+                lockedBox.style.display = 'none';
+                formBox.style.display = 'block';
+                revNameInput.value = `${currentUser.name} (${currentUser.gamerId})`;
+                if (document.getElementById('reqUserName')) {
+                    document.getElementById('reqUserName').value = `${currentUser.name} (${currentUser.discord})`;
+                }
+                if (document.getElementById('compUserName')) {
+                    document.getElementById('compUserName').value = `${currentUser.name} (${currentUser.discord})`;
+                }
+            } else {
+                authBtnText.innerText = "تسجيل دخول";
+                lockedBox.style.display = 'block';
+                formBox.style.display = 'none';
+                revNameInput.value = "";
+            }
+        }
+
+        function copyGamerIdCard() {
+            const rank = getUserRank(userXP);
+            const name = currentUser ? currentUser.name : "زائر المتجر";
+            const idNum = currentUser ? currentUser.gamerId : "#ALI-0000";
+            const text = `🪪 **بطاقة هوية متجر ALIOPZTE**\n👤 الاسم: **${name}** (${idNum})\n🏆 الرتبة: **${rank.icon} ${rank.title}**\n⚡ النقاط: **${userXP} XP**\n🔗 المتجر: ${window.location.origin}${window.location.pathname}`;
+            navigator.clipboard.writeText(text).then(() => {
+                playSfx('win');
+                alert("✅ تم نسخ بطاقة هويتك! الصقها الآن في شات الديسكورد.");
+            });
+        }
+
+        // ================= 🎁 الميزة 6: صندوق الكنز المخفي اليومي =================
+        function initTreasureHunt() {
+            const today = getTodayStr();
+            if (localStorage.getItem("ali_treasure_claimed_date") === today) return;
+
+            setTimeout(() => {
+                const chest = document.getElementById('floatingTreasure');
+                const randomTop = Math.floor(20 + Math.random() * 60);
+                const randomSide = Math.floor(8 + Math.random() * 75);
+                chest.style.top = randomTop + "vh";
+                chest.style.right = randomSide + "vw";
+                chest.style.display = "flex";
+            }, 4000);
+        }
+
+        function claimTreasureChest() {
+            const today = getTodayStr();
+            if (localStorage.getItem("ali_treasure_claimed_date") === today) return;
+
+            localStorage.setItem("ali_treasure_claimed_date", today);
+            localStorage.setItem("ali_badge_treasure", "true");
+            document.getElementById('floatingTreasure').style.display = "none";
+            playSfx('win');
+            addXP(30, "🎁 عثرت على صندوق الكنز المخفي اليومي!");
+        }
+
+        // ================= ⏳ الميزة 7: العداد التنازلي للحدث القادم =================
+        let customEventTargetMs = null;
+        function startEventCountdown() {
+            // إذا لم يحدد الأدمن تاريخاً في data.json، يضع عداداً تشويقياً تلقائياً لنهاية الأسبوع
+            let savedTarget = parseInt(localStorage.getItem("ali_default_event_target")) || 0;
+            if (!savedTarget || savedTarget < Date.now()) {
+                savedTarget = Date.now() + (2 * 24 * 60 * 60 * 1000) + (14 * 60 * 60 * 1000);
+                localStorage.setItem("ali_default_event_target", savedTarget);
+            }
+
+            setInterval(() => {
+                const target = customEventTargetMs || savedTarget;
+                const diff = Math.max(0, target - Date.now());
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((diff / 1000 / 60) % 60);
+                const secs = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('cdDays').innerText = String(days).padStart(2, '0');
+                document.getElementById('cdHours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cdMins').innerText = String(mins).padStart(2, '0');
+                document.getElementById('cdSecs').innerText = String(secs).padStart(2, '0');
+            }, 1000);
+        }
 
         // ================= المؤثرات الصوتية التفاعلية =================
         let audioCtx = null;
@@ -890,7 +1221,7 @@
             initDailyStreakUI();
         }
 
-        // ================= نظام الرتب والنقاط ومتجر الاستبدال =================
+        // ================= نظام الرتب والنقاط وبطاقة الهوية (الميزة 5) =================
         function getUserRank(xp) {
             if (xp >= 300) return { title: "أسطورة ALIOPZTE", icon: "👑", next: null, min: 300 };
             if (xp >= 150) return { title: "نخبة المتجر", icon: "🔥", next: 300, min: 150 };
@@ -913,8 +1244,29 @@
             document.getElementById('headerXPCount').innerText = userXP;
 
             document.getElementById('modalRankIcon').innerText = rank.icon;
-            document.getElementById('modalRankTitle').innerText = "رتبتك: " + badgePrefix + rank.title;
-            document.getElementById('modalXPText').innerText = `نقاطك المتاحة للاستبدال: ${userXP} XP`;
+            document.getElementById('modalRankTitle').innerText = badgePrefix + rank.title;
+            document.getElementById('modalXPText').innerText = `(${userXP} XP)`;
+
+            // تحديث بيانات بطاقة هوية القيمر
+            if (currentUser) {
+                document.getElementById('idCardName').innerText = currentUser.name;
+                document.getElementById('idCardDiscord').innerText = "Discord: " + currentUser.discord;
+                document.getElementById('idCardAvatar').innerText = currentUser.avatar || '🎮';
+                document.getElementById('idCardNumber').innerText = currentUser.gamerId;
+            } else {
+                document.getElementById('idCardName').innerText = "زائر المتجر (غير مسجل)";
+                document.getElementById('idCardDiscord').innerText = "اضغط على (تسجيل دخول) بالأعلى لتوثيق هويتك";
+                document.getElementById('idCardAvatar').innerText = "👤";
+                document.getElementById('idCardNumber').innerText = "#ALI-GUEST";
+            }
+
+            // أوسمة بطاقة الهوية
+            const badgesBox = document.getElementById('idCardBadges');
+            let badgesHtml = `<span class="gamer-badge-pill">${rank.icon} ${rank.title}</span>`;
+            if (isUserVipInstant()) badgesHtml += `<span class="gamer-badge-pill">⚡ VIP تحميل فوري</span>`;
+            if (hasRoyal) badgesHtml += `<span class="gamer-badge-pill">👑 الملكي الذهبي</span>`;
+            if (localStorage.getItem("ali_badge_treasure") === "true") badgesHtml += `<span class="gamer-badge-pill">🗺️ صائد الكنوز</span>`;
+            badgesBox.innerHTML = badgesHtml;
 
             if (rank.next) {
                 const percent = Math.min(100, Math.round(((userXP - rank.min) / (rank.next - rank.min)) * 100));
@@ -922,7 +1274,7 @@
                 document.getElementById('modalNextRankText').innerText = `متبقي ${rank.next - userXP} XP للترقية إلى الرتبة التالية!`;
             } else {
                 document.getElementById('modalXPBar').style.width = "100%";
-                document.getElementById('modalNextRankText').innerText = "🎉 لقد وصلت إلى أعلى رتبة أسطورية في المتجر (تحميل فوري VIP مفعل)!";
+                document.getElementById('modalNextRankText').innerText = "🎉 وصلت لأعلى رتبة أسطورية (تحميل VIP + إطار ذهبي للتقييمات)!";
             }
         }
 
@@ -979,7 +1331,7 @@
                 updateRankUI();
                 playSfx('win');
                 msgEl.style.color = '#ffd700';
-                msgEl.innerText = "👑 مبروك! حصلت على التاج الملكي الذهبي وتم تفعيل الثيم الذهبي!";
+                msgEl.innerText = "👑 مبروك! حصلت على التاج الملكي الذهبي والإطار المضيء لتقييماتك!";
             }
         }
 
@@ -1158,6 +1510,12 @@
                 
                 if (data.newsTicker) {
                     document.getElementById('newsTickerText').innerText = data.newsTicker;
+                }
+                if (data.eventTitle) {
+                    document.getElementById('eventTitleText').innerText = data.eventTitle;
+                }
+                if (data.eventTargetDate) {
+                    customEventTargetMs = new Date(data.eventTargetDate).getTime();
                 }
 
                 checkWheelStatus();
@@ -1458,7 +1816,7 @@
         function openComplaintModal() { document.getElementById('compMsg').innerText = ''; document.getElementById('complaintModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
 
-        // ================= مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
+        // ================= مشاركة العنصر (تُحسب لأول مرة فقط!) =================
         async function shareCurrentItem() {
             if (!activeItemObj) return;
             playSfx('click');
@@ -1495,7 +1853,7 @@
             }
         }
 
-        // ================= 🚨 إرسال الشكاوي والبلاغات إلى ويب هوك الشكاوي المخصص =================
+        // ================= إرسال الشكاوي والبلاغات إلى ويب هوك الشكاوي المخصص =================
         async function sendComplaintToDiscord() {
             if (isSubmittingComplaint) return;
             const userName = document.getElementById('compUserName').value.trim();
@@ -1519,7 +1877,6 @@
                 return;
             }
 
-            // قفل فوري لمنع الضغط المزدوج والسبام
             isSubmittingComplaint = true;
             compBtn.disabled = true;
             compBtn.style.opacity = '0.5';
@@ -1624,7 +1981,7 @@
             }
         }
 
-        // ================= الطلبات والتقييمات (ترسل للويب هوك العام) =================
+        // ================= الطلبات والتقييمات =================
         async function sendRequestToDiscord() {
             if (isSubmittingRequest) return;
             const userName = document.getElementById('reqUserName').value.trim();
@@ -1753,6 +2110,7 @@
 
         function filterItems() { renderItems(allItems); }
 
+        // ================= الميزة 8: عرض التقييمات مع الإطار الذهبي لأساطير المتجر =================
         async function fetchReviews() {
             const listContainer = document.getElementById('reviewsList');
             try {
@@ -1770,10 +2128,14 @@
                 listContainer.innerHTML = '';
                 data.reverse().forEach(item => {
                     if (item.name || item.comment) {
+                        const nameStr = String(item.name || '');
+                        const isLegendary = nameStr.includes("أسطورة") || nameStr.includes("نخبة") || nameStr.includes("VIP الملكي");
+
                         listContainer.innerHTML += `
-                            <div class="review-card">
+                            <div class="review-card ${isLegendary ? 'legendary-review' : ''}">
+                                ${isLegendary ? '<div class="legendary-tag">👑 تقييم مميز من نخبة وأساطير المتجر</div>' : ''}
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <span style="font-weight: bold; color: #fff; font-size: 0.9rem;">👤 ${item.name}</span>
+                                    <span style="font-weight: bold; color: ${isLegendary ? '#ffd700' : '#fff'}; font-size: 0.9rem;">👤 ${item.name}</span>
                                     <span style="color: #ffd700; font-size: 0.85rem;">${item.stars}</span>
                                 </div>
                                 <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0; line-height: 1.4;">${item.comment}</p>
@@ -1788,10 +2150,17 @@
 
         async function sendReviewToDiscord() {
             if (isSubmittingReview) return;
-            const name = document.getElementById('revName').value.trim();
+            const msg = document.getElementById('revMsg');
+
+            // التحقق الإجباري من تسجيل الدخول قبل السماح بإرسال أي تقييم
+            if (!currentUser || !currentUser.name) {
+                openAuthModal();
+                return;
+            }
+
+            const name = `${currentUser.avatar} ${currentUser.name} (${currentUser.gamerId})`;
             const stars = document.getElementById('revStars').value;
             const comment = document.getElementById('revComment').value.trim();
-            const msg = document.getElementById('revMsg');
             const submitBtn = document.getElementById('submitRevBtn');
 
             const lastRevTime = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
@@ -1803,9 +2172,9 @@
                 return;
             }
 
-            if (!name || !comment) {
+            if (!comment) {
                 msg.style.color = "#ef4444";
-                msg.innerText = "❌ يرجى كتابة الاسم ورأيك قبل الإرسال!";
+                msg.innerText = "❌ يرجى كتابة تعليقك أو رأيك قبل الإرسال!";
                 return;
             }
 
@@ -1815,7 +2184,7 @@
             localStorage.setItem("ali_last_review_time", now);
 
             msg.style.color = "#00f2fe";
-            msg.innerText = "⏳ جاري إرسال ونشر تقييمك...";
+            msg.innerText = "⏳ جاري إرسال ونشر تقييمك الموثق...";
 
             const rank = getUserRank(userXP);
             const hasRoyal = localStorage.getItem("ali_royal_badge") === "true";
@@ -1840,23 +2209,23 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         embeds: [{
-                            title: "🌟 تقييم جديد وصل للمتجر!",
+                            title: "🌟 تقييم جديد موثق وصل للمتجر!",
                             color: 65280,
                             fields: [
-                                { name: "👤 اسم العضو والرتبة:", value: nameWithRank, inline: true },
+                                { name: "👤 العضو الموثق والرتبة:", value: nameWithRank, inline: true },
+                                { name: "💬 يوزر الديسكورد:", value: currentUser.discord || "غير محدد", inline: true },
                                 { name: "⭐ التقييم:", value: stars, inline: true },
-                                { name: "💬 التعليق:", value: comment, inline: false }
+                                { name: "📝 التعليق:", value: comment, inline: false }
                             ],
                             timestamp: new Date().toISOString()
                         }]
                     })
                 });
 
-                addXP(25, "نشر تقييم للمتجر");
+                addXP(25, "نشر تقييم موثق للمتجر");
 
                 msg.style.color = "#00ff88";
-                msg.innerText = "✅ تم نشر تقييمك بنجاح وحصلت على +25 XP!";
-                document.getElementById('revName').value = '';
+                msg.innerText = "✅ تم نشر تقييمك الموثق بنجاح وحصلت على +25 XP!";
                 document.getElementById('revComment').value = '';
 
                 setTimeout(fetchReviews, 2000);

@@ -50,7 +50,6 @@
             --theme-c4: #00ff88;
         }
 
-        /* ثيمات المتجر المتعددة */
         body.theme-matrix {
             --theme-c1: #00ff41;
             --theme-c2: #008f11;
@@ -112,7 +111,7 @@
         .brand-icon { font-size: 1.6rem; color: var(--theme-c2); filter: drop-shadow(0 0 8px var(--theme-c2)); }
         .brand-text { font-size: 1.2rem; font-weight: 900; color: #fff; }
 
-        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 260px; }
+        .search-box { position: relative; flex: 1; min-width: 180px; max-width: 250px; }
         .search-box input { width: 100%; padding: 8px 38px 8px 12px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(13, 18, 30, 0.9); color: #fff; font-family: inherit; font-size: 0.85rem; }
         .search-box i { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 
@@ -122,6 +121,7 @@
         .btn-action.code-btn { background: linear-gradient(90deg, var(--theme-c1), var(--theme-c3)); }
         .btn-action.wheel-btn { background: linear-gradient(90deg, var(--theme-c2), var(--theme-c4)); color: #000; font-weight: 900; }
         .btn-action.req-btn { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; font-weight: 900; }
+        .btn-action.comp-btn { background: linear-gradient(90deg, #ef4444, #b91c1c); color: #fff; font-weight: 900; }
         .btn-action.rank-btn { background: rgba(255, 215, 0, 0.12); border: 1px solid #ffd700; color: #ffd700; font-weight: 900; }
         .btn-action.fav-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
         .btn-action.install-btn { background: linear-gradient(90deg, #10b981, #059669); color: #fff; font-weight: 900; display: none; }
@@ -389,6 +389,7 @@
                     <span id="headerRankIcon">🥉</span> <span id="headerRankTitle">مبتدئ</span> (<span id="headerXPCount">10</span> XP)
                 </button>
                 <button class="btn-action req-btn" onclick="playSfx('click'); openRequestModal()"><i class="fa-solid fa-lightbulb"></i> اطلب إضافة</button>
+                <button class="btn-action comp-btn" onclick="playSfx('click'); openComplaintModal()"><i class="fa-solid fa-triangle-exclamation"></i> الشكاوي</button>
                 <button class="btn-action notif-btn" onclick="playSfx('click'); triggerPushPrompt()"><i class="fa-solid fa-bell"></i> الإشعارات</button>
                 <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت</button>
                 <button class="btn-device-select" onclick="playSfx('click'); cycleTheme()" title="تغيير ثيم الموقع"><i class="fa-solid fa-palette"></i> <span id="themeLabel">RGB</span></button>
@@ -603,6 +604,29 @@
         </div>
     </div>
 
+    <!-- نافذة الشكاوي والبلاغات المخصصة للويب هوك الجديد -->
+    <div id="complaintModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal('complaintModal')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> قسم الشكاوي والإبلاغ عن المشاكل</h2>
+            <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:12px;">واجهتك مشكلة في المتجر أو السيرفر؟ أرسل شكواك وستصل فوراً إلى روم الشكاوي الخاص بالإدارة!</p>
+            
+            <input type="text" id="compUserName" placeholder="اسمك أو يوزرك في ديسكورد للتواصل معك..." style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(239,68,68,0.4); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+            
+            <select id="compType" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(239,68,68,0.4); background:#000; color:#fff; font-family:inherit; margin-bottom:10px;">
+                <option value="مشكلة في رابط تحميل أو ملف">🔗 مشكلة في رابط تحميل أو ملف</option>
+                <option value="مشكلة في تشغيل مود أو سكربت">🧩 مشكلة في تشغيل مود أو سكربت</option>
+                <option value="شكوى عامة أو إدارية">🚨 شكوى عامة أو إدارية</option>
+                <option value="مشكلة تقنية في الموقع">⚙️ مشكلة تقنية في الموقع</option>
+            </select>
+
+            <textarea id="compDetails" rows="3" placeholder="اشرح المشكلة أو الشكوى بالتفصيل هنا..." style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(239,68,68,0.4); background:#000; color:#fff; font-family:inherit; resize:none; margin-bottom:12px;"></textarea>
+            
+            <button id="submitCompBtn" onclick="sendComplaintToDiscord()" class="btn-card-view" style="font-size:0.95rem; padding:10px; background:linear-gradient(90deg, #ef4444, #b91c1c);"><i class="fa-solid fa-paper-plane"></i> إرسال الشكوى للإدارة</button>
+            <p id="compMsg" style="margin-top:10px; font-weight:bold; font-size:0.82rem;"></p>
+        </div>
+    </div>
+
     <!-- نافذة عجلة الحظ الذكية لنقاط XP -->
     <div id="wheelModal" class="modal-overlay">
         <div class="modal-box">
@@ -694,12 +718,18 @@
         let isSubmittingReport = false;
         let isSubmittingRequest = false;
         let isSubmittingReview = false;
+        let isSubmittingComplaint = false;
 
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGGMVsMz2qlMbazjuOLOMrUYxDm6_PuDBJALvR3HUIzNzGGKUeR9tiTlcAjmTc-0jHtA/exec";
+        // ويب هوك التقييمات والطلبات العام
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
-        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;  // ساعة كاملة بين التقييمات
-        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000; // 30 دقيقة بين الطلبات
-        const REPORT_COOLDOWN_MS = 15 * 60 * 1000;  // 15 دقيقة بين البلاغات
+        // ويب هوك مخصص للشكاوي والبلاغات فقط
+        const COMPLAINTS_WEBHOOK_URL = "https://discord.com/api/webhooks/1560533115036766268/9UqhSouafzK7Nn3zxxcC03V-zBI1qPzLljDogAk17IWIOGCDgppHXIukhmw8CPiScI3F";
+
+        const REVIEW_COOLDOWN_MS = 60 * 60 * 1000;    // ساعة كاملة بين التقييمات
+        const REQUEST_COOLDOWN_MS = 30 * 60 * 1000;   // 30 دقيقة بين الطلبات
+        const REPORT_COOLDOWN_MS = 15 * 60 * 1000;    // 15 دقيقة بين بلاغات الروابط
+        const COMPLAINT_COOLDOWN_MS = 15 * 60 * 1000; // 15 دقيقة بين الشكاوي
 
         let deferredPrompt;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -1425,9 +1455,10 @@
         function openWheelModal() { checkWheelStatus(); document.getElementById('wheelModal').classList.add('active'); }
         function openCodeModal() { document.getElementById('codeModal').classList.add('active'); }
         function openRequestModal() { document.getElementById('requestModal').classList.add('active'); }
+        function openComplaintModal() { document.getElementById('compMsg').innerText = ''; document.getElementById('complaintModal').classList.add('active'); }
         function openFeaturedModal() { if(window.featuredItemObj) openModal(window.featuredItemObj); }
 
-        // ================= 🛡️ مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
+        // ================= مشاركة العنصر (محمية ضد السبام: تُحسب لأول مرة فقط!) =================
         async function shareCurrentItem() {
             if (!activeItemObj) return;
             playSfx('click');
@@ -1464,7 +1495,71 @@
             }
         }
 
-        // ================= 🛡️ البلاغات والطلبات والتقييمات (مقفولة ضد الضغط المزدوج والسبام نهائياً) =================
+        // ================= 🚨 إرسال الشكاوي والبلاغات إلى ويب هوك الشكاوي المخصص =================
+        async function sendComplaintToDiscord() {
+            if (isSubmittingComplaint) return;
+            const userName = document.getElementById('compUserName').value.trim();
+            const compType = document.getElementById('compType').value;
+            const details = document.getElementById('compDetails').value.trim();
+            const msg = document.getElementById('compMsg');
+            const compBtn = document.getElementById('submitCompBtn');
+
+            if (!userName || !details) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "❌ يرجى كتابة اسمك وتفاصيل الشكوى أولاً!";
+                return;
+            }
+
+            const lastComp = parseInt(localStorage.getItem("ali_last_complaint_time")) || 0;
+            const now = Date.now();
+            if (now - lastComp < COMPLAINT_COOLDOWN_MS) {
+                const minsLeft = Math.ceil((COMPLAINT_COOLDOWN_MS - (now - lastComp)) / 60000);
+                msg.style.color = "#f59e0b";
+                msg.innerText = `⏳ منعاً للسبام، يمكنك إرسال شكوى أخرى بعد ${minsLeft} دقيقة.`;
+                return;
+            }
+
+            // قفل فوري لمنع الضغط المزدوج والسبام
+            isSubmittingComplaint = true;
+            compBtn.disabled = true;
+            compBtn.style.opacity = '0.5';
+            localStorage.setItem("ali_last_complaint_time", now);
+
+            msg.style.color = "#00f2fe";
+            msg.innerText = "⏳ جاري إرسال الشكوى إلى قسم الشكاوي...";
+
+            const rank = getUserRank(userXP);
+            try {
+                await fetch(COMPLAINTS_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "🚨 شكوى جديدة من المتجر!",
+                            color: 15548997,
+                            fields: [
+                                { name: "👤 صاحب الشكوى:", value: `${userName} (${rank.icon} ${rank.title})`, inline: true },
+                                { name: "📌 نوع الشكوى:", value: compType, inline: true },
+                                { name: "📝 تفاصيل الشكوى:", value: details, inline: false }
+                            ],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+                msg.style.color = "#00ff88";
+                msg.innerText = "✅ تم إرسال شكواك بنجاح إلى الإدارة وسيتم مراجعتها!";
+                document.getElementById('compDetails').value = '';
+            } catch (e) {
+                localStorage.removeItem("ali_last_complaint_time");
+                msg.style.color = "#ef4444";
+                msg.innerText = "❌ تعذر إرسال الشكوى حالياً، حاول لاحقاً.";
+            } finally {
+                isSubmittingComplaint = false;
+                compBtn.disabled = false;
+                compBtn.style.opacity = '1';
+            }
+        }
+
         async function reportBrokenLink() {
             if (!activeItemObj || isSubmittingReport) return;
             const msgEl = document.getElementById('itemActionMsg');
@@ -1496,15 +1591,15 @@
 
             msgEl.style.display = 'block';
             msgEl.style.color = '#00f2fe';
-            msgEl.innerText = "⏳ جاري إرسال البلاغ للإدارة...";
+            msgEl.innerText = "⏳ جاري إرسال البلاغ إلى روم الشكاوي...";
 
             try {
-                await fetch(DISCORD_WEBHOOK_URL, {
+                await fetch(COMPLAINTS_WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         embeds: [{
-                            title: "🚨 بلاغ عن رابط لا يعمل!",
+                            title: "🚨 بلاغ عن رابط معطل في المتجر!",
                             color: 15548997,
                             fields: [
                                 { name: "📦 اسم العنصر:", value: activeItemObj.title, inline: false },
@@ -1516,7 +1611,7 @@
                     })
                 });
                 msgEl.style.color = '#00ff88';
-                msgEl.innerText = "✅ تم إبلاغ الإدارة بنجاح! سيتم فحص وتحديث الرابط قريباً.";
+                msgEl.innerText = "✅ تم إبلاغ قسم الشكاوي بنجاح! سيتم فحص وتحديث الرابط قريباً.";
             } catch (e) {
                 localStorage.removeItem(reportKey);
                 localStorage.removeItem("ali_last_global_report_time");
@@ -1529,6 +1624,7 @@
             }
         }
 
+        // ================= الطلبات والتقييمات (ترسل للويب هوك العام) =================
         async function sendRequestToDiscord() {
             if (isSubmittingRequest) return;
             const userName = document.getElementById('reqUserName').value.trim();
@@ -1713,7 +1809,6 @@
                 return;
             }
 
-            // قفل فوري للزر وحفظ وقت التقييم قبل بدء الاتصال لمنع التكرار عند الضغط السريع
             isSubmittingReview = true;
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';

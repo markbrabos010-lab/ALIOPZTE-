@@ -63,6 +63,7 @@
             text-decoration: none; color: #fff; transition: 0.2s;
         }
         .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .btn-primary { background: linear-gradient(90deg, var(--primary), var(--secondary)); box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25); }
         .btn-success { background: linear-gradient(90deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
         .btn-danger { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
@@ -117,12 +118,34 @@
         @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
         .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 0.84rem; font-weight: 800; margin-bottom: 6px; color: #cbd5e1; }
-        input[type="text"], input[type="password"], select, textarea {
+        input[type="text"], input[type="password"], input[type="datetime-local"], select, textarea {
             width: 100%; padding: 11px 14px; border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(5, 7, 14, 0.85);
             color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
         }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+
+        textarea.code-editor-box {
+            font-family: monospace;
+            font-size: 0.82rem;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+            background: #02040a;
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #00ff88;
+        }
+
+        .patch-guide-banner {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px dashed rgba(16, 185, 129, 0.5);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 16px;
+            font-size: 0.83rem;
+            line-height: 1.6;
+            color: #d1fae5;
+        }
 
         /* قائمة العناصر في الأدمن */
         .admin-items-grid {
@@ -237,7 +260,7 @@
             <button class="tab-btn" onclick="switchTab('tab-codes', this)"><i class="fa-solid fa-key"></i> أكواد الهدايا</button>
             <button class="tab-btn" onclick="switchTab('tab-partners', this)"><i class="fa-solid fa-handshake"></i> روم الشراكات</button>
             <button class="tab-btn" onclick="switchTab('tab-settings', this)"><i class="fa-solid fa-sliders"></i> الأخبار وإعدادات GitHub</button>
-            <button class="tab-btn" onclick="switchTab('tab-updater', this)"><i class="fa-solid fa-bolt"></i> تحديث كود الموقع بضغطة زر</button>
+            <button class="tab-btn" onclick="switchTab('tab-updater', this)"><i class="fa-solid fa-wand-magic-sparkles" style="color:#10b981;"></i> 🤖 المرقع الذكي وتحديث الكود</button>
         </nav>
 
         <!-- ================= 1. تبويب إدارة العناصر ================= -->
@@ -412,13 +435,24 @@
         <div id="tab-settings" class="tab-pane">
             <div class="card-panel">
                 <div class="panel-title">
-                    <span><i class="fa-solid fa-bullhorn" style="color:var(--primary);"></i> شريط الأخبار المتحرك وإعدادات الربط</span>
+                    <span><i class="fa-solid fa-bullhorn" style="color:var(--primary);"></i> شريط الأخبار المتحرك والعداد التنازلي وإعدادات الربط</span>
                     <button onclick="saveDataToGitHub()" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> حفظ الإعدادات</button>
                 </div>
 
                 <div class="form-group">
                     <label>نص شريط الأخبار المتحرك في أعلى المتجر (News Ticker):</label>
                     <input type="text" id="newsTickerInput" placeholder="🔥 أهلاً بك في متجر ALIOPZTE الرسمي...">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>عنوان الحدث القادم (فوق العداد التنازلي في المتجر):</label>
+                        <input type="text" id="eventTitleInput" placeholder="🔥 العد التنازلي للفعالية والتحديث القادم في المتجر!">
+                    </div>
+                    <div class="form-group">
+                        <label>وقت وتاريخ انتهاء العداد التنازلي:</label>
+                        <input type="datetime-local" id="eventTargetDateInput">
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -445,30 +479,88 @@
             </div>
         </div>
 
-        <!-- ================= 6. تبويب تحديث كود الموقع بضغطة زر ================= -->
+        <!-- ================= 6. تبويب المرقع الذكي وتحديث كود الموقع بضغطة زر ================= -->
         <div id="tab-updater" class="tab-pane">
-            <div class="card-panel">
-                <div class="panel-title">
-                    <span><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> محدث كود المتجر السريع (يرفع الكود إلى GitHub مباشرة بدون مسح يدوي!)</span>
-                </div>
-                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px; line-height:1.6;">
-                    بدلاً من الذهاب إلى GitHub ومسح الكود القديم يدوياً على التابلت، فقط انسخ كود <code>index.html</code> الجديد من الشات، والصقه في الصندوق بالأسفل واضغط زر التحديث الفوري!
-                </p>
-                <div class="form-group">
-                    <label>الملف المراد تحديثه في المستودع:</label>
-                    <select id="targetFileToUpdate">
-                        <option value="index.html">الصفحة الرئيسية للمتجر (index.html)</option>
-                        <option value="admin.html">لوحة التحكم (admin.html)</option>
+
+            <!-- اختيار الملف المستهدف لجميع أدوات التحديث -->
+            <div class="card-panel" style="border-color: var(--primary); padding: 16px 22px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+                    <label style="margin:0; font-size:0.95rem; color:#fff;">
+                        <i class="fa-solid fa-file-code" style="color:var(--primary);"></i> اختر الملف المراد تعديله أو تحديثه في GitHub:
+                    </label>
+                    <select id="targetFileToUpdate" style="max-width:340px;">
+                        <option value="index.html">🌐 الصفحة الرئيسية للمتجر (index.html)</option>
+                        <option value="admin.html">🛠️ لوحة التحكم (admin.html)</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- الأداة 1: المرقع الذكي الأوتوماتيكي بصندوق واحد (One-Click Smart Auto-Patcher) -->
+            <div class="card-panel" style="border-color: var(--success);">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-robot" style="color:var(--success);"></i> 1. المرقع الذكي الأوتوماتيكي (يعدل الجزء الصغير تلقائياً بدون استهلاك السقف!)</span>
+                </div>
+
+                <div class="patch-guide-banner">
+                    💡 <b>كيف تستخدم المرقع الذكي لتوفير سقف جيميناي؟</b><br>
+                    اطلب من جيميناي أي تعديل وقل له: <b>"أعطني كود ترقيع للمرقع الذكي"</b>. سيعطيك بضعة أسطر فقط تلصقها هنا وتضغط الزر، وستقوم اللوحة تلقائياً بسحب الملف من GitHub، ودمج التعديل في مكانه الدقيق، وإعادة رفعه فوراً!
+                </div>
+
+                <div class="form-group">
+                    <label>الصق كود الترقيع الذكي (Smart Patch) هنا:</label>
+                    <textarea id="smartPatchInput" class="code-editor-box" rows="8" placeholder="<<<OLD&#10;السطر القديم&#10;===NEW&#10;السطر الجديد&#10;>>>&#10;&#10;أو أوامر الإضافة التلقائية:&#10;<<<ADD_CSS ... >>>&#10;<<<ADD_HTML ... >>>&#10;<<<ADD_JS ... >>>"></textarea>
+                </div>
+
+                <button onclick="applySmartPatchToGitHub()" id="smartPatchBtn" class="btn btn-success" style="width:100%; justify-content:center; padding:14px; font-size:1rem;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> تطبيق كود الترقيع الذكي وتحديث الموقع في GitHub الآن!
+                </button>
+            </div>
+
+            <!-- الأداة 2: استبدال جزء قديم بجزء جديد مباشرة (Find & Replace) -->
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-magnifying-glass-arrow-right" style="color:var(--primary);"></i> 2. استبدال جزء بسيط مباشرة (القديم ⬅️ الجديد)</span>
+                </div>
+                <p style="color:var(--text-muted); font-size:0.84rem; margin-bottom:14px;">
+                    إذا أردت تغيير كلمة أو جملة أو دالة معينة بدون علامات، ضع الجزء القديم في المربع الأول والجزء الجديد في المربع الثاني واضغط استبدال:
+                </p>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label style="color:#fca5a5;">❌ الكود أو النص القديم (الموجود حالياً في الملف):</label>
+                        <textarea id="findOldCodeInput" class="code-editor-box" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;" rows="6" placeholder="الصق السطر أو الكود القديم هنا..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#86efac;">✅ الكود أو النص الجديد (الذي سيحل محله):</label>
+                        <textarea id="replaceNewCodeInput" class="code-editor-box" rows="6" placeholder="الصق السطر أو الكود الجديد هنا..."></textarea>
+                    </div>
+                </div>
+
+                <button onclick="runFindAndReplaceOnGitHub()" id="findReplaceBtn" class="btn btn-primary" style="width:100%; justify-content:center; padding:13px; font-size:0.95rem;">
+                    <i class="fa-solid fa-arrows-rotate"></i> استبدال الجزء المحدد وحفظ التعديل في GitHub
+                </button>
+            </div>
+
+            <!-- الأداة 3: محدث الكود الكامل الأصلي -->
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> 3. محدث الكود الكامل للموقع (استبدال الملف بالكامل عند الحاجة)</span>
+                    <button onclick="pullRawFileFromGitHub()" class="btn btn-glass" style="font-size:0.8rem;">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> سحب كود الملف الحالي من GitHub
+                    </button>
+                </div>
+                <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:14px; line-height:1.6;">
+                    بدلاً من الذهاب إلى GitHub ومسح الكود القديم يدوياً على التابلت، فقط انسخ الكود الكامل الجديد، والصقه في الصندوق بالأسفل واضغط زر التحديث الفوري!
+                </p>
                 <div class="form-group">
                     <label>الصق الكود الكامل الجديد هنا:</label>
                     <textarea id="rawHtmlCodeInput" rows="8" placeholder="<!DOCTYPE html>... الصق الكود الكامل هنا" style="font-family:monospace; font-size:0.8rem; direction:ltr; text-align:left;"></textarea>
                 </div>
                 <button onclick="pushRawFileToGitHub()" id="pushCodeBtn" class="btn btn-warning" style="width:100%; justify-content:center; padding:14px; font-size:1rem;">
-                    <i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف في GitHub الآن!
+                    <i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف الكامل في GitHub الآن!
                 </button>
             </div>
+
         </div>
 
     </div>
@@ -483,6 +575,8 @@
 
         let storeData = {
             newsTicker: "🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | لا تنسَ الانضمام لسيرفر الديسكورد!",
+            eventTitle: "🔥 العد التنازلي للفعالية والتحديث القادم في المتجر!",
+            eventTargetDate: "",
             featuredId: null,
             wheelStatus: "open",
             wheelPrizes: ["15 XP ⚡", "25 XP 💎", "50 XP 🔥", "100 XP 👑", "20 XP ✨", "5 XP 🎁"],
@@ -498,7 +592,7 @@
             el.style.borderRightColor = color;
             el.innerText = msg;
             box.appendChild(el);
-            setTimeout(() => el.remove(), 3500);
+            setTimeout(() => el.remove(), 4000);
         }
 
         function checkAdminLogin() {
@@ -556,6 +650,8 @@
             document.getElementById('statWheelState').innerText = stateMap[storeData.wheelStatus] || "مفتوحة 🟢";
             document.getElementById('wheelStatusSelect').value = storeData.wheelStatus || 'open';
             document.getElementById('newsTickerInput').value = storeData.newsTicker || '';
+            document.getElementById('eventTitleInput').value = storeData.eventTitle || '';
+            document.getElementById('eventTargetDateInput').value = storeData.eventTargetDate || '';
 
             renderAdminItems();
             renderWheelPrizesAdmin();
@@ -848,6 +944,8 @@
         // ================= 5. الحفظ المباشر في GitHub (data.json) =================
         async function saveDataToGitHub() {
             storeData.newsTicker = document.getElementById('newsTickerInput').value.trim() || storeData.newsTicker;
+            storeData.eventTitle = document.getElementById('eventTitleInput').value.trim() || storeData.eventTitle;
+            storeData.eventTargetDate = document.getElementById('eventTargetDateInput').value || storeData.eventTargetDate;
             storeData.wheelStatus = document.getElementById('wheelStatusSelect').value;
 
             const token = document.getElementById('ghTokenInput').value.trim() || localStorage.getItem('ali_store_gh_token');
@@ -860,21 +958,22 @@
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ في المتجر...`;
 
-            const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`;
+            const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json?nocache=${Date.now()}`;
             try {
                 let sha = undefined;
-                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
+                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' } });
                 if (getRes.ok) {
                     const fileJson = await getRes.json();
                     sha = fileJson.sha;
                 }
 
                 const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(storeData, null, 2))));
-                const putRes = await fetch(apiUrl, {
+                const putRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data.json`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
                     },
                     body: JSON.stringify({
                         message: "تحديث بيانات المتجر من لوحة الأدمن",
@@ -896,53 +995,206 @@
             }
         }
 
-        // ================= 6. محدث ملفات الكود السريع بضغطة زر =================
+        // ================= 6. دوال المرقع الذكي الأوتوماتيكي ومحدث الكود السريع =================
+        function getActiveToken() {
+            return document.getElementById('ghTokenInput').value.trim() || localStorage.getItem('ali_store_gh_token') || '';
+        }
+
+        async function fetchGitHubFileContentAndSha(fileName, token) {
+            const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}?nocache=${Date.now()}`;
+            const res = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            if (!res.ok) throw new Error(`تعذر سحب ملف (${fileName}) من GitHub! تأكد من صلاحية التوكن.`);
+            const fileJson = await res.json();
+            const decodedContent = decodeURIComponent(escape(atob(fileJson.content.replace(/\s/g, ''))));
+            return { content: decodedContent, sha: fileJson.sha };
+        }
+
+        async function putGitHubFileContent(fileName, newContent, sha, token, commitMessage) {
+            const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
+            const contentEncoded = btoa(unescape(encodeURIComponent(newContent)));
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: commitMessage,
+                    content: contentEncoded,
+                    sha: sha
+                })
+            });
+            if (!putRes.ok) throw new Error("فشل رفع التحديث إلى GitHub!");
+            return await putRes.json();
+        }
+
+        // أ) تطبيق كود الترقيع الذكي بصندوق واحد (One-Click Smart Patch)
+        async function applySmartPatchToGitHub() {
+            const fileName = document.getElementById('targetFileToUpdate').value;
+            const patchRaw = document.getElementById('smartPatchInput').value.trim();
+            const token = getActiveToken();
+
+            if (!token) {
+                switchTab('tab-settings', document.querySelectorAll('.tab-btn')[4]);
+                return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+            }
+            if (!patchRaw) {
+                return showToast("⚠️ الصق كود الترقيع الذكي أولاً!", "#f59e0b");
+            }
+
+            const btn = document.getElementById('smartPatchBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري سحب ${fileName} وتطبيق التعديل الذكي تلقائياً...`;
+
+            try {
+                const fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                let content = fileObj.content;
+                let appliedCount = 0;
+
+                // 1. استبدال <<<OLD ... ===NEW ... >>>
+                const replaceRegex = /<<<OLD\s*([\s\S]*?)\s*===NEW\s*([\s\S]*?)\s*>>>/g;
+                let match;
+                while ((match = replaceRegex.exec(patchRaw)) !== null) {
+                    const oldPart = match[1];
+                    const newPart = match[2];
+                    if (content.includes(oldPart)) {
+                        content = content.replace(oldPart, newPart);
+                        appliedCount++;
+                    } else {
+                        throw new Error("لم يتم العثور على السطر القديم المطابق داخل الملف! لم يتم تغيير أي شيء حفاظاً على سلامة الموقع.");
+                    }
+                }
+
+                // 2. إضافة CSS تلقائياً قبل </style> عبر <<<ADD_CSS ... >>>
+                const cssRegex = /<<<ADD_CSS\s*([\s\S]*?)\s*>>>/g;
+                while ((match = cssRegex.exec(patchRaw)) !== null) {
+                    if (content.includes("</style>")) {
+                        content = content.replace("</style>", `\n/* إضافة تلقائية */\n${match[1]}\n</style>`);
+                        appliedCount++;
+                    }
+                }
+
+                // 3. إضافة HTML تلقائياً قبل </body> عبر <<<ADD_HTML ... >>>
+                const htmlRegex = /<<<ADD_HTML\s*([\s\S]*?)\s*>>>/g;
+                while ((match = htmlRegex.exec(patchRaw)) !== null) {
+                    if (content.includes("</body>")) {
+                        content = content.replace("</body>", `\n${match[1]}\n</body>`);
+                        appliedCount++;
+                    }
+                }
+
+                // 4. إضافة JS تلقائياً قبل آخر </script> عبر <<<ADD_JS ... >>>
+                const jsRegex = /<<<ADD_JS\s*([\s\S]*?)\s*>>>/g;
+                while ((match = jsRegex.exec(patchRaw)) !== null) {
+                    const lastScriptIdx = content.lastIndexOf("</script>");
+                    if (lastScriptIdx !== -1) {
+                        content = content.slice(0, lastScriptIdx) + `\n// إضافة تلقائية\n${match[1]}\n` + content.slice(lastScriptIdx);
+                        appliedCount++;
+                    }
+                }
+
+                if (appliedCount === 0) {
+                    throw new Error("صيغة كود الترقيع غير معروفة! تأكد من نسخ العلامات <<< >>> كاملة.");
+                }
+
+                await putGitHubFileContent(fileName, content, fileObj.sha, token, `تحديث ذكي تلقائي (${appliedCount} تعديل) في ${fileName}`);
+                showToast(`🚀 تم تطبيق (${appliedCount}) تعديل ذكي على ${fileName} ورفعه إلى GitHub بنجاح!`, "#10b981");
+                document.getElementById('smartPatchInput').value = '';
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> تطبيق كود الترقيع الذكي وتحديث الموقع في GitHub الآن!`;
+            }
+        }
+
+        // ب) استبدال جزء قديم بجزء جديد مباشرة (Find & Replace)
+        async function runFindAndReplaceOnGitHub() {
+            const fileName = document.getElementById('targetFileToUpdate').value;
+            const oldCode = document.getElementById('findOldCodeInput').value;
+            const newCode = document.getElementById('replaceNewCodeInput').value;
+            const token = getActiveToken();
+
+            if (!token) {
+                switchTab('tab-settings', document.querySelectorAll('.tab-btn')[4]);
+                return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+            }
+            if (!oldCode.trim()) {
+                return showToast("⚠️ الصق الكود القديم الذي تريد تغييره في المربع الأول!", "#f59e0b");
+            }
+
+            const btn = document.getElementById('findReplaceBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري البحث والاستبدال في ${fileName}...`;
+
+            try {
+                const fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                if (!fileObj.content.includes(oldCode)) {
+                    throw new Error("لم يتم العثور على الكود القديم داخل الملف! تأكد من نسخه بشكل مطابق.");
+                }
+                const updatedContent = fileObj.content.replace(oldCode, newCode);
+                await putGitHubFileContent(fileName, updatedContent, fileObj.sha, token, `تعديل جزئي سريع في ${fileName}`);
+                showToast(`✅ تم استبدال الجزء المحدد وتحديث ${fileName} في GitHub بنجاح!`, "#10b981");
+                document.getElementById('findOldCodeInput').value = '';
+                document.getElementById('replaceNewCodeInput').value = '';
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-arrows-rotate"></i> استبدال الجزء المحدد وحفظ التعديل في GitHub`;
+            }
+        }
+
+        // ج) سحب الكود الكامل الحالي من GitHub إلى الصندوق
+        async function pullRawFileFromGitHub() {
+            const fileName = document.getElementById('targetFileToUpdate').value;
+            const token = getActiveToken();
+            if (!token) return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+
+            try {
+                showToast(`⏳ جاري سحب ${fileName} من GitHub...`, "#00f2fe");
+                const fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                document.getElementById('rawHtmlCodeInput').value = fileObj.content;
+                showToast(`✅ تم سحب كود ${fileName} الحالي بنجاح!`, "#10b981");
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            }
+        }
+
+        // د) استبدال الملف بالكامل في GitHub
         async function pushRawFileToGitHub() {
             const fileName = document.getElementById('targetFileToUpdate').value;
             const rawCode = document.getElementById('rawHtmlCodeInput').value;
-            const token = document.getElementById('ghTokenInput').value.trim() || localStorage.getItem('ali_store_gh_token');
+            const token = getActiveToken();
 
             if (!token) return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
-            if (!rawCode.trim()) return showToast("⚠️ الصق الكود الجديد في الصندوق أولاً!", "#f59e0b");
+            if (!rawCode.trim() || rawCode.trim().length < 100) return showToast("⚠️ الكود فارغ أو قصير جداً! الصق الكود الكامل أولاً.", "#f59e0b");
 
             const btn = document.getElementById('pushCodeBtn');
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري رفع وتحديث ${fileName}...`;
 
-            const apiUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
             try {
                 let sha = undefined;
-                const getRes = await fetch(apiUrl, { headers: { 'Authorization': `token ${token}` } });
-                if (getRes.ok) {
-                    const fileJson = await getRes.json();
-                    sha = fileJson.sha;
-                }
+                try {
+                    const existing = await fetchGitHubFileContentAndSha(fileName, token);
+                    sha = existing.sha;
+                } catch (e) {}
 
-                const contentEncoded = btoa(unescape(encodeURIComponent(rawCode)));
-                const putRes = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: `تحديث سريع لملف ${fileName} من لوحة الأدمن`,
-                        content: contentEncoded,
-                        sha: sha
-                    })
-                });
-
-                if (putRes.ok) {
-                    showToast(`🚀 تم تحديث ملف ${fileName} في المتجر بنجاح!`, "#10b981");
-                    document.getElementById('rawHtmlCodeInput').value = '';
-                } else {
-                    showToast("❌ تعذر رفع الملف، تأكد من توكن GitHub!", "#ef4444");
-                }
+                await putGitHubFileContent(fileName, rawCode, sha, token, `تحديث كامل لملف ${fileName} من لوحة الأدمن`);
+                showToast(`🚀 تم تحديث ملف ${fileName} بالكامل في المتجر بنجاح!`, "#10b981");
+                document.getElementById('rawHtmlCodeInput').value = '';
             } catch (e) {
-                showToast("❌ حدث خطأ في الاتصال!", "#ef4444");
+                showToast("❌ تعذر رفع الملف، تأكد من توكن GitHub!", "#ef4444");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف في GitHub الآن!`;
+                btn.innerHTML = `<i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف الكامل في GitHub الآن!`;
             }
         }
 
@@ -956,3 +1208,4 @@
     </script>
 </body>
 </html>
+،

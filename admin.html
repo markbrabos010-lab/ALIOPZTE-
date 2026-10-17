@@ -1220,6 +1220,34 @@ window.generateDailyReport = function() {
         prompt('انسخ التقرير يدويا:', report);
     });
 };
+
+// Auto JS
+window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        // 1. تغيير النص التوضيحي لحقل الرابط
+        var urlInput = document.getElementById('newCodeUrl');
+        if(urlInput) urlInput.placeholder = "ضع رابط التحميل أو اكتب النقاط (مثال: 50 XP)";
+        
+        // 2. تعديل شكل عرض الأكواد
+        window.renderCodesAdmin = function() {
+            var box = document.getElementById('codesListContainer');
+            if (!storeData.codes || storeData.codes.length === 0) {
+                box.innerHTML = '<p style="color:var(--text-muted);">لا توجد أكواد هدايا حالياً.</p>';
+                return;
+            }
+            box.innerHTML = storeData.codes.map(function(c, idx) {
+                var isXP = !String(c.url).startsWith('http');
+                var displayUrl = isXP ? '<span style="color:#ffd700; font-weight:bold;">يعطي: ' + c.url + '</span>' : '<a href="' + c.url + '" target="_blank" style="color:var(--primary);">' + c.url + '</a>';
+                
+                return '<div style="background:rgba(5,7,14,0.8); border:1px solid var(--border); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
+                    '<div><strong style="color:var(--accent); font-size:1rem;">' + c.code + '</strong><div style="display:block; font-size:0.78rem; margin-top:3px;">' + displayUrl + '</div></div>' +
+                    '<button onclick="removeGiftCode(' + idx + ')" class="btn btn-danger">حذف</button></div>';
+            }).join('');
+        };
+        
+        if(typeof renderCodesAdmin === 'function') renderCodesAdmin();
+    }, 2000);
+});
 </script>
 </body>
 </html>

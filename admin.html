@@ -206,6 +206,27 @@
         </div>
     </div>
 
+    <!-- سكريبت مستقل ومعزول لتسجيل الدخول حتى يعمل فوراً وبضمان 100% -->
+    <script>
+        function checkAdminLogin() {
+            var passInput = document.getElementById('adminPassInput');
+            var errBox = document.getElementById('loginErr');
+            var val = passInput ? passInput.value.trim() : '';
+            if (val === "19861986") {
+                sessionStorage.setItem("ali_admin_logged", "true");
+                document.getElementById('loginOverlay').style.display = 'none';
+                if (typeof window.initAdminPanel === 'function') {
+                    window.initAdminPanel();
+                }
+            } else {
+                if (errBox) errBox.style.display = 'block';
+            }
+        }
+        if (sessionStorage.getItem("ali_admin_logged") === "true") {
+            document.getElementById('loginOverlay').style.display = 'none';
+        }
+    </script>
+
     <!-- الهيدر العلوي -->
     <header class="admin-header">
         <a href="index.html" class="brand">
@@ -560,7 +581,6 @@
     <div id="toastBox"></div>
 
     <script>
-        var ADMIN_PASS = "19861986";
         var REPO_OWNER = "markbrabos010-lab";
         var REPO_NAME = "ALIOPZTE-";
         var DEFAULT_WEBHOOK = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
@@ -586,18 +606,6 @@
             el.innerText = msg;
             box.appendChild(el);
             setTimeout(function() { el.remove(); }, 4000);
-        }
-
-        function checkAdminLogin() {
-            var inputEl = document.getElementById('adminPassInput');
-            var val = inputEl ? inputEl.value.trim() : "";
-            if (val === ADMIN_PASS) {
-                sessionStorage.setItem("ali_admin_logged", "true");
-                document.getElementById('loginOverlay').style.display = 'none';
-                initAdminPanel();
-            } else {
-                document.getElementById('loginErr').style.display = 'block';
-            }
         }
 
         window.addEventListener('DOMContentLoaded', function() {
@@ -1032,27 +1040,30 @@
                     }
                 }
 
+                var closeStyleTag = "</sty" + "le>";
                 var cssRegex = /<<<ADD_CSS\s*([\s\S]*?)\s*>>>/g;
                 while ((match = cssRegex.exec(patchRaw)) !== null) {
-                    if (content.includes("</style>")) {
-                        content = content.replace("</style>", "\n/* إضافة تلقائية */\n" + match[1] + "\n</style>");
+                    if (content.includes(closeStyleTag)) {
+                        content = content.replace(closeStyleTag, "\n/* Auto CSS */\n" + match[1] + "\n" + closeStyleTag);
                         appliedCount++;
                     }
                 }
 
+                var closeBodyTag = "</bo" + "dy>";
                 var htmlRegex = /<<<ADD_HTML\s*([\s\S]*?)\s*>>>/g;
                 while ((match = htmlRegex.exec(patchRaw)) !== null) {
-                    if (content.includes("</body>")) {
-                        content = content.replace("</body>", "\n" + match[1] + "\n</body>");
+                    if (content.includes(closeBodyTag)) {
+                        content = content.replace(closeBodyTag, "\n" + match[1] + "\n" + closeBodyTag);
                         appliedCount++;
                     }
                 }
 
+                var closeScriptTag = "</scr" + "ipt>";
                 var jsRegex = /<<<ADD_JS\s*([\s\S]*?)\s*>>>/g;
                 while ((match = jsRegex.exec(patchRaw)) !== null) {
-                    var lastScriptIdx = content.lastIndexOf("</script>");
+                    var lastScriptIdx = content.lastIndexOf(closeScriptTag);
                     if (lastScriptIdx !== -1) {
-                        content = content.slice(0, lastScriptIdx) + "\n// إضافة تلقائية\n" + match[1] + "\n" + content.slice(lastScriptIdx);
+                        content = content.slice(0, lastScriptIdx) + "\n// Auto JS\n" + match[1] + "\n" + content.slice(lastScriptIdx);
                         appliedCount++;
                     }
                 }

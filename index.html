@@ -620,6 +620,50 @@ a, button, input, select, .btn, #aliSuperHubBtn, [onclick], .hub-tab-btn {
 .loot-box-img:hover { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 30px #00f2fe); }
 .loot-box-img.shaking { animation: boxShake 0.4s infinite; }
 @keyframes boxShake { 0% {transform: rotate(-12deg);} 50% {transform: rotate(12deg);} 100% {transform: rotate(-12deg);} }
+
+/* Auto CSS */
+/* أداء عالي - إيقاف الأنيميشن */
+body.perf-mode .rgb-text,
+body.perf-mode .featured-banner,
+body.perf-mode .partners-sidebar,
+body.perf-mode .countdown-banner,
+body.perf-mode .btn-card-view,
+body.perf-mode .modal-box,
+body.perf-mode .app-card:hover,
+body.perf-mode .item-card:hover,
+body.perf-mode #aliSuperHubBtn {
+    animation: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+body.perf-mode #aliParticlesCanvas {
+    display: none !important;
+}
+
+/* قسم الإنجازات */
+.achievement-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.achievement-badge.unlocked {
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid #ffd700;
+    color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+.achievement-badge.locked {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    opacity: 0.6;
+}
 </style>
 </head>
 <body>
@@ -716,6 +760,7 @@ a, button, input, select, .btn, #aliSuperHubBtn, [onclick], .hub-tab-btn {
                 <button class="btn-action install-btn" id="installAppBtn" onclick="installPWA()"><i class="fa-solid fa-cloud-arrow-down"></i> تثبيت</button>
                 <button class="btn-device-select" onclick="playSfx('click'); cycleTheme()" title="تغيير ثيم الموقع"><i class="fa-solid fa-palette"></i> <span id="themeLabel">RGB</span></button>
                 <button class="btn-device-select" onclick="toggleSoundMute()" id="soundToggleBtn" title="المؤثرات الصوتية"><i class="fa-solid fa-volume-high"></i></button>
+                <button class="btn-device-select" onclick="togglePerformanceMode()" id="perfModeBtn" title="وضع الأداء العالي (إيقاف المؤثرات الثقيلة)"><i class="fa-solid fa-bolt"></i> <span id="perfModeLabel">ثقيل</span></button>
                 <button class="btn-device-select" onclick="openDeviceSelector()"><i class="fa-solid fa-sliders"></i> <span id="currentDeviceLabel">الجهاز</span></button>
                 <a href="https://youtube.com/@aliopzte790?si=mW1nU7yXKT5EjYGI" target="_blank" class="btn-social youtube"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://discord.gg/7BNpX9uZa" target="_blank" class="btn-social discord"><i class="fa-brands fa-discord"></i></a>
@@ -923,6 +968,12 @@ a, button, input, select, .btn, #aliSuperHubBtn, [onclick], .hub-tab-btn {
                 </div>
                 <p id="modalNextRankText" style="font-size:0.74rem; color:#cbd5e1; margin:0;"></p>
                 <div id="idCardBadges" class="gamer-badges-row"></div>
+                <div style="text-align:right; background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; margin-top:10px; border:1px solid rgba(0,242,254,0.2);">
+                    <div style="font-weight:900; color:var(--theme-c2); font-size:0.9rem; margin-bottom:8px;">
+                        <i class="fa-solid fa-trophy"></i> إنجازات المتجر:
+                    </div>
+                    <div id="achievementsList" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+                </div>
                 <button onclick="copyGamerIdCard()" class="btn-share-item" style="width:100%; margin-top:10px; padding:7px; font-size:0.78rem;">
                     <i class="fa-solid fa-copy"></i> نسخ بطاقة هويتي لمشاركتها في الديسكورد
                 </button>
@@ -2945,6 +2996,194 @@ function pokeMascot() {
     setTimeout(function() { b.classList.remove('show'); }, 4000); // إخفاء الرسالة بعد 4 ثواني
 }
 setInterval(function() { if(Math.random() > 0.65) pokeMascot(); }, 15000);
+
+// Auto JS
+// ==========================================
+// 🚀 الإضافات الجديدة (الأفاتار، الإنجازات، الأداء العالي)
+// ==========================================
+setTimeout(function() {
+    // 1. متجر الصور الرمزية (Avatars)
+    if (typeof XP_SHOP_ITEMS !== 'undefined') {
+        var newAvatars = [
+            { id: 'avatar_ninja', name: '🥷 صورة رمزية: النينجا', cost: 80, type: 'avatar', val: '🥷' },
+            { id: 'avatar_robot', name: '🤖 صورة رمزية: الروبوت', cost: 90, type: 'avatar', val: '🤖' },
+            { id: 'avatar_dragon', name: '🐉 صورة رمزية: التنين', cost: 120, type: 'avatar', val: '🐉' },
+            { id: 'avatar_skull', name: '💀 صورة رمزية: الجمجمة', cost: 100, type: 'avatar', val: '💀' },
+            { id: 'avatar_ghost', name: '👻 صورة رمزية: الشبح', cost: 110, type: 'avatar', val: '👻' }
+        ];
+        XP_SHOP_ITEMS.push(...newAvatars);
+    }
+
+    // Override buyOrEquipShopItem
+    window.buyOrEquipShopItem = function(itemId) {
+        var item = XP_SHOP_ITEMS.find(function(x) { return x.id === itemId; });
+        if (!item) return;
+        var owned = getOwnedShopItems();
+        if (!owned.includes(itemId)) {
+            if (getStoreXp() < item.cost) {
+                alert('⚠️ رصيدك من الـ XP غير كافٍ! أكمل التحديات أو العب لجمع النقاط.');
+                return;
+            }
+            addStoreXp(-item.cost);
+            owned.push(itemId);
+            localStorage.setItem('ali_xp_shop_owned', JSON.stringify(owned));
+        }
+        if (item.type === 'title') {
+            localStorage.setItem('ali_equipped_title', item.val);
+            applyEquippedCustomizations();
+        } else if (item.type === 'fx') {
+            var curFx = localStorage.getItem('ali_equipped_fx');
+            localStorage.setItem('ali_equipped_fx', curFx === item.val ? 'none' : item.val);
+            applyEquippedCustomizations();
+        } else if (item.type === 'avatar') {
+            var curAvatar = localStorage.getItem('ali_equipped_avatar');
+            localStorage.setItem('ali_equipped_avatar', curAvatar === item.val ? '🎮' : item.val);
+            applyEquippedCustomizations();
+        }
+        if(typeof renderXpShop === 'function') renderXpShop();
+    };
+
+    // Override renderXpShop
+    window.renderXpShop = function() {
+        var box = document.getElementById('xpShopContainer');
+        if (!box) return;
+        var owned = getOwnedShopItems();
+        var eqTitle = localStorage.getItem('ali_equipped_title') || '';
+        var eqFx = localStorage.getItem('ali_equipped_fx') || 'none';
+        var eqAvatar = localStorage.getItem('ali_equipped_avatar') || '🎮';
+
+        box.innerHTML = XP_SHOP_ITEMS.map(function(item) {
+            var isOwned = owned.includes(item.id);
+            var isEquipped = (item.type === 'title' && eqTitle === item.val) || 
+                             (item.type === 'fx' && eqFx === item.val) ||
+                             (item.type === 'avatar' && eqAvatar === item.val);
+            var btnText = isOwned ? (isEquipped ? '✅ مفعّل (اضغط للإيقاف)' : '⚡ تفعيل الآن') : ('شراء (' + item.cost + ' XP)');
+            return '<div class="shop-row">' +
+                '<div><strong style="font-size:0.9rem;">' + item.name + '</strong><div style="font-size:0.75rem; color:#ffd700;">السعر: ' + item.cost + ' XP</div></div>' +
+                '<button class="hub-action-btn" onclick="buyOrEquipShopItem(\'' + item.id + '\')">' + btnText + '</button>' +
+            '</div>';
+        }).join('');
+    };
+
+    // Override applyEquippedCustomizations
+    var origApply = window.applyEquippedCustomizations;
+    window.applyEquippedCustomizations = function() {
+        if(origApply) origApply();
+        var eqAvatar = localStorage.getItem('ali_equipped_avatar');
+        var idAvatarEl = document.getElementById('idCardAvatar');
+        if (eqAvatar && idAvatarEl) {
+            idAvatarEl.innerText = eqAvatar;
+        } else if (idAvatarEl) {
+            idAvatarEl.innerText = '🎮';
+        }
+    };
+
+    // 2. نظام الإنجازات (Achievements)
+    window.ACHIEVEMENTS = [
+        { id: 'ach_first_dl', title: '🥇 أول تحميل', desc: 'قم بتحميل أول عنصر', icon: '🥇' },
+        { id: 'ach_vault', title: '🔓 كاسر الخزنة', desc: 'افتح الخزنة السرية', icon: '🔓' },
+        { id: 'ach_arcade', title: '🎯 قناص الأركيد', desc: 'احصل على 40 نقطة في الأركيد', icon: '🎯' },
+        { id: 'ach_review', title: '🤝 داعم المتجر', desc: 'أرسل أول تقييم', icon: '🤝' },
+        { id: 'ach_snake', title: '🐍 الثعبان الشرس', desc: 'تجاوز 50 نقطة في لعبة الثعبان', icon: '🐍' }
+    ];
+
+    window.unlockAchievement = function(id) {
+        var unlocked = JSON.parse(localStorage.getItem('ali_achievements') || '[]');
+        if (!unlocked.includes(id)) {
+            unlocked.push(id);
+            localStorage.setItem('ali_achievements', JSON.stringify(unlocked));
+            if(typeof showToast === 'function') showToast('🏆 تم فتح إنجاز جديد: ' + ACHIEVEMENTS.find(a => a.id === id).title, '#ffd700');
+            if(typeof playSfx === 'function') playSfx('win');
+            window.renderAchievements();
+        }
+    };
+
+    window.renderAchievements = function() {
+        var container = document.getElementById('achievementsList');
+        if (!container) return;
+        var unlocked = JSON.parse(localStorage.getItem('ali_achievements') || '[]');
+        container.innerHTML = ACHIEVEMENTS.map(a => {
+            var isUnlocked = unlocked.includes(a.id);
+            return `<div class="achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}" title="${a.desc}">
+                <span style="font-size:1.2rem;">${isUnlocked ? a.icon : '🔒'}</span>
+                <span>${a.title}</span>
+            </div>`;
+        }).join('');
+    };
+
+    // ربط الإنجازات بالأحداث
+    if(typeof grantDownloadXPOnce === 'function') {
+        var origDl = grantDownloadXPOnce;
+        window.grantDownloadXPOnce = function() {
+            origDl();
+            window.unlockAchievement('ach_first_dl');
+        };
+    }
+    
+    if(typeof checkVaultGuess === 'function') {
+        var origVault = checkVaultGuess;
+        window.checkVaultGuess = function() {
+            origVault();
+            var key = 'ali_vault_' + getTodayDateKey();
+            var data = JSON.parse(localStorage.getItem(key));
+            if(data && data.won) window.unlockAchievement('ach_vault');
+        };
+    }
+    
+    if(typeof finishArcadeGame === 'function') {
+        var origArcade = finishArcadeGame;
+        window.finishArcadeGame = function() {
+            origArcade();
+            if(typeof arcadeScore !== 'undefined' && arcadeScore >= 40) window.unlockAchievement('ach_arcade');
+        };
+    }
+    
+    if(typeof sendReviewToDiscord === 'function') {
+        var origReview = sendReviewToDiscord;
+        window.sendReviewToDiscord = async function() {
+            await origReview();
+            var lastRev = parseInt(localStorage.getItem("ali_last_review_time")) || 0;
+            if (Date.now() - lastRev < 60000) window.unlockAchievement('ach_review');
+        };
+    }
+
+    if(typeof openRankModal === 'function') {
+        var origOpenRank = openRankModal;
+        window.openRankModal = function() {
+            origOpenRank();
+            window.renderAchievements();
+        };
+    }
+
+    // 3. وضع الأداء العالي (Performance Mode)
+    window.togglePerformanceMode = function() {
+        var isPerf = document.body.classList.toggle('perf-mode');
+        localStorage.setItem('ali_perf_mode', isPerf ? 'true' : 'false');
+        window.updatePerfModeUI();
+        if(typeof playSfx === 'function') playSfx('click');
+    };
+
+    window.updatePerfModeUI = function() {
+        var isPerf = document.body.classList.contains('perf-mode');
+        var label = document.getElementById('perfModeLabel');
+        if(label) {
+            label.innerText = isPerf ? 'خفيف' : 'ثقيل';
+            label.style.color = isPerf ? '#10b981' : '#ff007f';
+        }
+    };
+
+    if (localStorage.getItem('ali_perf_mode') === 'true') {
+        document.body.classList.add('perf-mode');
+    }
+    
+    // تفعيل التحديثات فور التحميل
+    window.updatePerfModeUI();
+    window.renderAchievements();
+    var eqAvatar = localStorage.getItem('ali_equipped_avatar');
+    var idAvatarEl = document.getElementById('idCardAvatar');
+    if (eqAvatar && idAvatarEl) idAvatarEl.innerText = eqAvatar;
+    
+}, 1000); // تأخير ثانية واحدة لضمان تحميل المتجر بالكامل
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->

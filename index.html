@@ -513,7 +513,15 @@
         body.device-mobile .main-layout { flex-direction: column; }
         body.device-mobile .partners-sidebar { width: 100%; }
         body.device-mobile .items-grid { grid-template-columns: 1fr; gap: 12px; }
-    </style>
+    
+/* Auto CSS */
+/* إخفاء راديو ومشغل الأغاني نهائياً */
+[id*="lofi" i], [class*="lofi" i], [onclick*="lofi" i], #radioWidget, .radio-widget, #musicPlayer, .music-player {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+</style>
 </head>
 <body>
 
@@ -2425,6 +2433,24 @@
                 submitBtn.style.opacity = '1';
             }
         }
-    </script>
+    
+// Auto JS
+// إيقاف وحذف مشغل الأغاني والراديو من الصفحة تلقائياً
+(function removeLofiRadioFeature() {
+    function cleanMusicElements() {
+        document.querySelectorAll('[id*="lofi" i], [class*="lofi" i], [onclick*="lofi" i], #radioWidget, .radio-widget, #musicPlayer, .music-player').forEach(function(el) {
+            el.remove();
+        });
+        document.querySelectorAll('audio').forEach(function(aud) {
+            aud.pause();
+            aud.src = '';
+            aud.remove();
+        });
+    }
+    cleanMusicElements();
+    document.addEventListener('DOMContentLoaded', cleanMusicElements);
+    window.addEventListener('load', cleanMusicElements);
+})();
+</script>
 </body>
 </html>

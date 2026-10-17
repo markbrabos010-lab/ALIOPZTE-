@@ -786,6 +786,11 @@ body.perf-mode #aliParticlesCanvas {
 
 /* 4. عنصر اليوم */
 .daily-item-box { background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(13,18,30,0.95)); border: 1px solid #ffd700; border-radius: 14px; padding: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+/* Auto CSS */
+.video-container-responsive { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 15px; border: 1px solid var(--theme-c2); }
+.video-container-responsive video, .video-container-responsive iframe { width: 100%; height: 100%; display: block; border: none; aspect-ratio: 16/9; }
+.video-unplayable-msg { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 15px; border-radius: 10px; text-align: center; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; }
 </style>
 </head>
 <body>
@@ -4430,6 +4435,83 @@ setTimeout(function() {
             msg.style.color = "#ef4444";
             msg.innerText = "❌ الكود غير صحيح أو منتهي الصلاحية!";
         }
+    };
+}, 3000);
+
+// Auto JS
+setTimeout(function() {
+    window.openModal = function(item) {
+        if(typeof activeItemObj !== 'undefined') activeItemObj = item;
+        if(typeof activeTargetUrl !== 'undefined') activeTargetUrl = item.url;
+        if(typeof addToRecentlyViewed === 'function') addToRecentlyViewed(item);
+
+        document.getElementById('mTitle').innerText = item.title;
+        document.getElementById('mDesc').innerText = item.desc || '';
+        document.getElementById('itemActionMsg').style.display = 'none';
+
+        var alreadyClaimedFirstShare = localStorage.getItem("ali_first_share_ever_claimed") === "true";
+        document.getElementById('shareBtnLabel').innerText = alreadyClaimedFirstShare ? "مشاركة العنصر" : "مشاركة العنصر (+10 XP لأول مرة)";
+
+        var ytId = null;
+        if (item.url) {
+            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            var match = item.url.match(regExp);
+            if (match && match[2].length === 11) ytId = match[2];
+        }
+
+        var vidContainer = document.getElementById('mVideoContainer');
+        var imgEl = document.getElementById('mImg');
+
+        if (ytId) {
+            imgEl.style.display = 'none';
+            vidContainer.style.display = 'block';
+            vidContainer.className = 'video-container-responsive';
+            vidContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1" allowfullscreen allow="autoplay"></iframe>';
+        } 
+        else if (item.url && item.url.match(/\.(mp4|webm|ogg)(\?.*)?$/i)) {
+            imgEl.style.display = 'none';
+            vidContainer.style.display = 'block';
+            vidContainer.className = 'video-container-responsive';
+            vidContainer.innerHTML = '<video controls autoplay src="' + item.url + '"></video>';
+        } 
+        else if (item.url && (item.url.includes('gofile.io') || item.url.includes('mediafire.com') || item.url.includes('drive.google.com'))) {
+            imgEl.style.display = 'block';
+            imgEl.src = item.image;
+            vidContainer.style.display = 'block';
+            vidContainer.className = 'video-unplayable-msg';
+            vidContainer.innerHTML = 'هذا الرابط عبارة عن صفحة تحميل خارجية. لا يمكن تشغيله مباشرة هنا. اضغط على زر التحميل في الأسفل لفتحه.';
+        } 
+        else {
+            vidContainer.style.display = 'none';
+            vidContainer.innerHTML = '';
+            imgEl.style.display = 'block';
+            imgEl.src = item.image;
+        }
+
+        var scriptBox = document.getElementById('mScriptBox');
+        if (item.category === 'scripts' || item.category === 'roblox' || item.script) {
+            scriptBox.style.display = 'block';
+            document.getElementById('mScriptCode').innerText = item.script || item.url;
+        } else {
+            scriptBox.style.display = 'none';
+        }
+
+        var vipHint = document.getElementById('mVipHint');
+        if (typeof isUserVipInstant === 'function' && isUserVipInstant()) {
+            vipHint.innerHTML = 'ميزة VIP مفعلة لديك: التحميل فوري بدون انتظار!';
+        } else {
+            vipHint.innerHTML = '<span style="color:var(--text-muted);">اجمع 150 XP لفتح التحميل الفوري VIP بدون عداد!</span>';
+        }
+
+        if (typeof downloadTimerInterval !== 'undefined' && downloadTimerInterval) clearInterval(downloadTimerInterval);
+        var btn = document.getElementById('mDlBtn');
+        btn.disabled = false;
+        var dlClaimed = localStorage.getItem("ali_dl_" + item.id) === "true";
+        var vipState = typeof isUserVipInstant === 'function' && isUserVipInstant();
+        btn.innerHTML = '<i class="fa-solid fa-download"></i> ' + (vipState ? 'تحميل فوري VIP' : 'تجهيز رابط التحميل') + ' ' + (dlClaimed ? '' : '(+15 XP)');
+        btn.onclick = function() { if(typeof startDownloadTimer === 'function') startDownloadTimer(); };
+
+        document.getElementById('itemModal').classList.add('active');
     };
 }, 3000);
 </script>

@@ -740,6 +740,27 @@ body.perf-mode #aliParticlesCanvas {
     padding: 20px; max-width: 400px; width: 100%; text-align: right;
 }
 .feedback-card textarea { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; margin-bottom: 10px; font-family: inherit; resize: none; }
+
+/* Auto CSS */
+/* إخفاء لعبة الثعبان */
+#hub-snake, button[onclick*="hub-snake"] { display: none !important; }
+
+/* زر خريطة الكنز العائم */
+#treasureMapBtn {
+    position: fixed; bottom: 85px; left: 85px; z-index: 9988;
+    width: 55px; height: 55px; border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #f59e0b);
+    border: 2px solid #fff; color: #fff; font-size: 1.7rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 0 15px rgba(255,215,0,0.6);
+    transition: 0.3s;
+}
+#treasureMapBtn:hover { transform: scale(1.1) rotate(15deg); }
+
+/* تنسيق النجوم */
+#quickStarsBox { text-align: center; margin-top: 10px; }
+.quick-stars-row { display: flex; justify-content: center; gap: 8px; margin: 10px 0; font-size: 1.8rem; cursor: pointer; color: #94a3b8; }
+.quick-stars-row span:hover, .quick-stars-row span.active { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
 </style>
 </head>
 <body>
@@ -3726,6 +3747,138 @@ setTimeout(function() {
     }
 
 }, 3500); // تأخير لضمان تحميل الدوال الأساسية
+
+// Auto JS
+setTimeout(function() {
+    // 1. إخفاء الثعبان
+    var snakeBtn = document.querySelector('button[onclick*="hub-snake"]');
+    if(snakeBtn) snakeBtn.style.display = 'none';
+    var snakePane = document.getElementById('hub-snake');
+    if(snakePane) snakePane.style.display = 'none';
+
+    // 2. إصلاح صندوق الملاحظات (Feedback)
+    var oldFb = document.getElementById('floatingFeedbackBtn');
+    if(oldFb) oldFb.remove();
+    var oldFbBox = document.getElementById('feedbackModalBox');
+    if(oldFbBox) oldFbBox.remove();
+
+    var fbBtn = document.createElement('div');
+    fbBtn.id = 'floatingFeedbackBtn';
+    fbBtn.innerHTML = '💬';
+    fbBtn.title = 'أرسل ملاحظة';
+    fbBtn.style.cssText = "position:fixed; bottom:150px; left:20px; width:50px; height:50px; background:linear-gradient(135deg,#f59e0b,#ea580c); border:2px solid #fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:#fff; cursor:pointer; z-index:9999; box-shadow:0 0 15px rgba(245,158,11,0.6); transition:0.3s;";
+    fbBtn.onclick = function() { document.getElementById('fbModalNew').style.display = 'flex'; };
+    document.body.appendChild(fbBtn);
+
+    var fbModal = document.createElement('div');
+    fbModal.id = 'fbModalNew';
+    fbModal.style.cssText = "position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:99999; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px); font-family:'Tajawal', sans-serif;";
+    fbModal.innerHTML = `
+        <div style="background:#0d1222; border:2px solid #f59e0b; border-radius:16px; padding:20px; max-width:400px; width:100%; text-align:right;">
+            <h3 style="color:#f59e0b; margin-bottom:10px;">💬 ملاحظة للإدارة</h3>
+            <textarea id="fbTextNew" rows="3" placeholder="اكتب ملاحظتك هنا..." style="width:100%; padding:10px; border-radius:8px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:#fff; margin-bottom:10px; font-family:inherit; resize:none;"></textarea>
+            <div style="display:flex; gap:10px;">
+                <button onclick="sendFbNew()" style="flex:1; background:linear-gradient(90deg,#f59e0b,#ea580c); border:none; padding:10px; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">إرسال</button>
+                <button onclick="document.getElementById('fbModalNew').style.display='none'" style="flex:1; background:rgba(255,255,255,0.1); border:none; padding:10px; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">إلغاء</button>
+            </div>
+            <p id="fbMsgNew" style="margin-top:10px; font-size:0.8rem; font-weight:bold; color:#00ff88;"></p>
+        </div>
+    `;
+    document.body.appendChild(fbModal);
+
+    window.sendFbNew = async function() {
+        var text = document.getElementById('fbTextNew').value.trim();
+        if(!text) return;
+        var msg = document.getElementById('fbMsgNew');
+        msg.innerText = '⏳ جاري الإرسال...';
+        var webhook = localStorage.getItem('ali_store_webhook') || "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
+        try {
+            await fetch(webhook, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ embeds: [{ title: "💬 ملاحظة من المتجر", description: text, color: 16776960 }] })
+            });
+            msg.innerText = '✅ تم الإرسال بنجاح!';
+            document.getElementById('fbTextNew').value = '';
+            setTimeout(function() { document.getElementById('fbModalNew').style.display = 'none'; }, 2000);
+        } catch(e) {
+            msg.innerText = '❌ حدث خطأ.';
+        }
+    };
+
+    // 3. إصلاح تقييم النجوم
+    setInterval(function() {
+        var modal = document.getElementById('itemModal');
+        if (modal && modal.classList.contains('active')) {
+            if (!document.getElementById('quickStarsBox')) {
+                var vipHint = document.getElementById('mVipHint');
+                if (vipHint) {
+                    var starsBox = document.createElement('div');
+                    starsBox.id = 'quickStarsBox';
+                    starsBox.innerHTML = `
+                        <div style="margin-top:10px; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                            <span style="font-size:0.85rem; color:#fff;">قيم هذا العنصر (+5 XP):</span>
+                            <div class="quick-stars-row" id="quickStarsRow">
+                                <span onclick="submitNewStars(1)">★</span>
+                                <span onclick="submitNewStars(2)">★</span>
+                                <span onclick="submitNewStars(3)">★</span>
+                                <span onclick="submitNewStars(4)">★</span>
+                                <span onclick="submitNewStars(5)">★</span>
+                            </div>
+                        </div>
+                    `;
+                    vipHint.parentNode.insertBefore(starsBox, vipHint.nextSibling);
+                }
+            }
+        } else {
+            var box = document.getElementById('quickStarsBox');
+            if (box) box.remove();
+        }
+    }, 500);
+
+    window.submitNewStars = function(stars) {
+        if (!activeItemObj) return;
+        var itemId = activeItemObj.id;
+        var ratedKey = "ali_rated_" + itemId;
+        if (localStorage.getItem(ratedKey)) {
+            alert("لقد قمت بتقييم هذا العنصر مسبقاً!");
+            return;
+        }
+        localStorage.setItem(ratedKey, stars);
+        document.querySelectorAll('#quickStarsRow span').forEach(function(s, idx) {
+            if (idx < stars) s.classList.add('active');
+        });
+        if (typeof addStoreXp === 'function') addStoreXp(5);
+        if (typeof playSfx === 'function') playSfx('xp');
+        alert("✅ شكراً لتقييمك! حصلت على +5 XP.");
+    };
+
+    // 4. خريطة الكنز
+    window.launchTreasureMap = function() {
+        var oldChest = document.getElementById('tempTreasureChest');
+        if (oldChest) oldChest.remove();
+
+        var chest = document.createElement('div');
+        chest.id = 'tempTreasureChest';
+        chest.innerHTML = '🎁';
+        chest.style.cssText = "position:fixed; font-size:4rem; z-index:99999; cursor:pointer; filter:drop-shadow(0 0 20px #ffd700); transition:0.3s; animation:pulse 1s infinite;";
+        
+        var x = Math.floor(Math.random() * 80) + 10;
+        var y = Math.floor(Math.random() * 70) + 15;
+        chest.style.left = x + 'vw';
+        chest.style.top = y + 'vh';
+
+        chest.onclick = function() {
+            if (typeof addStoreXp === 'function') addStoreXp(50);
+            if (typeof playSfx === 'function') playSfx('win');
+            alert('🎉 لقد وجدت الكنز المخفي! ربحت +50 XP.');
+            chest.remove();
+        };
+        document.body.appendChild(chest);
+        setTimeout(function() { if (chest) chest.remove(); }, 30000);
+    };
+
+}, 4000);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
@@ -3813,5 +3966,8 @@ setTimeout(function() {
         <p id="feedbackMsg" style="margin-top:10px; font-size:0.8rem; font-weight:bold;"></p>
     </div>
 </div>
+
+<!-- زر خريطة الكنز العائم -->
+<div id="treasureMapBtn" onclick="launchTreasureMap()" title="ابحث عن الكنز المخفي">🗺️</div>
 </body>
 </html>

@@ -521,6 +521,65 @@
     visibility: hidden !important;
     pointer-events: none !important;
 }
+
+/* Auto CSS */
+/* ستايل مركز الفعاليات والميزات الرباعية (1, 4, 7, 10) */
+#aliSuperHubBtn {
+    position: fixed; bottom: 20px; right: 20px; z-index: 9990;
+    background: linear-gradient(135deg, #00f2fe, #7f00ff, #ff007f);
+    color: #fff; border: 2px solid rgba(255,255,255,0.4); border-radius: 50px;
+    padding: 12px 20px; font-family: 'Tajawal', sans-serif; font-weight: 900;
+    font-size: 0.92rem; cursor: pointer; box-shadow: 0 0 22px rgba(0, 242, 254, 0.55);
+    display: flex; align-items: center; gap: 8px; transition: 0.25s;
+}
+#aliSuperHubBtn:hover { transform: scale(1.06) translateY(-2px); }
+
+#aliSuperHubModal {
+    position: fixed; inset: 0; background: rgba(5, 7, 14, 0.92);
+    backdrop-filter: blur(12px); z-index: 9998; display: none;
+    align-items: center; justify-content: center; padding: 14px;
+    font-family: 'Tajawal', sans-serif; direction: rtl; color: #fff;
+}
+.hub-box {
+    background: #0d1222; border: 2px solid #00f2fe; border-radius: 20px;
+    max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto;
+    padding: 20px; position: relative; box-shadow: 0 0 35px rgba(0, 242, 254, 0.25);
+}
+.hub-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.hub-tab-btn {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: #94a3b8; padding: 8px 14px; border-radius: 10px; font-family: inherit;
+    font-weight: 800; font-size: 0.82rem; cursor: pointer; white-space: nowrap; flex: 1;
+}
+.hub-tab-btn.active { background: linear-gradient(90deg, #00f2fe, #7f00ff); color: #fff; border-color: transparent; }
+.hub-pane { display: none; }
+.hub-pane.active { display: block; }
+.quest-row, .shop-row {
+    background: rgba(5, 7, 14, 0.85); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 12px; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+}
+.hub-action-btn {
+    background: linear-gradient(90deg, #10b981, #059669); color: #fff;
+    border: none; padding: 7px 14px; border-radius: 8px; font-family: inherit;
+    font-weight: 800; font-size: 0.8rem; cursor: pointer;
+}
+.hub-action-btn:disabled { opacity: 0.45; cursor: not-allowed; background: #334155; }
+#cpsTargetArea {
+    width: 100%; height: 150px; border-radius: 16px;
+    background: radial-gradient(circle, rgba(255,0,127,0.22), rgba(13,18,34,0.95));
+    border: 2px dashed #ff007f; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; cursor: pointer; user-select: none;
+    margin: 12px 0; transition: 0.1s;
+}
+#cpsTargetArea:active { transform: scale(0.97); background: rgba(0, 242, 254, 0.25); border-color: #00f2fe; }
+.vault-inputs { display: flex; justify-content: center; gap: 10px; margin: 14px 0; direction: ltr; }
+.vault-digit {
+    width: 60px; height: 65px; font-size: 1.7rem; font-weight: 900;
+    text-align: center; border-radius: 12px; border: 2px solid #00f2fe;
+    background: #05070e; color: #00ff88; font-family: monospace;
+}
+#aliParticlesCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 9980; display: none; }
 </style>
 </head>
 <body>
@@ -2451,6 +2510,386 @@
     document.addEventListener('DOMContentLoaded', cleanMusicElements);
     window.addEventListener('load', cleanMusicElements);
 })();
+
+// Auto JS
+// ================= برمجة الميزات الأربع (1, 4, 7, 10) =================
+function getStoreXp() {
+    var keys = ['ali_user_xp', 'userXP', 'xp', 'store_xp'];
+    for (var i = 0; i < keys.length; i++) {
+        var v = localStorage.getItem(keys[i]);
+        if (v !== null && !isNaN(parseInt(v))) return parseInt(v);
+    }
+    return 50;
+}
+
+function addStoreXp(amount) {
+    var current = getStoreXp() + amount;
+    if (current < 0) current = 0;
+    ['ali_user_xp', 'userXP', 'xp', 'store_xp'].forEach(function(k) {
+        localStorage.setItem(k, current);
+    });
+    var hubLbl = document.getElementById('hubUserXpDisplay');
+    if (hubLbl) hubLbl.innerText = 'رصيدك الحالي: ' + current + ' XP ⚡';
+    // تحديث أي عداد XP موجود في الهيدر الأصلي
+    document.querySelectorAll('[id*="xp" i], [class*="xp-val" i]').forEach(function(el) {
+        if (el.id !== 'hubUserXpDisplay' && el.children.length === 0 && /\d+/.test(el.innerText)) {
+            el.innerText = el.innerText.replace(/\d+/, current);
+        }
+    });
+    return current;
+}
+
+function openAliSuperHub() {
+    addStoreXp(0);
+    completeDailyQuest('visit');
+    renderDailyQuests();
+    renderXpShop();
+    initDailyVault();
+    document.getElementById('aliSuperHubModal').style.display = 'flex';
+}
+
+function switchHubTab(paneId, btn) {
+    document.querySelectorAll('.hub-pane').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.hub-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.getElementById(paneId).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ---------- 1. نظام التحديات اليومية ----------
+var DAILY_QUESTS_LIST = [
+    { id: 'visit', title: '🔥 زيارة مركز الفعاليات اليومي', reward: 20 },
+    { id: 'interact', title: '🎮 تصفح أو فتح أي لعبة/مود في المتجر', reward: 30 },
+    { id: 'cps_play', title: '⚡ خوض اختبار سرعة الإيم (CPS)', reward: 35 }
+];
+
+function getTodayDateKey() {
+    return new Date().toISOString().slice(0, 10);
+}
+
+function getQuestProgress() {
+    var raw = localStorage.getItem('ali_daily_quests_' + getTodayDateKey());
+    return raw ? JSON.parse(raw) : { done: {}, claimed: {} };
+}
+
+function saveQuestProgress(data) {
+    localStorage.setItem('ali_daily_quests_' + getTodayDateKey(), JSON.stringify(data));
+}
+
+function completeDailyQuest(questId) {
+    var prog = getQuestProgress();
+    if (!prog.done[questId]) {
+        prog.done[questId] = true;
+        saveQuestProgress(prog);
+    }
+}
+
+function claimQuestReward(questId, reward) {
+    var prog = getQuestProgress();
+    if (prog.done[questId] && !prog.claimed[questId]) {
+        prog.claimed[questId] = true;
+        saveQuestProgress(prog);
+        addStoreXp(reward);
+        renderDailyQuests();
+    }
+}
+
+function renderDailyQuests() {
+    var box = document.getElementById('dailyQuestsContainer');
+    if (!box) return;
+    var prog = getQuestProgress();
+    box.innerHTML = DAILY_QUESTS_LIST.map(function(q) {
+        var isDone = !!prog.done[q.id];
+        var isClaimed = !!prog.claimed[q.id];
+        var btnHtml = '';
+        if (isClaimed) {
+            btnHtml = '<button class="hub-action-btn" disabled>✅ تم الاستلام</button>';
+        } else if (isDone) {
+            btnHtml = '<button class="hub-action-btn" onclick="claimQuestReward(\'' + q.id + '\',' + q.reward + ')">🎁 استلام +' + q.reward + ' XP</button>';
+        } else {
+            btnHtml = '<span style="font-size:0.78rem; color:#f59e0b;">⏳ قيد الإنجاز</span>';
+        }
+        return '<div class="quest-row">' +
+            '<div><strong style="font-size:0.9rem;">' + q.title + '</strong><div style="font-size:0.75rem; color:#00f2fe;">المكافأة: +' + q.reward + ' XP</div></div>' +
+            btnHtml +
+        '</div>';
+    }).join('');
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target.closest('a, .card, [onclick*="item" i]')) {
+        completeDailyQuest('interact');
+    }
+});
+
+// ---------- 4. اختبار سرعة الإيم (CPS Mini-Game) ----------
+var cpsState = { running: false, finished: false, clicks: 0, startTime: 0, timerId: null };
+
+function registerCpsClick() {
+    if (cpsState.finished) return;
+    if (!cpsState.running) {
+        cpsState.running = true;
+        cpsState.clicks = 1;
+        cpsState.startTime = Date.now();
+        document.getElementById('cpsAreaTitle').innerText = '🔥 اضغط بأسرع ما يمكن!!';
+        cpsState.timerId = setInterval(updateCpsGame, 50);
+    } else {
+        cpsState.clicks++;
+    }
+    document.getElementById('cpsClicksLbl').innerText = cpsState.clicks;
+}
+
+function updateCpsGame() {
+    var elapsed = (Date.now() - cpsState.startTime) / 1000;
+    var remain = Math.max(0, 5 - elapsed);
+    var rate = elapsed > 0 ? (cpsState.clicks / elapsed) : 0;
+    document.getElementById('cpsTimerLbl').innerText = remain.toFixed(1);
+    document.getElementById('cpsRateLbl').innerText = rate.toFixed(1);
+
+    if (remain <= 0) {
+        clearInterval(cpsState.timerId);
+        cpsState.running = false;
+        cpsState.finished = true;
+        var finalCps = (cpsState.clicks / 5).toFixed(1);
+        completeDailyQuest('cps_play');
+        if (finalCps >= 7) {
+            addStoreXp(40);
+            document.getElementById('cpsAreaTitle').innerText = '👑 إيم أسطوري (' + finalCps + ' CPS)! ربحت +40 XP!';
+        } else {
+            document.getElementById('cpsAreaTitle').innerText = 'انتهى الوقت! سرعتك: ' + finalCps + ' CPS (حاول تتجاوز 7)';
+        }
+    }
+}
+
+function resetCpsGame() {
+    clearInterval(cpsState.timerId);
+    cpsState = { running: false, finished: false, clicks: 0, startTime: 0, timerId: null };
+    document.getElementById('cpsTimerLbl').innerText = '5.0';
+    document.getElementById('cpsClicksLbl').innerText = '0';
+    document.getElementById('cpsRateLbl').innerText = '0.0';
+    document.getElementById('cpsAreaTitle').innerText = 'اضغط هنا للبدء بالاختبار!';
+}
+
+// ---------- 7. متجر XP للألقاب والتأثيرات ----------
+var XP_SHOP_ITEMS = [
+    { id: 'title_king', name: '👑 لقب: ملك المودات', cost: 100, type: 'title', val: '👑 ملك المودات' },
+    { id: 'title_hacker', name: '💻 لقب: هكر ALIOPZTE', cost: 150, type: 'title', val: '💻 هكر أسطوري' },
+    { id: 'fx_snow', name: '❄️ تأثير تساقط الثلج النيون في المتجر', cost: 120, type: 'fx', val: 'snow' },
+    { id: 'fx_sparks', name: '🔥 تأثير الشرارات النارية في الشاشة', cost: 160, type: 'fx', val: 'fire' }
+];
+
+function getOwnedShopItems() {
+    var raw = localStorage.getItem('ali_xp_shop_owned');
+    return raw ? JSON.parse(raw) : [];
+}
+
+function buyOrEquipShopItem(itemId) {
+    var item = XP_SHOP_ITEMS.find(function(x) { return x.id === itemId; });
+    if (!item) return;
+    var owned = getOwnedShopItems();
+    if (!owned.includes(itemId)) {
+        if (getStoreXp() < item.cost) {
+            alert('⚠️ رصيدك من الـ XP غير كافٍ! أكمل التحديات أو العب CPS لجمع النقاط.');
+            return;
+        }
+        addStoreXp(-item.cost);
+        owned.push(itemId);
+        localStorage.setItem('ali_xp_shop_owned', JSON.stringify(owned));
+    }
+    if (item.type === 'title') {
+        localStorage.setItem('ali_equipped_title', item.val);
+        applyEquippedCustomizations();
+    } else if (item.type === 'fx') {
+        var curFx = localStorage.getItem('ali_equipped_fx');
+        localStorage.setItem('ali_equipped_fx', curFx === item.val ? 'none' : item.val);
+        applyEquippedCustomizations();
+    }
+    renderXpShop();
+}
+
+function renderXpShop() {
+    var box = document.getElementById('xpShopContainer');
+    if (!box) return;
+    var owned = getOwnedShopItems();
+    var eqTitle = localStorage.getItem('ali_equipped_title') || '';
+    var eqFx = localStorage.getItem('ali_equipped_fx') || 'none';
+
+    box.innerHTML = XP_SHOP_ITEMS.map(function(item) {
+        var isOwned = owned.includes(item.id);
+        var isEquipped = (item.type === 'title' && eqTitle === item.val) || (item.type === 'fx' && eqFx === item.val);
+        var btnText = isOwned ? (isEquipped ? '✅ مفعّل (اضغط للإيقاف)' : '⚡ تفعيل الآن') : ('شراء (' + item.cost + ' XP)');
+        return '<div class="shop-row">' +
+            '<div><strong style="font-size:0.9rem;">' + item.name + '</strong><div style="font-size:0.75rem; color:#ffd700;">السعر: ' + item.cost + ' XP</div></div>' +
+            '<button class="hub-action-btn" onclick="buyOrEquipShopItem(\'' + item.id + '\')">' + btnText + '</button>' +
+        '</div>';
+    }).join('');
+}
+
+var fxAnimId = null;
+function applyEquippedCustomizations() {
+    var eqTitle = localStorage.getItem('ali_equipped_title') || '';
+    var badge = document.getElementById('aliVipBadgeTop');
+    if (badge) badge.innerText = eqTitle;
+
+    var eqFx = localStorage.getItem('ali_equipped_fx') || 'none';
+    var cvs = document.getElementById('aliParticlesCanvas');
+    if (!cvs) return;
+    if (fxAnimId) cancelAnimationFrame(fxAnimId);
+    if (eqFx === 'none') {
+        cvs.style.display = 'none';
+        return;
+    }
+    cvs.style.display = 'block';
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
+    var ctx = cvs.getContext('2d');
+    var parts = [];
+    for (var i = 0; i < 45; i++) {
+        parts.push({
+            x: Math.random() * cvs.width,
+            y: Math.random() * cvs.height,
+            r: Math.random() * 3 + 1.5,
+            s: Math.random() * 1.5 + 0.7
+        });
+    }
+    function drawFx() {
+        ctx.clearRect(0, 0, cvs.width, cvs.height);
+        ctx.fillStyle = eqFx === 'snow' ? '#00f2fe' : '#ff4500';
+        for (var i = 0; i < parts.length; i++) {
+            var p = parts[i];
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+            p.y += (eqFx === 'snow' ? p.s : -p.s);
+            if (eqFx === 'snow' && p.y > cvs.height) p.y = -5;
+            if (eqFx === 'fire' && p.y < 0) p.y = cvs.height + 5;
+        }
+        fxAnimId = requestAnimationFrame(drawFx);
+    }
+    drawFx();
+}
+
+// ---------- 10. خزنة الرقم السري (Crack The Vault) ----------
+function initDailyVault() {
+    var key = 'ali_vault_' + getTodayDateKey();
+    var data = localStorage.getItem(key);
+    if (!data) {
+        var secret = Math.floor(100 + Math.random() * 900);
+        data = { code: secret, tries: 5, won: false };
+        localStorage.setItem(key, JSON.stringify(data));
+    } else {
+        data = JSON.parse(data);
+    }
+    document.getElementById('vaultTriesLeft').innerText = data.tries;
+    var hintEl = document.getElementById('vaultHintMsg');
+    if (data.won) {
+        hintEl.style.color = '#00ff88';
+        hintEl.innerText = '🎉 لقد كسرت شيفرة الخزنة اليوم بالفعل! الكود كان: ' + data.code;
+        document.getElementById('vaultGuessBtn').disabled = true;
+    } else if (data.tries <= 0) {
+        hintEl.style.color = '#ef4444';
+        hintEl.innerText = '🔒 انتهت محاولاتك لليوم! الكود السري كان: ' + data.code;
+        document.getElementById('vaultGuessBtn').disabled = true;
+    }
+}
+
+function checkVaultGuess() {
+    var key = 'ali_vault_' + getTodayDateKey();
+    var data = JSON.parse(localStorage.getItem(key));
+    if (!data || data.won || data.tries <= 0) return;
+
+    var d1 = document.getElementById('vDig1').value || '0';
+    var d2 = document.getElementById('vDig2').value || '0';
+    var d3 = document.getElementById('vDig3').value || '0';
+    var guess = parseInt(d1 + '' + d2 + '' + d3);
+    var hintEl = document.getElementById('vaultHintMsg');
+
+    data.tries--;
+    if (guess === data.code) {
+        data.won = true;
+        addStoreXp(150);
+        hintEl.style.color = '#00ff88';
+        hintEl.innerText = '🎉 كفوو! فتحت الخزنة وربحت +150 XP فورية!';
+        document.getElementById('vaultGuessBtn').disabled = true;
+    } else if (data.tries <= 0) {
+        hintEl.style.color = '#ef4444';
+        hintEl.innerText = '❌ انتهت المحاولات! الكود السري كان: ' + data.code;
+        document.getElementById('vaultGuessBtn').disabled = true;
+    } else {
+        hintEl.style.color = '#ffd700';
+        hintEl.innerText = guess < data.code ? '🔼 التلميح: الرقم السري أكبر من ' + guess + '!' : '🔽 التلميح: الرقم السري أصغر من ' + guess + '!';
+    }
+    document.getElementById('vaultTriesLeft').innerText = data.tries;
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+window.addEventListener('load', applyEquippedCustomizations);
 </script>
+
+<!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
+<canvas id="aliParticlesCanvas"></canvas>
+
+<button id="aliSuperHubBtn" onclick="openAliSuperHub()">
+    <i class="fa-solid fa-gamepad"></i> <span>الفعاليات والجوائز</span>
+    <span id="aliVipBadgeTop" style="background:rgba(0,0,0,0.45); padding:2px 8px; border-radius:20px; font-size:0.75rem; color:#ffd700;"></span>
+</button>
+
+<div id="aliSuperHubModal">
+    <div class="hub-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div>
+                <h3 style="margin:0; color:#00f2fe; font-size:1.15rem;">⚡ مركز فعاليات وتحديات ALIOPZTE</h3>
+                <span id="hubUserXpDisplay" style="font-size:0.82rem; color:#ffd700; font-weight:800;">رصيدك: 0 XP</span>
+            </div>
+            <button onclick="document.getElementById('aliSuperHubModal').style.display='none'" style="background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; cursor:pointer;">✖</button>
+        </div>
+
+        <div class="hub-tabs">
+            <button class="hub-tab-btn active" onclick="switchHubTab('hub-quests', this)">🎯 1. التحديات</button>
+            <button class="hub-tab-btn" onclick="switchHubTab('hub-cps', this)">⚡ 4. سرعة الإيم</button>
+            <button class="hub-tab-btn" onclick="switchHubTab('hub-xpshop', this)">🛒 7. متجر XP</button>
+            <button class="hub-tab-btn" onclick="switchHubTab('hub-vault', this)">🕵️‍♂️ 10. الخزنة</button>
+        </div>
+
+        <!-- 1. التحديات اليومية -->
+        <div id="hub-quests" class="hub-pane active">
+            <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">أكمل المهام اليومية البسيطة واجمع نقاط XP مجانية كل يوم:</p>
+            <div id="dailyQuestsContainer"></div>
+        </div>
+
+        <!-- 4. اختبار سرعة الإيم CPS -->
+        <div id="hub-cps" class="hub-pane" style="text-align:center;">
+            <p style="font-size:0.82rem; color:#94a3b8;">اضغط بأسرع ما يمكن خلال 5 ثوانٍ! إذا تجاوزت <b>7 CPS</b> ستربح <b>+40 XP</b> ووسام إيم أسطوري!</p>
+            <div style="display:flex; justify-content:space-around; margin:10px 0; font-weight:900;">
+                <span style="color:#00f2fe;">⏱️ الوقت: <b id="cpsTimerLbl">5.0</b>s</span>
+                <span style="color:#00ff88;">🖱️ الضغطات: <b id="cpsClicksLbl">0</b></span>
+                <span style="color:#ffd700;">🔥 السرعة: <b id="cpsRateLbl">0.0</b> CPS</span>
+            </div>
+            <div id="cpsTargetArea" onclick="registerCpsClick()">
+                <i class="fa-solid fa-crosshairs" style="font-size:2rem; color:#ff007f; margin-bottom:6px;"></i>
+                <strong id="cpsAreaTitle" style="font-size:1.05rem;">اضغط هنا للبدء بالاختبار!</strong>
+            </div>
+            <button class="hub-action-btn" onclick="resetCpsGame()" style="background:#334155;">🔄 إعادة الاختبار</button>
+        </div>
+
+        <!-- 7. متجر الـ XP والألقاب والتأثيرات -->
+        <div id="hub-xpshop" class="hub-pane">
+            <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">استبدل نقاط الـ XP بألقاب ملكية وتأثيرات شاشة خاصة بك:</p>
+            <div id="xpShopContainer"></div>
+        </div>
+
+        <!-- 10. خزنة الرقم السري -->
+        <div id="hub-vault" class="hub-pane" style="text-align:center;">
+            <p style="font-size:0.82rem; color:#94a3b8;">خزنة المتجر مقفلة برقم سري من <b>3 أرقام (من 100 إلى 999)</b>! لديك 5 محاولات يومياً لربح <b>+150 XP</b>:</p>
+            <div style="font-size:0.85rem; color:#ffd700; font-weight:800; margin-top:6px;">المحاولات المتبقية اليوم: <span id="vaultTriesLeft">5</span>/5</div>
+            <div class="vault-inputs">
+                <input type="number" id="vDig1" class="vault-digit" min="1" max="9" value="5">
+                <input type="number" id="vDig2" class="vault-digit" min="0" max="9" value="0">
+                <input type="number" id="vDig3" class="vault-digit" min="0" max="9" value="0">
+            </div>
+            <button id="vaultGuessBtn" class="hub-action-btn" style="padding:10px 24px; font-size:0.92rem;" onclick="checkVaultGuess()">🔓 تجربة فتح الخزنة</button>
+            <p id="vaultHintMsg" style="margin-top:12px; font-weight:900; font-size:0.9rem; min-height:24px;"></p>
+        </div>
+    </div>
+</div>
 </body>
 </html>

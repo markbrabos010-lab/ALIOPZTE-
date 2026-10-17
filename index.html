@@ -4388,6 +4388,50 @@ setTimeout(function() {
     };
 
 }, 4500);
+
+// Auto JS
+setTimeout(function() {
+    window.redeemCode = function() {
+        var val = document.getElementById('codeInputValue').value.trim();
+        var found = allCodes.find(function(c) { return c.code.toLowerCase() === val.toLowerCase(); });
+        var msg = document.getElementById('codeMsg');
+
+        if (found) {
+            if(typeof playSfx === 'function') playSfx('win');
+            var usedCodes = JSON.parse(localStorage.getItem('ali_used_codes') || '[]');
+            
+            if (usedCodes.includes(found.code)) {
+                msg.style.color = "#f59e0b";
+                msg.innerText = "⚠️ لقد قمت باستخدام هذا الكود مسبقاً!";
+                return;
+            }
+
+            var xpMatch = String(found.url).match(/(\d+)/);
+            var isXP = xpMatch && (String(found.url).toUpperCase().includes('XP') || !String(found.url).startsWith('http'));
+
+            if (isXP) {
+                var xpAmount = parseInt(xpMatch[1]);
+                if(typeof addXP === 'function') addXP(xpAmount, "كود هدية: " + found.code);
+                msg.style.color = "#00ff88";
+                msg.innerHTML = "✅ كود صحيح! تمت إضافة <b>" + xpAmount + " XP</b> إلى رصيدك.";
+            } else {
+                msg.style.color = "#00ff88";
+                msg.innerHTML = "✅ كود صحيح! <a href='" + found.url + "' target='_blank' style='color:var(--theme-c2); text-decoration:underline;'>اضغط هنا لفتح الملف الخاص</a>";
+            }
+            
+            usedCodes.push(found.code);
+            localStorage.setItem('ali_used_codes', JSON.stringify(usedCodes));
+            
+            setTimeout(function(){
+                document.getElementById('codeInputValue').value = '';
+            }, 2000);
+
+        } else {
+            msg.style.color = "#ef4444";
+            msg.innerText = "❌ الكود غير صحيح أو منتهي الصلاحية!";
+        }
+    };
+}, 3000);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->

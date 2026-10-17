@@ -761,6 +761,16 @@ body.perf-mode #aliParticlesCanvas {
 #quickStarsBox { text-align: center; margin-top: 10px; }
 .quick-stars-row { display: flex; justify-content: center; gap: 8px; margin: 10px 0; font-size: 1.8rem; cursor: pointer; color: #94a3b8; }
 .quick-stars-row span:hover, .quick-stars-row span.active { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+
+/* Auto CSS */
+/* 1. انفجار القصاصات */
+#confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999; display: none; }
+
+/* 5. ماكينة الحظ */
+.slot-machine-box { display: flex; justify-content: center; gap: 15px; margin: 20px 0; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 12px; border: 1px solid var(--theme-c2); }
+.slot-reel { width: 70px; height: 90px; background: #000; border: 2px solid #ffd700; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: inset 0 0 15px rgba(255,215,0,0.2); }
+.slot-reel.spinning { animation: slotSpin 0.15s infinite; border-color: var(--theme-c1); }
+@keyframes slotSpin { 0% { transform: translateY(-5px); } 50% { transform: translateY(5px); } 100% { transform: translateY(-5px); } }
 </style>
 </head>
 <body>
@@ -3936,6 +3946,186 @@ setTimeout(function() {
         setTimeout(function() { if (chest) chest.remove(); }, 30000);
     };
 }, 4000); // تأخير 4 ثواني لضمان تحميل باقي الأكواد
+
+// Auto JS
+setTimeout(function() {
+    // ================= 3. رسالة ترحيب ديناميكية =================
+    var hr = new Date().getHours();
+    var greeting = "";
+    if (hr >= 5 && hr < 12) greeting = "صباح الخير يا بطل! ☀️ استعد لتحميلات أسطورية.";
+    else if (hr >= 12 && hr < 18) greeting = "مساء الخير يا قيمر! 🌇 جولة جديدة من الألعاب بانتظارك.";
+    else greeting = "سهرة سعيدة يا محترف! 🌙 لا تنسَ تجربة عجلة الحظ.";
+    
+    setTimeout(function() {
+        if (typeof showToast === 'function') showToast(greeting, "#00f2fe");
+        else console.log(greeting);
+    }, 3500);
+
+    // ================= 4. مؤثر صوتي للتحميل + 1. انفجار القصاصات =================
+    window.playDownloadSfx = function() {
+        try {
+            if (typeof soundMuted !== 'undefined' && soundMuted) return;
+            var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            var osc = audioCtx.createOscillator();
+            var gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {}
+    };
+
+    window.launchConfetti = function() {
+        var canvas = document.getElementById('confettiCanvas');
+        if (!canvas) return;
+        var ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        canvas.style.display = 'block';
+
+        var particles = [];
+        var colors = ['#00f2fe', '#7f00ff', '#ff007f', '#10b981', '#ffd700'];
+        
+        for (var i = 0; i < 100; i++) {
+            particles.push({
+                x: window.innerWidth / 2,
+                y: window.innerHeight / 2,
+                vx: (Math.random() - 0.5) * 15,
+                vy: (Math.random() - 0.5) * 15 - 5,
+                size: Math.random() * 8 + 4,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                life: 100
+            });
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var active = false;
+            particles.forEach(function(p) {
+                if (p.life > 0) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.3; // الجاذبية
+                    p.life--;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size, p.size);
+                    active = true;
+                }
+            });
+            if (active) requestAnimationFrame(updateConfetti);
+            else canvas.style.display = 'none';
+        }
+        updateConfetti();
+    };
+
+    // ربط التأثير الصوتي والقصاصات بزر التحميل
+    if (typeof startDownloadTimer === 'function') {
+        var origDlTimer = startDownloadTimer;
+        window.startDownloadTimer = function() {
+            origDlTimer();
+            playDownloadSfx();
+            launchConfetti();
+        };
+    }
+
+    // ================= 5. ماكينة الحظ (Casino Slot) =================
+    var hubTabs = document.querySelector('.hub-tabs');
+    var hubBox = document.querySelector('.hub-box');
+    
+    if (hubTabs && hubBox) {
+        var slotBtn = document.createElement('button');
+        slotBtn.className = 'hub-tab-btn';
+        slotBtn.innerHTML = '🎰 ماكينة الحظ';
+        slotBtn.onclick = function() { switchHubTab('hub-slot', this); };
+        hubTabs.appendChild(slotBtn);
+
+        var slotPane = document.createElement('div');
+        slotPane.id = 'hub-slot';
+        slotPane.className = 'hub-pane';
+        slotPane.innerHTML = `
+            <div style="text-align:center;">
+                <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">جرب حظك! ادفع 30 XP لتدوير الماكينة. تطابق 3 رموز = 100 XP، تطابق رمزين = 30 XP.</p>
+                <div class="slot-machine-box">
+                    <div class="slot-reel" id="reel1">🍎</div>
+                    <div class="slot-reel" id="reel2">🍋</div>
+                    <div class="slot-reel" id="reel3">🍒</div>
+                </div>
+                <div id="slotMsg" style="font-weight:900; font-size:0.95rem; min-height:25px; margin-bottom:10px;"></div>
+                <button class="game-btn" id="slotSpinBtn" onclick="spinSlot()" style="width:100%;">تدوير الماكينة (30 XP) 🎰</button>
+            </div>
+        `;
+        hubBox.appendChild(slotPane);
+    }
+
+    var slotSymbols = ['🍎', '🍋', '🍒', '🔔', '💎', '7️⃣'];
+    var isSpinning = false;
+
+    window.spinSlot = function() {
+        if (isSpinning) return;
+        
+        var currentXP = typeof getStoreXp === 'function' ? getStoreXp() : 0;
+        if (currentXP < 30) {
+            if(typeof showToast === 'function') showToast("⚠️ تحتاج 30 XP لتدوير الماكينة!", "#ef4444");
+            else alert("تحتاج 30 XP!");
+            return;
+        }
+
+        if (typeof addStoreXp === 'function') addStoreXp(-30);
+        isSpinning = true;
+        document.getElementById('slotSpinBtn').disabled = true;
+        document.getElementById('slotSpinBtn').style.opacity = '0.5';
+        document.getElementById('slotMsg').innerText = 'جاري التدوير... ⏳';
+
+        var reels = [document.getElementById('reel1'), document.getElementById('reel2'), document.getElementById('reel3')];
+        reels.forEach(function(r) { r.classList.add('spinning'); });
+
+        var spinInterval = setInterval(function() {
+            reels.forEach(function(r) {
+                r.innerText = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            });
+        }, 100);
+
+        setTimeout(function() {
+            clearInterval(spinInterval);
+            reels.forEach(function(r) { r.classList.remove('spinning'); });
+            
+            var res1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            var res2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            var res3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            
+            reels[0].innerText = res1;
+            reels[1].innerText = res2;
+            reels[2].innerText = res3;
+
+            var msg = document.getElementById('slotMsg');
+            
+            if (res1 === res2 && res2 === res3) {
+                msg.style.color = '#10b981';
+                msg.innerText = '🎉 جاكبوت! تطابق 3 رموز. ربحت 100 XP!';
+                if (typeof addStoreXp === 'function') addStoreXp(100);
+                if (typeof playSfx === 'function') playSfx('win');
+                launchConfetti();
+            } else if (res1 === res2 || res2 === res3 || res1 === res3) {
+                msg.style.color = '#ffd700';
+                msg.innerText = '✨ تطابق رمزان! استعدت 30 XP.';
+                if (typeof addStoreXp === 'function') addStoreXp(30);
+                if (typeof playSfx === 'function') playSfx('xp');
+            } else {
+                msg.style.color = '#ef4444';
+                msg.innerText = '😢 لا يوجد تطابق. حظ أوفر في المرة القادمة!';
+            }
+
+            isSpinning = false;
+            document.getElementById('slotSpinBtn').disabled = false;
+            document.getElementById('slotSpinBtn').style.opacity = '1';
+        }, 2000);
+    };
+
+}, 4000);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
@@ -4026,5 +4216,7 @@ setTimeout(function() {
 
 <!-- زر خريطة الكنز العائم -->
 <div id="treasureMapBtn" onclick="launchTreasureMap()" title="ابحث عن الكنز المخفي">🗺️</div>
+
+<canvas id="confettiCanvas"></canvas>
 </body>
 </html>

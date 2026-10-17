@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المتجر | ALIOPZTE Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #05070e;
+            --bg-card: rgba(13, 18, 32, 0.92);
+            --primary: #00f2fe;
+            --secondary: #7f00ff;
+            --accent: #ff007f;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 45%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Tajawal', sans-serif;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* شاشة القفل */
+        #loginOverlay {
+            position: fixed; inset: 0; background: rgba(5, 7, 14, 0.98);
+            backdrop-filter: blur(15px); z-index: 9999;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .login-box {
+            background: var(--bg-card); border: 2px solid var(--primary);
+            border-radius: 22px; padding: 30px 24px; max-width: 400px; width: 100%;
+            text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.25);
+        }
+
+        /* الهيدر */
+        .admin-header {
+            background: rgba(5, 7, 14, 0.92); backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--border); padding: 14px 20px;
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+        }
+        .brand { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 1.25rem; color: #fff; text-decoration: none; }
+        .brand i { color: var(--primary); font-size: 1.5rem; }
+
+        .btn {
+            padding: 10px 16px; border-radius: 10px; border: 1px solid transparent;
+            font-family: inherit; font-weight: 800; font-size: 0.85rem;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+            text-decoration: none; color: #fff; transition: 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-primary { background: linear-gradient(90deg, var(--primary), var(--secondary)); box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25); }
+        .btn-success { background: linear-gradient(90deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+        .btn-danger { background: rgba(239, 68, 68, 0.18); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5; }
+        .btn-warning { background: linear-gradient(90deg, #f59e0b, #ea580c); color: #fff; }
+        .btn-glass { background: rgba(255, 255, 255, 0.07); border-color: var(--border); }
+
+        .container { max-width: 1280px; margin: 20px auto; padding: 0 15px; }
+
+        /* شريط الإحصائيات */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px; margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 16px; display: flex; align-items: center; gap: 14px;
+        }
+        .stat-icon {
+            width: 46px; height: 46px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        }
+
+        /* التبويبات */
+        .tabs-nav {
+            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 18px;
+        }
+        .tab-btn {
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-muted); padding: 11px 18px; border-radius: 12px;
+            font-family: inherit; font-weight: 800; font-size: 0.88rem;
+            cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px;
+        }
+        .tab-btn.active {
+            background: linear-gradient(90deg, rgba(0, 242, 254, 0.2), rgba(127, 0, 255, 0.2));
+            border-color: var(--primary); color: #fff;
+        }
+
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+
+        .card-panel {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 18px; padding: 22px; margin-bottom: 20px;
+        }
+        .panel-title {
+            font-size: 1.15rem; font-weight: 900; margin-bottom: 16px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+        @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 14px; }
+        label { display: block; font-size: 0.84rem; font-weight: 800; margin-bottom: 6px; color: #cbd5e1; }
+        input[type="text"], input[type="password"], input[type="datetime-local"], select, textarea {
+            width: 100%; padding: 11px 14px; border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.14); background: rgba(5, 7, 14, 0.85);
+            color: #fff; font-family: inherit; font-size: 0.9rem; outline: none;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+
+        textarea.code-editor-box {
+            font-family: monospace;
+            font-size: 0.82rem;
+            direction: ltr;
+            text-align: left;
+            line-height: 1.5;
+            background: #02040a;
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #00ff88;
+        }
+
+        .patch-guide-banner {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px dashed rgba(16, 185, 129, 0.5);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 16px;
+            font-size: 0.83rem;
+            line-height: 1.6;
+            color: #d1fae5;
+        }
+
+        /* قائمة العناصر في الأدمن */
+        .admin-items-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px;
+        }
+        .admin-item-card {
+            background: rgba(5, 7, 14, 0.75); border: 1px solid var(--border);
+            border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .admin-item-card img { width: 100%; height: 140px; object-fit: cover; }
+        .admin-item-body { padding: 12px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .admin-item-actions { display: flex; gap: 6px; margin-top: auto; padding-top: 8px; flex-wrap: wrap; }
+
+        /* بادجات جوائز العجلة */
+        .prizes-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+        .prize-chip {
+            background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.4);
+            color: #ffd700; padding: 8px 14px; border-radius: 12px; font-weight: 800; font-size: 0.88rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .prize-chip button {
+            background: rgba(239, 68, 68, 0.25); border: none; color: #fca5a5;
+            width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 0.75rem;
+        }
+
+        .quick-xp-btns { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 16px; }
+        .quick-xp-btn {
+            background: rgba(0, 242, 254, 0.12); border: 1px solid rgba(0, 242, 254, 0.35);
+            color: var(--primary); padding: 6px 12px; border-radius: 8px;
+            font-family: inherit; font-weight: 800; font-size: 0.8rem; cursor: pointer;
+        }
+        .quick-xp-btn:hover { background: var(--primary); color: #000; }
+
+        #toastBox {
+            position: fixed; bottom: 20px; left: 20px; z-index: 9999;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .toast-item {
+            background: #0d1222; border-right: 4px solid var(--primary);
+            color: #fff; padding: 12px 18px; border-radius: 10px; font-weight: 800;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6); font-size: 0.88rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- نافذة تسجيل الدخول للأدمن -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <i class="fa-solid fa-user-shield" style="font-size:3rem; color:var(--primary); margin-bottom:12px;"></i>
+            <h2 style="margin-bottom:6px;">لوحة تحكم ALIOPZTE</h2>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:18px;">أدخل كلمة مرور الإدارة للمتابعة:</p>
+            <input type="password" id="adminPassInput" placeholder="••••••••" style="text-align:center; font-size:1.2rem; margin-bottom:14px;" onkeydown="if(event.key==='Enter') checkAdminLogin()">
+            <button type="button" onclick="checkAdminLogin()" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:1rem;">
+                <i class="fa-solid fa-unlock"></i> دخول اللوحة
+            </button>
+            <p id="loginErr" style="color:var(--danger); font-size:0.82rem; margin-top:10px; display:none;">❌ كلمة المرور غير صحيحة!</p>
+        </div>
+    </div>
+
+    <!-- الهيدر العلوي -->
+    <header class="admin-header">
+        <a href="index.html" class="brand">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>إدارة متجر <span style="color:var(--primary);">ALIOPZTE</span></span>
+        </a>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <a href="index.html" class="btn btn-glass"><i class="fa-solid fa-store"></i> فتح المتجر</a>
+            <button onclick="saveDataToGitHub()" id="mainSaveBtn" class="btn btn-success">
+                <i class="fa-solid fa-cloud-arrow-up"></i> حفظ جميع التغييرات في المتجر
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- شريط الإحصائيات السريعة -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(0,242,254,0.15); color:var(--primary);"><i class="fa-solid fa-gamepad"></i></div>
+                <div>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">إجمالي العناصر والملفات</span>
+                    <strong id="statItemsCount" style="display:block; font-size:1.25rem;">0 عنصر</strong>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(245,158,11,0.15); color:#ffd700;"><i class="fa-solid fa-dharmachakra"></i></div>
+                <div>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">حالة عجلة الحظ</span>
+                    <strong id="statWheelState" style="display:block; font-size:1.1rem; color:#ffd700;">مقفلة 🔒</strong>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(255,0,127,0.15); color:var(--accent);"><i class="fa-solid fa-key"></i></div>
+                <div>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">أكواد الهدايا الفعالة</span>
+                    <strong id="statCodesCount" style="display:block; font-size:1.25rem;">0 كود</strong>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:rgba(16,185,129,0.15); color:var(--success);"><i class="fa-solid fa-handshake"></i></div>
+                <div>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">شركاء المتجر</span>
+                    <strong id="statPartnersCount" style="display:block; font-size:1.25rem;">0 شريك</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- أزرار التبويبات -->
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('tab-items', this)"><i class="fa-solid fa-boxes-stacked"></i> إدارة الألعاب والمودات</button>
+            <button class="tab-btn" onclick="switchTab('tab-wheel', this)"><i class="fa-solid fa-dharmachakra"></i> عجلة الحظ وجوائز XP</button>
+            <button class="tab-btn" onclick="switchTab('tab-codes', this)"><i class="fa-solid fa-key"></i> أكواد الهدايا</button>
+            <button class="tab-btn" onclick="switchTab('tab-partners', this)"><i class="fa-solid fa-handshake"></i> روم الشراكات</button>
+            <button class="tab-btn" onclick="switchTab('tab-settings', this)"><i class="fa-solid fa-sliders"></i> الأخبار وإعدادات GitHub</button>
+            <button class="tab-btn" onclick="switchTab('tab-updater', this)"><i class="fa-solid fa-wand-magic-sparkles" style="color:#10b981;"></i> 🤖 المرقع الذكي وتحديث الكود</button>
+        </nav>
+
+        <!-- ================= 1. تبويب إدارة العناصر ================= -->
+        <div id="tab-items" class="tab-pane active">
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span id="itemFormHeader"><i class="fa-solid fa-plus-circle" style="color:var(--primary);"></i> إضافة لعبة / مود / سكربت / فيديو جديد</span>
+                    <button id="cancelEditBtn" onclick="resetItemForm()" class="btn btn-glass" style="display:none;">إلغاء التعديل</button>
+                </div>
+
+                <input type="hidden" id="editItemId" value="">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>عنوان العنصر (اسم اللعبة أو المود أو الحلقة):</label>
+                        <input type="text" id="itemTitle" placeholder="مثال: مود التحول في ماين كرافت للجوال">
+                    </div>
+                    <div class="form-group">
+                        <label>القسم (Category):</label>
+                        <select id="itemCategory">
+                            <option value="minecraft">🧊 ماين كرافت (minecraft)</option>
+                            <option value="roblox">🎮 روبلكس (roblox)</option>
+                            <option value="mods">🧩 مودات (mods)</option>
+                            <option value="scripts">💻 سكربتات (scripts)</option>
+                            <option value="other-games">👻 ألعاب أخرى (other-games)</option>
+                            <option value="videos">🎬 فيديوهات (videos)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>رابط صورة العنصر (Image URL):</label>
+                        <input type="text" id="itemImage" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>رابط التحميل أو الفيديو (Download / Video URL):</label>
+                        <input type="text" id="itemUrl" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>وصف العنصر:</label>
+                    <textarea id="itemDesc" rows="2" placeholder="اكتب وصفاً مختصراً ومشوقاً للعنصر..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>كود السكربت للنسخ المباشر (اختياري - يظهر في صندوق النسخ السريع):</label>
+                    <input type="text" id="itemScript" placeholder="اختياري: loadstring(game:HttpGet('...'))()">
+                </div>
+
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; background:rgba(88,101,242,0.12); border:1px solid rgba(88,101,242,0.35); padding:12px 15px; border-radius:12px; margin-bottom:14px;">
+                    <label style="margin:0; display:flex; align-items:center; gap:8px; cursor:pointer; color:#fff;">
+                        <input type="checkbox" id="notifyDiscordOnAdd" checked style="width:18px; height:18px;">
+                        <span>🔔 إرسال إشعار تلقائي في ديسكورد مع منشن <code>@everyone</code> عند إضافة هذا العنصر</span>
+                    </label>
+                    <label style="margin:0; display:flex; align-items:center; gap:8px; cursor:pointer; color:#ffd700;">
+                        <input type="checkbox" id="setAsFeaturedOnAdd" style="width:18px; height:18px;">
+                        <span>🔥 تعيين كعنصر رائج في أعلى المتجر</span>
+                    </label>
+                </div>
+
+                <button id="saveItemBtn" onclick="addOrUpdateItem()" class="btn btn-primary" style="width:100%; justify-content:center; padding:12px; font-size:0.95rem;">
+                    <i class="fa-solid fa-plus"></i> إضافة العنصر وحفظه في المتجر
+                </button>
+            </div>
+
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-layer-group" style="color:var(--primary);"></i> العناصر الحالية في المتجر</span>
+                    <input type="text" id="adminSearchInput" oninput="renderAdminItems()" placeholder="ابحث في العناصر..." style="max-width:260px; padding:7px 12px;">
+                </div>
+                <div id="adminItemsGrid" class="admin-items-grid"></div>
+            </div>
+        </div>
+
+        <!-- ================= 2. تبويب عجلة الحظ وجوائز الـ XP ================= -->
+        <div id="tab-wheel" class="tab-pane">
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-dharmachakra" style="color:#ffd700;"></i> التحكم الكامل بعجلة الحظ وجوائز الـ XP</span>
+                    <button onclick="saveDataToGitHub()" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> حفظ إعدادات العجلة</button>
+                </div>
+
+                <div class="form-group">
+                    <label>حالة عجلة الحظ في المتجر (Wheel Status):</label>
+                    <select id="wheelStatusSelect" onchange="updateWheelStatusLocal()">
+                        <option value="open">🟢 مفتوحة للجميع (Open - يمكن للمتابعين تدويرها)</option>
+                        <option value="locked">🔒 مقفلة مؤقتاً (Locked - تظهر العجلة مع رسالة مقفلة مؤقتاً)</option>
+                        <option value="hidden">👁️‍🗨️ مخفية تماماً (Hidden - إخفاء زر الحظ من الهيدر)</option>
+                    </select>
+                </div>
+
+                <hr style="border-color:var(--border); margin:18px 0;">
+
+                <label>⚡ إضافة سريعة لجوائز نقاط XP بضغطة زر (تُضاف لرصيد الفائز تلقائياً):</label>
+                <div class="quick-xp-btns">
+                    <button class="quick-xp-btn" onclick="quickAddPrize('10 XP 🎁')">+ إضافة (10 XP 🎁)</button>
+                    <button class="quick-xp-btn" onclick="quickAddPrize('25 XP ⚡')">+ إضافة (25 XP ⚡)</button>
+                    <button class="quick-xp-btn" onclick="quickAddPrize('50 XP 🔥')">+ إضافة (50 XP 🔥)</button>
+                    <button class="quick-xp-btn" onclick="quickAddPrize('100 XP 💎')">+ إضافة (100 XP 💎)</button>
+                    <button class="quick-xp-btn" onclick="quickAddPrize('200 XP 👑')">+ إضافة (200 XP 👑)</button>
+                    <button class="quick-xp-btn" onclick="quickAddPrize('حظ أوفر في المرة القادمة!')">+ إضافة (حظ أوفر)</button>
+                </div>
+
+                <div class="form-group" style="margin-top:14px;">
+                    <label>أو اكتب جائزة مخصصة (أي نص يحتوي على رقم مثل <code>75 XP</code> سيعطي الفائز 75 نقطة XP تلقائياً!):</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="newWheelPrizeInput" placeholder="مثال: 60 XP 🔥 أو كود سري: VIP2026">
+                        <button onclick="addCustomWheelPrize()" class="btn btn-primary" style="white-space:nowrap;"><i class="fa-solid fa-plus"></i> إضافة الجائزة</button>
+                    </div>
+                </div>
+
+                <label style="margin-top:16px;">🎁 الجوائز الموجودة داخل العجلة حالياً (اضغط X لحذف أي جائزة):</label>
+                <div id="wheelPrizesList" class="prizes-list"></div>
+            </div>
+        </div>
+
+        <!-- ================= 3. تبويب أكواد الهدايا ================= -->
+        <div id="tab-codes" class="tab-pane">
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-key" style="color:var(--accent);"></i> إدارة أكواد الهدايا والمودات السرية</span>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>الكود السري (Code):</label>
+                        <div style="display:flex; gap:8px;">
+                            <input type="text" id="newCodeText" placeholder="مثال: ALI2026">
+                            <button onclick="generateRandomCode()" class="btn btn-glass" title="توليد كود عشوائي"><i class="fa-solid fa-dice"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>الرابط الذي يفتحه الكود (URL):</label>
+                        <input type="text" id="newCodeUrl" placeholder="https://...">
+                    </div>
+                </div>
+                <button onclick="addGiftCode()" class="btn btn-primary"><i class="fa-solid fa-plus"></i> إضافة الكود وحفظه</button>
+
+                <div id="codesListContainer" style="margin-top:20px; display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+        </div>
+
+        <!-- ================= 4. تبويب الشراكات ================= -->
+        <div id="tab-partners" class="tab-pane">
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-handshake" style="color:var(--primary);"></i> إدارة روم الشراكات</span>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>اسم الشريك أو القناة:</label>
+                        <input type="text" id="partnerName" placeholder="اسم اليوتيوبر / الشريك">
+                    </div>
+                    <div class="form-group">
+                        <label>رابط صورة الشريك (Avatar URL):</label>
+                        <input type="text" id="partnerImage" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>رابط قناة اليوتيوب أو السيرفر:</label>
+                    <input type="text" id="partnerUrl" placeholder="https://youtube.com/...">
+                </div>
+                <button onclick="addPartner()" class="btn btn-primary"><i class="fa-solid fa-plus"></i> إضافة الشريك وحفظه</button>
+
+                <div id="partnersListContainer" style="margin-top:20px; display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:12px;"></div>
+            </div>
+        </div>
+
+        <!-- ================= 5. تبويب الأخبار وإعدادات GitHub والديسكورد ================= -->
+        <div id="tab-settings" class="tab-pane">
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-bullhorn" style="color:var(--primary);"></i> شريط الأخبار المتحرك والعداد التنازلي وإعدادات الربط</span>
+                    <button onclick="saveDataToGitHub()" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> حفظ الإعدادات</button>
+                </div>
+
+                <div class="form-group">
+                    <label>نص شريط الأخبار المتحرك في أعلى المتجر (News Ticker):</label>
+                    <input type="text" id="newsTickerInput" placeholder="🔥 أهلاً بك في متجر ALIOPZTE الرسمي...">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>عنوان الحدث القادم (فوق العداد التنازلي في المتجر):</label>
+                        <input type="text" id="eventTitleInput" placeholder="🔥 العد التنازلي للفعالية والتحديث القادم في المتجر!">
+                    </div>
+                    <div class="form-group">
+                        <label>وقت وتاريخ انتهاء العداد التنازلي:</label>
+                        <input type="datetime-local" id="eventTargetDateInput">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>العنصر الرائج في البنر الرئيسي (Featured Item):</label>
+                    <select id="featuredItemSelect"></select>
+                </div>
+
+                <hr style="border-color:var(--border); margin:20px 0;">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fa-brands fa-github"></i> مفتاح GitHub الشخصي (Token - يُحفظ في جهازك فقط):</label>
+                        <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" oninput="localStorage.setItem('ali_store_gh_token', this.value.trim())">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-brands fa-discord"></i> رابط Webhook ديسكورد لإشعارات الإضافات الجديدة:</label>
+                        <input type="text" id="discordWebhookInput" placeholder="https://discord.com/api/webhooks/..." oninput="localStorage.setItem('ali_store_webhook', this.value.trim())">
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                    <button onclick="downloadBackupJson()" class="btn btn-glass"><i class="fa-solid fa-download"></i> تحميل نسخة احتياطية (data.json)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 6. تبويب المرقع الذكي وتحديث كود الموقع بضغطة زر ================= -->
+        <div id="tab-updater" class="tab-pane">
+
+            <div class="card-panel" style="border-color: var(--primary); padding: 16px 22px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+                    <label style="margin:0; font-size:0.95rem; color:#fff;">
+                        <i class="fa-solid fa-file-code" style="color:var(--primary);"></i> اختر الملف المراد تعديله أو تحديثه في GitHub:
+                    </label>
+                    <select id="targetFileToUpdate" style="max-width:340px;">
+                        <option value="index.html">🌐 الصفحة الرئيسية للمتجر (index.html)</option>
+                        <option value="admin.html">🛠️ لوحة التحكم (admin.html)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- الأداة 1: المرقع الذكي الأوتوماتيكي -->
+            <div class="card-panel" style="border-color: var(--success);">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-robot" style="color:var(--success);"></i> 1. المرقع الذكي الأوتوماتيكي (يعدل الجزء الصغير تلقائياً بدون استهلاك السقف!)</span>
+                </div>
+
+                <div class="patch-guide-banner">
+                    💡 <b>كيف تستخدم المرقع الذكي لتوفير سقف جيميناي؟</b><br>
+                    اطلب من جيميناي أي تعديل وقل له: <b>"أعطني كود ترقيع للمرقع الذكي"</b>. سيعطيك بضعة أسطر فقط تلصقها هنا وتضغط الزر، وستقوم اللوحة تلقائياً بسحب الملف من GitHub، ودمج التعديل في مكانه الدقيق، وإعادة رفعه فوراً!
+                </div>
+
+                <div class="form-group">
+                    <label>الصق كود الترقيع الذكي (Smart Patch) هنا:</label>
+                    <textarea id="smartPatchInput" class="code-editor-box" rows="8" placeholder="<<<OLD&#10;السطر القديم&#10;===NEW&#10;السطر الجديد&#10;>>>&#10;&#10;أو أوامر الإضافة التلقائية:&#10;<<<ADD_CSS ... >>>&#10;<<<ADD_HTML ... >>>&#10;<<<ADD_JS ... >>>"></textarea>
+                </div>
+
+                <button onclick="applySmartPatchToGitHub()" id="smartPatchBtn" class="btn btn-success" style="width:100%; justify-content:center; padding:14px; font-size:1rem;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> تطبيق كود الترقيع الذكي وتحديث الموقع في GitHub الآن!
+                </button>
+            </div>
+
+            <!-- الأداة 2: استبدال جزء قديم بجزء جديد -->
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-magnifying-glass-arrow-right" style="color:var(--primary);"></i> 2. استبدال جزء بسيط مباشرة (القديم ⬅️ الجديد)</span>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label style="color:#fca5a5;">❌ الكود أو النص القديم (الموجود حالياً في الملف):</label>
+                        <textarea id="findOldCodeInput" class="code-editor-box" style="border-color:rgba(239,68,68,0.4); color:#fca5a5;" rows="6" placeholder="الصق السطر أو الكود القديم هنا..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#86efac;">✅ الكود أو النص الجديد (الذي سيحل محله):</label>
+                        <textarea id="replaceNewCodeInput" class="code-editor-box" rows="6" placeholder="الصق السطر أو الكود الجديد هنا..."></textarea>
+                    </div>
+                </div>
+
+                <button onclick="runFindAndReplaceOnGitHub()" id="findReplaceBtn" class="btn btn-primary" style="width:100%; justify-content:center; padding:13px; font-size:0.95rem;">
+                    <i class="fa-solid fa-arrows-rotate"></i> استبدال الجزء المحدد وحفظ التعديل في GitHub
+                </button>
+            </div>
+
+            <!-- الأداة 3: محدث الكود الكامل -->
+            <div class="card-panel">
+                <div class="panel-title">
+                    <span><i class="fa-solid fa-bolt" style="color:#ffd700;"></i> 3. محدث الكود الكامل للموقع (استبدال الملف بالكامل عند الحاجة)</span>
+                    <button onclick="pullRawFileFromGitHub()" class="btn btn-glass" style="font-size:0.8rem;">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> سحب كود الملف الحالي من GitHub
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label>الصق الكود الكامل الجديد هنا:</label>
+                    <textarea id="rawHtmlCodeInput" rows="8" placeholder="<!DOCTYPE html>... الصق الكود الكامل هنا" style="font-family:monospace; font-size:0.8rem; direction:ltr; text-align:left;"></textarea>
+                </div>
+                <button onclick="pushRawFileToGitHub()" id="pushCodeBtn" class="btn btn-warning" style="width:100%; justify-content:center; padding:14px; font-size:1rem;">
+                    <i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف الكامل في GitHub الآن!
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="toastBox"></div>
+
+    <script>
+        var ADMIN_PASS = "19861986";
+        var REPO_OWNER = "markbrabos010-lab";
+        var REPO_NAME = "ALIOPZTE-";
+        var DEFAULT_WEBHOOK = "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
+
+        var storeData = {
+            newsTicker: "🔥 أهلاً بك في متجر ALIOPZTE الرسمي للألعاب والمودات | لا تنسَ الانضمام لسيرفر الديسكورد!",
+            eventTitle: "🔥 العد التنازلي للفعالية والتحديث القادم في المتجر!",
+            eventTargetDate: "",
+            featuredId: null,
+            wheelStatus: "open",
+            wheelPrizes: ["15 XP ⚡", "25 XP 💎", "50 XP 🔥", "100 XP 👑", "20 XP ✨", "5 XP 🎁"],
+            items: [],
+            partners: [],
+            codes: []
+        };
+
+        function showToast(msg, color) {
+            color = color || "#00f2fe";
+            var box = document.getElementById('toastBox');
+            var el = document.createElement('div');
+            el.className = 'toast-item';
+            el.style.borderRightColor = color;
+            el.innerText = msg;
+            box.appendChild(el);
+            setTimeout(function() { el.remove(); }, 4000);
+        }
+
+        function checkAdminLogin() {
+            var inputEl = document.getElementById('adminPassInput');
+            var val = inputEl ? inputEl.value.trim() : "";
+            if (val === ADMIN_PASS) {
+                sessionStorage.setItem("ali_admin_logged", "true");
+                document.getElementById('loginOverlay').style.display = 'none';
+                initAdminPanel();
+            } else {
+                document.getElementById('loginErr').style.display = 'block';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            if (sessionStorage.getItem("ali_admin_logged") === "true") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                initAdminPanel();
+            }
+        });
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        async function initAdminPanel() {
+            var savedToken = localStorage.getItem('ali_store_gh_token') || localStorage.getItem('ali_bot_gh_token') || '';
+            document.getElementById('ghTokenInput').value = savedToken;
+
+            var savedWebhook = localStorage.getItem('ali_store_webhook') || DEFAULT_WEBHOOK;
+            document.getElementById('discordWebhookInput').value = savedWebhook;
+
+            try {
+                var res = await fetch('data.json?nocache=' + Date.now());
+                if (res.ok) {
+                    var data = await res.json();
+                    storeData = Object.assign(storeData, data);
+                    if (!storeData.wheelPrizes || storeData.wheelPrizes.length === 0) {
+                        storeData.wheelPrizes = ["15 XP ⚡", "25 XP 💎", "50 XP 🔥", "100 XP 👑", "20 XP ✨"];
+                    }
+                }
+            } catch (e) {}
+
+            refreshAllAdminUI();
+        }
+
+        function refreshAllAdminUI() {
+            document.getElementById('statItemsCount').innerText = (storeData.items || []).length + " عنصر";
+            document.getElementById('statCodesCount').innerText = (storeData.codes || []).length + " كود";
+            document.getElementById('statPartnersCount').innerText = (storeData.partners || []).length + " شريك";
+
+            var stateMap = { open: "مفتوحة 🟢", locked: "مقفلة 🔒", hidden: "مخفية 👁️‍🗨️" };
+            document.getElementById('statWheelState').innerText = stateMap[storeData.wheelStatus] || "مفتوحة 🟢";
+            document.getElementById('wheelStatusSelect').value = storeData.wheelStatus || 'open';
+            document.getElementById('newsTickerInput').value = storeData.newsTicker || '';
+            document.getElementById('eventTitleInput').value = storeData.eventTitle || '';
+            document.getElementById('eventTargetDateInput').value = storeData.eventTargetDate || '';
+
+            renderAdminItems();
+            renderWheelPrizesAdmin();
+            renderCodesAdmin();
+            renderPartnersAdmin();
+            renderFeaturedSelect();
+        }
+
+        function renderAdminItems() {
+            var grid = document.getElementById('adminItemsGrid');
+            var q = (document.getElementById('adminSearchInput').value || '').trim().toLowerCase();
+            var items = (storeData.items || []).filter(function(i) { return !q || (i.title && i.title.toLowerCase().includes(q)); });
+
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="color:var(--text-muted);">لا توجد عناصر حالياً.</p>';
+                return;
+            }
+
+            grid.innerHTML = items.map(function(item) {
+                var isFeat = String(storeData.featuredId) === String(item.id);
+                return '<div class="admin-item-card" style="' + (isFeat ? 'border-color:#ffd700;' : '') + '">' +
+                    '<img src="' + item.image + '" loading="lazy" onerror="this.src=\'https://cdn-icons-png.flaticon.com/512/686/686589.png\'">' +
+                    '<div class="admin-item-body">' +
+                        '<div style="display:flex; justify-content:space-between; align-items:center;">' +
+                            '<span style="font-size:0.72rem; background:rgba(0,242,254,0.15); color:var(--primary); padding:2px 8px; border-radius:6px;">' + item.category + '</span>' +
+                            (isFeat ? '<span style="font-size:0.72rem; color:#ffd700; font-weight:bold;">🔥 الرائج حالياً</span>' : '') +
+                        '</div>' +
+                        '<strong style="font-size:0.95rem;">' + item.title + '</strong>' +
+                        '<p style="font-size:0.78rem; color:var(--text-muted); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">' + (item.desc || '') + '</p>' +
+                        '<div class="admin-item-actions">' +
+                            '<button onclick="startEditItem(\'' + item.id + '\')" class="btn btn-glass" style="flex:1; padding:6px 10px; font-size:0.78rem; justify-content:center;"><i class="fa-solid fa-pen"></i> تعديل</button>' +
+                            '<button onclick="setFeaturedQuick(\'' + item.id + '\')" class="btn btn-glass" style="padding:6px 10px; font-size:0.78rem; color:#ffd700;" title="تعيين كعنصر رائج"><i class="fa-solid fa-fire"></i></button>' +
+                            '<button onclick="deleteItem(\'' + item.id + '\')" class="btn btn-danger" style="padding:6px 10px; font-size:0.78rem;"><i class="fa-solid fa-trash"></i></button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        async function addOrUpdateItem() {
+            var editId = document.getElementById('editItemId').value;
+            var title = document.getElementById('itemTitle').value.trim();
+            var category = document.getElementById('itemCategory').value;
+            var image = document.getElementById('itemImage').value.trim();
+            var url = document.getElementById('itemUrl').value.trim();
+            var desc = document.getElementById('itemDesc').value.trim();
+            var script = document.getElementById('itemScript').value.trim();
+
+            if (!title || !image || !url) {
+                return showToast("⚠️ يرجى ملء العنوان ورابط الصورة ورابط التحميل!", "#f59e0b");
+            }
+
+            if (!storeData.items) storeData.items = [];
+
+            if (editId) {
+                var idx = storeData.items.findIndex(function(i) { return String(i.id) === String(editId); });
+                if (idx !== -1) {
+                    storeData.items[idx] = { id: storeData.items[idx].id, title: title, category: category, image: image, url: url, desc: desc, script: script };
+                }
+                showToast("✅ تم تعديل العنصر! جاري الحفظ في المتجر...");
+            } else {
+                var newId = Date.now();
+                var newItem = { id: newId, title: title, category: category, image: image, url: url, desc: desc, script: script };
+                storeData.items.unshift(newItem);
+
+                if (document.getElementById('setAsFeaturedOnAdd').checked) {
+                    storeData.featuredId = newId;
+                }
+                if (document.getElementById('notifyDiscordOnAdd').checked) {
+                    sendNewItemDiscordWebhook(newItem);
+                }
+            }
+
+            resetItemForm();
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        function startEditItem(id) {
+            var item = storeData.items.find(function(i) { return String(i.id) === String(id); });
+            if (!item) return;
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('itemTitle').value = item.title || '';
+            document.getElementById('itemCategory').value = item.category || 'minecraft';
+            document.getElementById('itemImage').value = item.image || '';
+            document.getElementById('itemUrl').value = item.url || '';
+            document.getElementById('itemDesc').value = item.desc || '';
+            document.getElementById('itemScript').value = item.script || '';
+
+            document.getElementById('itemFormHeader').innerHTML = '<i class="fa-solid fa-pen-to-square" style="color:#ffd700;"></i> تعديل العنصر: ' + item.title;
+            document.getElementById('saveItemBtn').innerHTML = '<i class="fa-solid fa-check"></i> حفظ التعديلات على العنصر';
+            document.getElementById('cancelEditBtn').style.display = 'inline-flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetItemForm() {
+            document.getElementById('editItemId').value = '';
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemImage').value = '';
+            document.getElementById('itemUrl').value = '';
+            document.getElementById('itemDesc').value = '';
+            document.getElementById('itemScript').value = '';
+            document.getElementById('itemFormHeader').innerHTML = '<i class="fa-solid fa-plus-circle" style="color:var(--primary);"></i> إضافة لعبة / مود / سكربت / فيديو جديد';
+            document.getElementById('saveItemBtn').innerHTML = '<i class="fa-solid fa-plus"></i> إضافة العنصر وحفظه في المتجر';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+        }
+
+        async function deleteItem(id) {
+            if (!confirm("هل أنت متأكد من حذف هذا العنصر؟")) return;
+            storeData.items = storeData.items.filter(function(i) { return String(i.id) !== String(id); });
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        async function setFeaturedQuick(id) {
+            storeData.featuredId = id;
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        async function sendNewItemDiscordWebhook(item) {
+            var webhookUrl = document.getElementById('discordWebhookInput').value.trim() || DEFAULT_WEBHOOK;
+            if (!webhookUrl) return;
+            var itemDirectLink = "https://markbrabos010-lab.github.io/ALIOPZTE-/?id=" + item.id;
+            try {
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: "@everyone 🔥 **إضافة جديدة نزلت الآن في متجر ALIOPZTE!**",
+                        embeds: [{
+                            title: "🎮 " + item.title,
+                            description: (item.desc || 'متوفر الآن للتحميل المباشر في المتجر!') + "\n\n📥 **[اضغط هنا للفتح والتحميل مباشرة](" + itemDirectLink + ")**",
+                            color: 65534,
+                            image: { url: item.image },
+                            fields: [{ name: "📂 القسم:", value: item.category, inline: true }],
+                            timestamp: new Date().toISOString()
+                        }]
+                    })
+                });
+            } catch (e) {}
+        }
+
+        function updateWheelStatusLocal() {
+            storeData.wheelStatus = document.getElementById('wheelStatusSelect').value;
+            refreshAllAdminUI();
+        }
+
+        function renderWheelPrizesAdmin() {
+            var box = document.getElementById('wheelPrizesList');
+            if (!storeData.wheelPrizes || storeData.wheelPrizes.length === 0) {
+                box.innerHTML = '<p style="color:var(--text-muted);">لا توجد جوائز مضافة.</p>';
+                return;
+            }
+            box.innerHTML = storeData.wheelPrizes.map(function(p, idx) {
+                return '<div class="prize-chip"><span>🎁 ' + p + '</span><button onclick="removeWheelPrize(' + idx + ')" title="حذف الجائزة"><i class="fa-solid fa-xmark"></i></button></div>';
+            }).join('');
+        }
+
+        function quickAddPrize(prizeText) {
+            if (!storeData.wheelPrizes) storeData.wheelPrizes = [];
+            storeData.wheelPrizes.push(prizeText);
+            renderWheelPrizesAdmin();
+            showToast("➕ تمت إضافة (" + prizeText + ") إلى العجلة! اضغط حفظ لتطبيقها.");
+        }
+
+        function addCustomWheelPrize() {
+            var val = document.getElementById('newWheelPrizeInput').value.trim();
+            if (!val) return showToast("⚠️ اكتب الجائزة أولاً!", "#f59e0b");
+            if (!storeData.wheelPrizes) storeData.wheelPrizes = [];
+            storeData.wheelPrizes.push(val);
+            document.getElementById('newWheelPrizeInput').value = '';
+            renderWheelPrizesAdmin();
+            showToast("➕ تمت إضافة (" + val + ") إلى العجلة!");
+        }
+
+        function removeWheelPrize(idx) {
+            storeData.wheelPrizes.splice(idx, 1);
+            renderWheelPrizesAdmin();
+        }
+
+        function generateRandomCode() {
+            var chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            var res = "ALI-";
+            for (var i = 0; i < 5; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('newCodeText').value = res;
+        }
+
+        async function addGiftCode() {
+            var code = document.getElementById('newCodeText').value.trim();
+            var url = document.getElementById('newCodeUrl').value.trim();
+            if (!code || !url) return showToast("⚠️ اكتب الكود والرابط أولاً!", "#f59e0b");
+            if (!storeData.codes) storeData.codes = [];
+            storeData.codes.unshift({ code: code, url: url });
+            document.getElementById('newCodeText').value = '';
+            document.getElementById('newCodeUrl').value = '';
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        async function removeGiftCode(idx) {
+            storeData.codes.splice(idx, 1);
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        function renderCodesAdmin() {
+            var box = document.getElementById('codesListContainer');
+            if (!storeData.codes || storeData.codes.length === 0) {
+                box.innerHTML = '<p style="color:var(--text-muted);">لا توجد أكواد هدايا حالياً.</p>';
+                return;
+            }
+            box.innerHTML = storeData.codes.map(function(c, idx) {
+                return '<div style="background:rgba(5,7,14,0.8); border:1px solid var(--border); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
+                    '<div><strong style="color:var(--accent); font-size:1rem;">🔑 ' + c.code + '</strong><a href="' + c.url + '" target="_blank" style="display:block; color:var(--primary); font-size:0.78rem; margin-top:3px;">' + c.url + '</a></div>' +
+                    '<button onclick="removeGiftCode(' + idx + ')" class="btn btn-danger"><i class="fa-solid fa-trash"></i></button></div>';
+            }).join('');
+        }
+
+        async function addPartner() {
+            var name = document.getElementById('partnerName').value.trim();
+            var image = document.getElementById('partnerImage').value.trim();
+            var youtubeUrl = document.getElementById('partnerUrl').value.trim();
+            if (!name || !image || !youtubeUrl) return showToast("⚠️ املأ بيانات الشريك كاملة!", "#f59e0b");
+            if (!storeData.partners) storeData.partners = [];
+            storeData.partners.push({ id: Date.now(), name: name, image: image, youtubeUrl: youtubeUrl });
+            document.getElementById('partnerName').value = '';
+            document.getElementById('partnerImage').value = '';
+            document.getElementById('partnerUrl').value = '';
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        async function removePartner(idx) {
+            storeData.partners.splice(idx, 1);
+            refreshAllAdminUI();
+            await saveDataToGitHub();
+        }
+
+        function renderPartnersAdmin() {
+            var box = document.getElementById('partnersListContainer');
+            if (!storeData.partners || storeData.partners.length === 0) {
+                box.innerHTML = '<p style="color:var(--text-muted);">لا يوجد شركاء حالياً.</p>';
+                return;
+            }
+            box.innerHTML = storeData.partners.map(function(p, idx) {
+                return '<div style="background:rgba(5,7,14,0.8); border:1px solid var(--border); padding:10px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;">' +
+                    '<div style="display:flex; align-items:center; gap:10px;"><img src="' + p.image + '" style="width:40px; height:40px; border-radius:50%; object-fit:cover;"><div><strong style="font-size:0.88rem; display:block;">' + p.name + '</strong><a href="' + p.youtubeUrl + '" target="_blank" style="font-size:0.72rem; color:var(--primary);">فتح الرابط</a></div></div>' +
+                    '<button onclick="removePartner(' + idx + ')" class="btn btn-danger" style="padding:6px 10px;"><i class="fa-solid fa-trash"></i></button></div>';
+            }).join('');
+        }
+
+        function renderFeaturedSelect() {
+            var sel = document.getElementById('featuredItemSelect');
+            sel.innerHTML = (storeData.items || []).map(function(i) {
+                return '<option value="' + i.id + '" ' + (String(storeData.featuredId) === String(i.id) ? 'selected' : '') + '>' + i.title + '</option>';
+            }).join('');
+            sel.onchange = function() { storeData.featuredId = sel.value; };
+        }
+
+        async function saveDataToGitHub() {
+            storeData.newsTicker = document.getElementById('newsTickerInput').value.trim() || storeData.newsTicker;
+            storeData.eventTitle = document.getElementById('eventTitleInput').value.trim() || storeData.eventTitle;
+            storeData.eventTargetDate = document.getElementById('eventTargetDateInput').value || storeData.eventTargetDate;
+            storeData.wheelStatus = document.getElementById('wheelStatusSelect').value;
+
+            var token = getActiveToken();
+            if (!token) {
+                switchTab('tab-settings', document.querySelectorAll('.tab-btn')[4]);
+                return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً لحفظ التغييرات!", "#f59e0b");
+            }
+
+            var btn = document.getElementById('mainSaveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ في المتجر...';
+
+            var apiUrl = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/data.json?nocache=" + Date.now();
+            try {
+                var sha = undefined;
+                var getRes = await fetch(apiUrl, { headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' } });
+                if (getRes.ok) {
+                    var fileJson = await getRes.json();
+                    sha = fileJson.sha;
+                }
+
+                var contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(storeData, null, 2))));
+                var putRes = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/data.json", {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'token ' + token,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: "تحديث بيانات المتجر من لوحة الأدمن",
+                        content: contentEncoded,
+                        sha: sha
+                    })
+                });
+
+                if (putRes.ok) {
+                    showToast("✅ تم حفظ جميع التغييرات في المتجر بنجاح!", "#10b981");
+                } else {
+                    showToast("❌ فشل الحفظ: تأكد من صلاحية توكن GitHub!", "#ef4444");
+                }
+            } catch (e) {
+                showToast("❌ خطأ في الاتصال بـ GitHub!", "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> حفظ جميع التغييرات في المتجر';
+            }
+        }
+
+        function getActiveToken() {
+            return document.getElementById('ghTokenInput').value.trim() || localStorage.getItem('ali_store_gh_token') || '';
+        }
+
+        async function fetchGitHubFileContentAndSha(fileName, token) {
+            var apiUrl = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + fileName + "?nocache=" + Date.now();
+            var res = await fetch(apiUrl, {
+                headers: {
+                    'Authorization': 'token ' + token,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            if (!res.ok) throw new Error("تعذر سحب ملف (" + fileName + ") من GitHub! تأكد من صلاحية التوكن.");
+            var fileJson = await res.json();
+            var decodedContent = decodeURIComponent(escape(atob(fileJson.content.replace(/\s/g, ''))));
+            return { content: decodedContent, sha: fileJson.sha };
+        }
+
+        async function putGitHubFileContent(fileName, newContent, sha, token, commitMessage) {
+            var apiUrl = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + fileName;
+            var contentEncoded = btoa(unescape(encodeURIComponent(newContent)));
+            var putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: commitMessage,
+                    content: contentEncoded,
+                    sha: sha
+                })
+            });
+            if (!putRes.ok) throw new Error("فشل رفع التحديث إلى GitHub!");
+            return await putRes.json();
+        }
+
+        async function applySmartPatchToGitHub() {
+            var fileName = document.getElementById('targetFileToUpdate').value;
+            var patchRaw = document.getElementById('smartPatchInput').value.trim();
+            var token = getActiveToken();
+
+            if (!token) {
+                switchTab('tab-settings', document.querySelectorAll('.tab-btn')[4]);
+                return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+            }
+            if (!patchRaw) {
+                return showToast("⚠️ الصق كود الترقيع الذكي أولاً!", "#f59e0b");
+            }
+
+            var btn = document.getElementById('smartPatchBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري سحب ' + fileName + ' وتطبيق التعديل الذكي تلقائياً...';
+
+            try {
+                var fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                var content = fileObj.content;
+                var appliedCount = 0;
+
+                var replaceRegex = /<<<OLD\s*([\s\S]*?)\s*===NEW\s*([\s\S]*?)\s*>>>/g;
+                var match;
+                while ((match = replaceRegex.exec(patchRaw)) !== null) {
+                    var oldPart = match[1];
+                    var newPart = match[2];
+                    if (content.includes(oldPart)) {
+                        content = content.replace(oldPart, newPart);
+                        appliedCount++;
+                    } else {
+                        throw new Error("لم يتم العثور على السطر القديم المطابق داخل الملف! لم يتم تغيير أي شيء حفاظاً على سلامة الموقع.");
+                    }
+                }
+
+                var cssRegex = /<<<ADD_CSS\s*([\s\S]*?)\s*>>>/g;
+                while ((match = cssRegex.exec(patchRaw)) !== null) {
+                    if (content.includes("</style>")) {
+                        content = content.replace("</style>", "\n/* إضافة تلقائية */\n" + match[1] + "\n</style>");
+                        appliedCount++;
+                    }
+                }
+
+                var htmlRegex = /<<<ADD_HTML\s*([\s\S]*?)\s*>>>/g;
+                while ((match = htmlRegex.exec(patchRaw)) !== null) {
+                    if (content.includes("</body>")) {
+                        content = content.replace("</body>", "\n" + match[1] + "\n</body>");
+                        appliedCount++;
+                    }
+                }
+
+                var jsRegex = /<<<ADD_JS\s*([\s\S]*?)\s*>>>/g;
+                while ((match = jsRegex.exec(patchRaw)) !== null) {
+                    var lastScriptIdx = content.lastIndexOf("</script>");
+                    if (lastScriptIdx !== -1) {
+                        content = content.slice(0, lastScriptIdx) + "\n// إضافة تلقائية\n" + match[1] + "\n" + content.slice(lastScriptIdx);
+                        appliedCount++;
+                    }
+                }
+
+                if (appliedCount === 0) {
+                    throw new Error("صيغة كود الترقيع غير معروفة! تأكد من نسخ العلامات <<< >>> كاملة.");
+                }
+
+                await putGitHubFileContent(fileName, content, fileObj.sha, token, "تحديث ذكي تلقائي (" + appliedCount + " تعديل) في " + fileName);
+                showToast("🚀 تم تطبيق (" + appliedCount + ") تعديل ذكي على " + fileName + " ورفعه إلى GitHub بنجاح!", "#10b981");
+                document.getElementById('smartPatchInput').value = '';
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> تطبيق كود الترقيع الذكي وتحديث الموقع في GitHub الآن!';
+            }
+        }
+
+        async function runFindAndReplaceOnGitHub() {
+            var fileName = document.getElementById('targetFileToUpdate').value;
+            var oldCode = document.getElementById('findOldCodeInput').value;
+            var newCode = document.getElementById('replaceNewCodeInput').value;
+            var token = getActiveToken();
+
+            if (!token) {
+                switchTab('tab-settings', document.querySelectorAll('.tab-btn')[4]);
+                return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+            }
+            if (!oldCode.trim()) {
+                return showToast("⚠️ الصق الكود القديم الذي تريد تغييره في المربع الأول!", "#f59e0b");
+            }
+
+            var btn = document.getElementById('findReplaceBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري البحث والاستبدال في ' + fileName + '...';
+
+            try {
+                var fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                if (!fileObj.content.includes(oldCode)) {
+                    throw new Error("لم يتم العثور على الكود القديم داخل الملف! تأكد من نسخه بشكل مطابق.");
+                }
+                var updatedContent = fileObj.content.replace(oldCode, newCode);
+                await putGitHubFileContent(fileName, updatedContent, fileObj.sha, token, "تعديل جزئي سريع في " + fileName);
+                showToast("✅ تم استبدال الجزء المحدد وتحديث " + fileName + " في GitHub بنجاح!", "#10b981");
+                document.getElementById('findOldCodeInput').value = '';
+                document.getElementById('replaceNewCodeInput').value = '';
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> استبدال الجزء المحدد وحفظ التعديل في GitHub';
+            }
+        }
+
+        async function pullRawFileFromGitHub() {
+            var fileName = document.getElementById('targetFileToUpdate').value;
+            var token = getActiveToken();
+            if (!token) return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+
+            try {
+                showToast("⏳ جاري سحب " + fileName + " من GitHub...", "#00f2fe");
+                var fileObj = await fetchGitHubFileContentAndSha(fileName, token);
+                document.getElementById('rawHtmlCodeInput').value = fileObj.content;
+                showToast("✅ تم سحب كود " + fileName + " الحالي بنجاح!", "#10b981");
+            } catch (err) {
+                showToast("❌ " + err.message, "#ef4444");
+            }
+        }
+
+        async function pushRawFileToGitHub() {
+            var fileName = document.getElementById('targetFileToUpdate').value;
+            var rawCode = document.getElementById('rawHtmlCodeInput').value;
+            var token = getActiveToken();
+
+            if (!token) return showToast("⚠️ ضع توكن GitHub في تبويب الإعدادات أولاً!", "#f59e0b");
+            if (!rawCode.trim() || rawCode.trim().length < 100) return showToast("⚠️ الكود فارغ أو قصير جداً! الصق الكود الكامل أولاً.", "#f59e0b");
+
+            var btn = document.getElementById('pushCodeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري رفع وتحديث ' + fileName + '...';
+
+            try {
+                var sha = undefined;
+                try {
+                    var existing = await fetchGitHubFileContentAndSha(fileName, token);
+                    sha = existing.sha;
+                } catch (e) {}
+
+                await putGitHubFileContent(fileName, rawCode, sha, token, "تحديث كامل لملف " + fileName + " من لوحة الأدمن");
+                showToast("🚀 تم تحديث ملف " + fileName + " بالكامل في المتجر بنجاح!", "#10b981");
+                document.getElementById('rawHtmlCodeInput').value = '';
+            } catch (e) {
+                showToast("❌ تعذر رفع الملف، تأكد من توكن GitHub!", "#ef4444");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-rocket"></i> استبدال وتحديث الملف الكامل في GitHub الآن!';
+            }
+        }
+
+        function downloadBackupJson() {
+            var blob = new Blob([JSON.stringify(storeData, null, 2)], { type: "application/json" });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = "data-backup.json";
+            a.click();
+        }
+    </script>
+</body>
+</html>

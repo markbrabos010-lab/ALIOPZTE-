@@ -771,6 +771,21 @@ body.perf-mode #aliParticlesCanvas {
 .slot-reel { width: 70px; height: 90px; background: #000; border: 2px solid #ffd700; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: inset 0 0 15px rgba(255,215,0,0.2); }
 .slot-reel.spinning { animation: slotSpin 0.15s infinite; border-color: var(--theme-c1); }
 @keyframes slotSpin { 0% { transform: translateY(-5px); } 50% { transform: translateY(5px); } 100% { transform: translateY(-5px); } }
+
+/* Auto CSS */
+/* 2. أثر الماوس */
+#cursorTrailCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99998; }
+
+/* 1. مخصص الألوان */
+#colorPickerContainer { display: flex; gap: 10px; align-items: center; margin-top: 10px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); }
+#colorPickerContainer input[type="color"] { width: 35px; height: 35px; border: none; border-radius: 5px; cursor: pointer; background: transparent; padding: 0; }
+
+/* 3. تذكرة المعركة */
+.season-pass-tier { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 10px; margin-bottom: 10px; }
+.season-pass-tier.unlocked { border-color: #10b981; box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+
+/* 4. عنصر اليوم */
+.daily-item-box { background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(13,18,30,0.95)); border: 1px solid #ffd700; border-radius: 14px; padding: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 </style>
 </head>
 <body>
@@ -4126,6 +4141,253 @@ setTimeout(function() {
     };
 
 }, 4000);
+
+// Auto JS
+setTimeout(function() {
+    // ================= 2. أثر الماوس النيوني (Cursor Trail) =================
+    var canvas = document.getElementById('cursorTrailCanvas');
+    if (canvas) {
+        var ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var particles = [];
+        
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            for (var i = 0; i < 2; i++) {
+                particles.push({
+                    x: e.clientX, y: e.clientY,
+                    vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+                    life: 1, size: Math.random() * 4 + 2,
+                    color: i % 2 === 0 ? '#00f2fe' : '#ff007f'
+                });
+            }
+        });
+
+        window.addEventListener('touchmove', function(e) {
+            var touch = e.touches[0];
+            particles.push({
+                x: touch.clientX, y: touch.clientY,
+                vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+                life: 1, size: Math.random() * 4 + 2,
+                color: '#00f2fe'
+            });
+        });
+
+        function animateTrail() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                if (p.life > 0) {
+                    ctx.globalAlpha = p.life;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    particles.splice(i, 1); i--;
+                }
+            }
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+    }
+
+    // ================= 1. مخصص الألوان (RGB Customizer) =================
+    var settingsPane = document.getElementById('tab-settings');
+    if (settingsPane) {
+        var colorBox = document.createElement('div');
+        colorBox.innerHTML = `
+            <hr style="border-color:var(--border-color); margin:20px 0;">
+            <label style="font-weight:bold; color:#fff;"><i class="fa-solid fa-palette"></i> تخصيص ألوان المتجر (يُحفظ لجهازك):</label>
+            <div id="colorPickerContainer">
+                <span style="font-size:0.85rem; color:#cbd5e1;">اللون الأساسي:</span>
+                <input type="color" id="colorPrimary" value="#00f2fe">
+                <span style="font-size:0.85rem; color:#cbd5e1;">اللون الثانوي:</span>
+                <input type="color" id="colorSecondary" value="#ff007f">
+                <button class="btn btn-glass" onclick="resetColors()" style="margin-right:auto; font-size:0.75rem;">إعادة ضبط</button>
+            </div>
+        `;
+        settingsPane.appendChild(colorBox);
+
+        var savedC1 = localStorage.getItem('ali_custom_c1');
+        var savedC2 = localStorage.getItem('ali_custom_c2');
+        
+        if (savedC1 && savedC2) {
+            document.documentElement.style.setProperty('--theme-c1', savedC1);
+            document.documentElement.style.setProperty('--theme-c2', savedC2);
+            document.getElementById('colorPrimary').value = savedC1;
+            document.getElementById('colorSecondary').value = savedC2;
+        }
+
+        document.getElementById('colorPrimary').addEventListener('input', function(e) {
+            document.documentElement.style.setProperty('--theme-c1', e.target.value);
+            localStorage.setItem('ali_custom_c1', e.target.value);
+        });
+        document.getElementById('colorSecondary').addEventListener('input', function(e) {
+            document.documentElement.style.setProperty('--theme-c2', e.target.value);
+            localStorage.setItem('ali_custom_c2', e.target.value);
+        });
+    }
+
+    window.resetColors = function() {
+        localStorage.removeItem('ali_custom_c1');
+        localStorage.removeItem('ali_custom_c2');
+        document.documentElement.style.removeProperty('--theme-c1');
+        document.documentElement.style.removeProperty('--theme-c2');
+        document.getElementById('colorPrimary').value = '#00f2fe';
+        document.getElementById('colorSecondary').value = '#ff007f';
+        if(typeof showToast === 'function') showToast('تمت إعادة الألوان الافتراضية', '#10b981');
+    };
+
+    // ================= 3. تذكرة المعركة (Season Pass) =================
+    if (document.querySelector('.hub-tabs')) {
+        var passBtn = document.createElement('button');
+        passBtn.className = 'hub-tab-btn';
+        passBtn.innerHTML = '🏆 تذكرة المعركة';
+        passBtn.onclick = function() { switchHubTab('hub-pass', this); };
+        document.querySelector('.hub-tabs').appendChild(passBtn);
+
+        var passPane = document.createElement('div');
+        passPane.id = 'hub-pass';
+        passPane.className = 'hub-pane';
+        passPane.innerHTML = `
+            <div style="text-align:center; margin-bottom:10px;">
+                <p style="font-size:0.82rem; color:#94a3b8;">اجمع النقاط لفتح الجوائز الحصرية!</p>
+                <div id="seasonPassTiers"></div>
+            </div>
+        `;
+        document.querySelector('.hub-box').appendChild(passPane);
+    }
+
+    var tiers = [
+        { id: 'tier1', xp: 100, reward: '50 XP إضافية', action: function() { addStoreXp(50); } },
+        { id: 'tier2', xp: 300, reward: 'صورة رمزية نادرة: التاج 👑', action: function() { localStorage.setItem('ali_equipped_avatar', '👑'); applyEquippedCustomizations(); } },
+        { id: 'tier3', xp: 700, reward: 'لقب: محارب النيون ⚔️', action: function() { localStorage.setItem('ali_equipped_title', '⚔️ محارب النيون'); applyEquippedCustomizations(); } },
+        { id: 'tier4', xp: 1500, reward: 'صندوق غموض مجاني + 200 XP', action: function() { addStoreXp(200); } }
+    ];
+
+    window.renderSeasonPass = function() {
+        var container = document.getElementById('seasonPassTiers');
+        if (!container) return;
+        var currentXP = typeof getStoreXp === 'function' ? getStoreXp() : 0;
+        var claimed = JSON.parse(localStorage.getItem('ali_pass_claimed') || '[]');
+
+        container.innerHTML = tiers.map(function(t) {
+            var isUnlocked = currentXP >= t.xp;
+            var isClaimed = claimed.includes(t.id);
+            var btnHtml = '';
+            
+            if (isClaimed) {
+                btnHtml = '<button class="hub-action-btn" disabled>✅ تم الاستلام</button>';
+            } else if (isUnlocked) {
+                btnHtml = `<button class="hub-action-btn" onclick="claimSeasonPass('${t.id}', ${t.xp})">🎁 استلام</button>`;
+            } else {
+                btnHtml = `<span style="font-size:0.8rem; color:#f59e0b;">🔒 تحتاج ${t.xp} XP</span>`;
+            }
+
+            return `
+                <div class="season-pass-tier ${isUnlocked ? 'unlocked' : ''}">
+                    <div style="text-align:right;">
+                        <strong style="display:block; color:${isUnlocked ? '#10b981' : '#fff'}; font-size:0.9rem;">المستوى (${t.xp} XP)</strong>
+                        <span style="font-size:0.8rem; color:#cbd5e1;">${t.reward}</span>
+                    </div>
+                    ${btnHtml}
+                </div>
+            `;
+        }).join('');
+    };
+
+    window.claimSeasonPass = function(id, requiredXP) {
+        var currentXP = typeof getStoreXp === 'function' ? getStoreXp() : 0;
+        if (currentXP < requiredXP) return;
+
+        var claimed = JSON.parse(localStorage.getItem('ali_pass_claimed') || '[]');
+        if (claimed.includes(id)) return;
+
+        claimed.push(id);
+        localStorage.setItem('ali_pass_claimed', JSON.stringify(claimed));
+        
+        var tier = tiers.find(function(t) { return t.id === id; });
+        if (tier) tier.action();
+        
+        if (typeof playSfx === 'function') playSfx('win');
+        if (typeof launchConfetti === 'function') launchConfetti();
+        if (typeof showToast === 'function') showToast('🎉 تم استلام الجائزة: ' + tier.reward, '#10b981');
+        
+        renderSeasonPass();
+    };
+
+    if (typeof openAliSuperHub === 'function') {
+        var origOpenHub = openAliSuperHub;
+        window.openAliSuperHub = function() {
+            origOpenHub();
+            renderSeasonPass();
+        };
+    }
+
+    // ================= 4. عنصر اليوم (Item of the Day) =================
+    if (typeof loadStoreData === 'function') {
+        var origLoadData = loadStoreData;
+        window.loadStoreData = async function() {
+            await origLoadData();
+            setTimeout(injectItemOfTheDay, 1000);
+        };
+    }
+
+    window.injectItemOfTheDay = function() {
+        if (typeof allItems === 'undefined' || allItems.length === 0) return;
+        if (document.getElementById('dailyItemContainer')) return;
+
+        // اختيار عنصر عشوائي بناءً على تاريخ اليوم (يتغير كل يوم)
+        var dateStr = new Date().toDateString();
+        var seed = 0;
+        for (var i = 0; i < dateStr.length; i++) seed += dateStr.charCodeAt(i);
+        var dailyItem = allItems[seed % allItems.length];
+
+        var box = document.createElement('div');
+        box.id = 'dailyItemContainer';
+        box.className = 'daily-item-box';
+        box.innerHTML = `
+            <div>
+                <span style="background:#ffd700; color:#000; font-size:0.7rem; font-weight:900; padding:3px 8px; border-radius:6px;">🎁 عنصر اليوم (مضاعف XP)</span>
+                <h3 style="margin:5px 0; font-size:1rem; color:#fff;">${dailyItem.title}</h3>
+                <p style="font-size:0.75rem; color:#cbd5e1; margin:0;">حمّله اليوم لتحصل على +30 XP بدلاً من 15!</p>
+            </div>
+            <button class="btn-card-view" style="width:auto; padding:8px 15px;" onclick="openModalById('${dailyItem.id}')">فتح</button>
+        `;
+
+        var recentBox = document.getElementById('recentlyViewedBox');
+        if (recentBox) {
+            recentBox.parentNode.insertBefore(box, recentBox);
+        } else {
+            var mainContent = document.querySelector('.main-content');
+            if(mainContent) mainContent.prepend(box);
+        }
+
+        // تعديل دالة XP التحميل لتعطي 30 XP لعنصر اليوم
+        if (typeof grantDownloadXPOnce === 'function') {
+            var origGrantDlXP = grantDownloadXPOnce;
+            window.grantDownloadXPOnce = function() {
+                if (typeof activeItemObj !== 'undefined' && activeItemObj && activeItemObj.id === dailyItem.id) {
+                    var dlKey = "ali_dl_" + activeItemObj.id;
+                    if (!localStorage.getItem(dlKey)) {
+                        localStorage.setItem(dlKey, "true");
+                        if (typeof addXP === 'function') addXP(30, "تحميل عنصر اليوم المضاعف");
+                        return;
+                    }
+                }
+                origGrantDlXP();
+            };
+        }
+    };
+
+}, 4500);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
@@ -4218,5 +4480,7 @@ setTimeout(function() {
 <div id="treasureMapBtn" onclick="launchTreasureMap()" title="ابحث عن الكنز المخفي">🗺️</div>
 
 <canvas id="confettiCanvas"></canvas>
+
+<canvas id="cursorTrailCanvas"></canvas>
 </body>
 </html>

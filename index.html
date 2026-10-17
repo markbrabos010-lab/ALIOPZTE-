@@ -664,6 +664,44 @@ body.perf-mode #aliParticlesCanvas {
     color: #94a3b8;
     opacity: 0.6;
 }
+
+/* Auto CSS */
+/* ألعاب مركز الفعاليات الجديدة */
+.game-btn {
+    background: rgba(0, 242, 254, 0.1); border: 1px solid var(--theme-c2);
+    color: var(--theme-c2); padding: 8px 16px; border-radius: 8px;
+    font-family: inherit; font-weight: 800; cursor: pointer; transition: 0.2s;
+}
+.game-btn:hover { background: var(--theme-c2); color: #000; }
+.game-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* 1. الثعبان */
+#snakeCanvas {
+    background: #000; border: 2px solid #10b981; border-radius: 10px;
+    display: block; margin: 10px auto; box-shadow: 0 0 15px rgba(16,185,129,0.3);
+    touch-action: none;
+}
+.snake-controls { display: grid; grid-template-columns: repeat(3, 50px); gap: 5px; justify-content: center; margin-top: 10px; }
+.snake-controls button { background: rgba(255,255,255,0.1); border: 1px solid #10b981; color: #fff; padding: 10px; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
+.snake-controls button:active { background: #10b981; }
+
+/* 2. بطاقة الكشط */
+#scratchCanvasContainer { position: relative; width: 100%; max-width: 300px; height: 150px; margin: 15px auto; border-radius: 12px; overflow: hidden; border: 2px solid #ffd700; }
+#scratchCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; }
+#scratchPrizeText { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0d1222; color: #ffd700; font-weight: 900; font-size: 1.1rem; }
+
+/* 3. المعلومات */
+.trivia-q { font-size: 1rem; font-weight: bold; margin-bottom: 15px; color: #fff; text-align: center; }
+.trivia-opt { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; text-align: right; transition: 0.2s; font-family: inherit; width: 100%; }
+.trivia-opt:hover { background: rgba(0, 242, 254, 0.2); border-color: var(--theme-c2); }
+.trivia-opt.correct { background: rgba(16, 185, 129, 0.4); border-color: #10b981; }
+.trivia-opt.wrong { background: rgba(239, 68, 68, 0.4); border-color: #ef4444; }
+
+/* 4. المفاعل */
+#reactorBarBg { width: 100%; height: 25px; background: rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; margin: 15px 0; border: 1px solid var(--theme-c2); }
+#reactorBarFill { width: 0%; height: 100%; background: linear-gradient(90deg, #ff007f, #00f2fe); transition: width 0.1s; }
+#reactorClickBtn { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle, #7f00ff, #12091f); border: 3px solid #00f2fe; color: #fff; font-size: 1.5rem; font-weight: 900; cursor: pointer; margin: 0 auto; display: block; box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); user-select: none; }
+#reactorClickBtn:active { transform: scale(0.95); box-shadow: 0 0 40px rgba(255, 0, 127, 0.8); }
 </style>
 </head>
 <body>
@@ -3184,6 +3222,302 @@ setTimeout(function() {
     if (eqAvatar && idAvatarEl) idAvatarEl.innerText = eqAvatar;
     
 }, 1000); // تأخير ثانية واحدة لضمان تحميل المتجر بالكامل
+
+// Auto JS
+setTimeout(function() {
+    // إضافة التبويبات الجديدة لمركز الفعاليات
+    var hubTabs = document.querySelector('.hub-tabs');
+    var hubBox = document.querySelector('.hub-box');
+    if(hubTabs && hubBox) {
+        var newTabs = [
+            { id: 'hub-snake', title: '🐍 1. الثعبان النيون', html: `
+                <div style="text-align:center;">
+                    <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">كل 10 نقاط = +5 XP. استخدم الأسهم أو الأزرار بالأسفل.</p>
+                    <div style="display:flex; justify-content:center; gap:15px; margin-bottom:10px; font-weight:900;">
+                        <span style="color:#10b981;">النقاط: <b id="snakeScoreLbl">0</b></span>
+                    </div>
+                    <canvas id="snakeCanvas" width="300" height="300"></canvas>
+                    <div class="snake-controls">
+                        <div></div><button onclick="snakeDir='UP'">⬆️</button><div></div>
+                        <button onclick="snakeDir='LEFT'">⬅️</button><button onclick="snakeDir='DOWN'">⬇️</button><button onclick="snakeDir='RIGHT'">➡️</button>
+                    </div>
+                    <button class="game-btn" style="margin-top:15px; width:100%;" onclick="startSnakeGame()">ابدأ اللعب 🎮</button>
+                </div>
+            `},
+            { id: 'hub-trivia', title: '🧠 2. المعلومات', html: `
+                <div id="triviaContainer" style="text-align:center;">
+                    <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:15px;">أجب على 3 أسئلة صحيحة لتربح +40 XP!</p>
+                    <div id="triviaBox" style="background:rgba(0,0,0,0.5); padding:15px; border-radius:12px; border:1px solid var(--theme-c2);">
+                        <div class="trivia-q" id="triviaQ">اضغط ابدأ لتحدي معلوماتك</div>
+                        <div id="triviaOpts"></div>
+                    </div>
+                    <button class="game-btn" id="triviaStartBtn" style="margin-top:15px; width:100%;" onclick="startTrivia()">ابدأ التحدي 🧠</button>
+                </div>
+            `},
+            { id: 'hub-clicker', title: '👆 3. المفاعل', html: `
+                <div style="text-align:center;">
+                    <p style="font-size:0.82rem; color:#94a3b8;">اضغط بأسرع ما يمكن لشحن المفاعل قبل أن يفرغ! (هدف: 100)</p>
+                    <div id="reactorBarBg"><div id="reactorBarFill"></div></div>
+                    <div style="font-size:1.2rem; font-weight:900; color:#00f2fe; margin-bottom:10px;">الطاقة: <span id="reactorVal">0</span>%</div>
+                    <button id="reactorClickBtn" onclick="reactorClick()">⚡</button>
+                    <button class="game-btn" id="reactorStartBtn" style="margin-top:20px; width:100%;" onclick="startReactor()">ابدأ الشحن ⚡</button>
+                </div>
+            `},
+            { id: 'hub-scratch', title: '🎟️ 4. بطاقة الكشط', html: `
+                <div style="text-align:center;">
+                    <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">امسح البطاقة باصبعك (أو الماوس) لكشف الجائزة المخفية!</p>
+                    <div id="scratchCanvasContainer">
+                        <div id="scratchPrizeText">🎁</div>
+                        <canvas id="scratchCanvas" width="300" height="150"></canvas>
+                    </div>
+                    <button class="game-btn" id="scratchResetBtn" style="margin-top:10px; width:100%;" onclick="initScratchCard()">بطاقة جديدة (مجاناً)</button>
+                </div>
+            `}
+        ];
+
+        newTabs.forEach(function(tab) {
+            var btn = document.createElement('button');
+            btn.className = 'hub-tab-btn';
+            btn.innerHTML = tab.title;
+            btn.onclick = function() { switchHubTab(tab.id, this); };
+            hubTabs.appendChild(btn);
+
+            var pane = document.createElement('div');
+            pane.id = tab.id;
+            pane.className = 'hub-pane';
+            pane.innerHTML = tab.html;
+            hubBox.appendChild(pane);
+        });
+    }
+
+    // ================= 1. لعبة الثعبان =================
+    window.snakeDir = 'RIGHT';
+    window.snakeInterval = null;
+    window.snakeCanvas = document.getElementById('snakeCanvas');
+    window.snakeCtx = window.snakeCanvas ? window.snakeCanvas.getContext('2d') : null;
+    window.snakeBody = [];
+    window.snakeFood = {x: 0, y: 0};
+    window.snakeScore = 0;
+
+    window.startSnakeGame = function() {
+        if(snakeInterval) clearInterval(snakeInterval);
+        snakeBody = [{x: 10, y: 10}, {x: 9, y: 10}, {x: 8, y: 10}];
+        snakeDir = 'RIGHT';
+        snakeScore = 0;
+        document.getElementById('snakeScoreLbl').innerText = '0';
+        placeSnakeFood();
+        snakeInterval = setInterval(drawSnake, 150);
+    };
+
+    function placeSnakeFood() {
+        snakeFood = {x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20)};
+    }
+
+    function drawSnake() {
+        if(!snakeCtx) return;
+        var head = {x: snakeBody[0].x, y: snakeBody[0].y};
+        if(snakeDir === 'UP') head.y--;
+        if(snakeDir === 'DOWN') head.y++;
+        if(snakeDir === 'LEFT') head.x--;
+        if(snakeDir === 'RIGHT') head.x++;
+
+        if(head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20 || snakeBody.some(function(s){ return s.x === head.x && s.y === head.y; })) {
+            clearInterval(snakeInterval);
+            var earnedXP = Math.floor(snakeScore / 10) * 5;
+            if(earnedXP > 0) { addStoreXp(earnedXP); alert("🎉 انتهت اللعبة! جمعت " + snakeScore + " نقطة وحصلت على " + earnedXP + " XP."); }
+            else { alert("💥 اصطدمت! حاول مرة أخرى."); }
+            return;
+        }
+
+        snakeBody.unshift(head);
+        if(head.x === snakeFood.x && head.y === snakeFood.y) {
+            snakeScore += 10;
+            document.getElementById('snakeScoreLbl').innerText = snakeScore;
+            if(typeof playSfx === 'function') playSfx('xp');
+            placeSnakeFood();
+        } else {
+            snakeBody.pop();
+        }
+
+        snakeCtx.fillStyle = '#05070e';
+        snakeCtx.fillRect(0, 0, 300, 300);
+        snakeCtx.fillStyle = '#ff007f';
+        snakeCtx.fillRect(snakeFood.x * 15, snakeFood.y * 15, 15, 15);
+        snakeCtx.fillStyle = '#10b981';
+        snakeBody.forEach(function(seg) {
+            snakeCtx.fillRect(seg.x * 15, seg.y * 15, 14, 14);
+        });
+    }
+
+    window.addEventListener('keydown', function(e) {
+        if(!document.getElementById('hub-snake').classList.contains('active')) return;
+        if(e.key === 'ArrowUp' && snakeDir !== 'DOWN') snakeDir = 'UP';
+        if(e.key === 'ArrowDown' && snakeDir !== 'UP') snakeDir = 'DOWN';
+        if(e.key === 'ArrowLeft' && snakeDir !== 'RIGHT') snakeDir = 'LEFT';
+        if(e.key === 'ArrowRight' && snakeDir !== 'LEFT') snakeDir = 'RIGHT';
+    });
+
+    // ================= 2. بطاقة الكشط =================
+    window.initScratchCard = function() {
+        var cvs = document.getElementById('scratchCanvas');
+        var ctx = cvs.getContext('2d');
+        var prizeTxt = document.getElementById('scratchPrizeText');
+        
+        var prizes = ["+10 XP", "+20 XP", "+50 XP", "حظ أوفر", "+100 XP"];
+        var wonPrize = prizes[Math.floor(Math.random() * prizes.length)];
+        prizeTxt.innerText = wonPrize;
+
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#2a2a2a';
+        ctx.fillRect(0, 0, 300, 150);
+        ctx.fillStyle = '#555';
+        ctx.font = 'bold 20px Tajawal';
+        ctx.textAlign = 'center';
+        ctx.fillText('امسح هنا 👆', 150, 80);
+
+        var isDrawing = false;
+        ctx.globalCompositeOperation = 'destination-out';
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            var rect = cvs.getBoundingClientRect();
+            var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            var y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        cvs.addEventListener('mousedown', function(e) { isDrawing = true; scratch(e); });
+        cvs.addEventListener('mousemove', scratch);
+        cvs.addEventListener('mouseup', function() { isDrawing = false; });
+        cvs.addEventListener('touchstart', function(e) { isDrawing = true; scratch(e); });
+        cvs.addEventListener('touchmove', scratch);
+        cvs.addEventListener('touchend', function() { isDrawing = false; });
+
+        cvs.addEventListener('mouseup', checkScratchReveal);
+        cvs.addEventListener('touchend', checkScratchReveal);
+
+        function checkScratchReveal() {
+            var imageData = ctx.getImageData(0, 0, 300, 150);
+            var pixels = imageData.data;
+            var transparent = 0;
+            for (var i = 3; i < pixels.length; i += 4) {
+                if (pixels[i] === 0) transparent++;
+            }
+            if (transparent > (300 * 150 * 0.5)) {
+                if(!cvs.dataset.revealed) {
+                    cvs.dataset.revealed = 'true';
+                    var match = wonPrize.match(/(\d+)/);
+                    if(match) { addStoreXp(parseInt(match[1])); if(typeof playSfx === 'function') playSfx('win'); }
+                    else { addStoreXp(5); }
+                }
+            }
+        }
+        cvs.dataset.revealed = '';
+    };
+
+    // ================= 3. تحدي المعلومات =================
+    var triviaQs = [
+        { q: "ما هو العنصر الأساسي لصنع الأدوات في ماين كرافت؟", opts: ["الخشب", "الحجر", "الحديد", "الماس"], ans: 0 },
+        { q: "ما هي الشركة المطورة للعبة Roblox؟", opts: ["Epic Games", "Roblox Corporation", "Mojang", "Valve"], ans: 1 },
+        { q: "في أي عام تم إصدار لعبة GTA V لأول مرة؟", opts: ["2011", "2013", "2015", "2017"], ans: 1 },
+        { q: "ما هو اسم الشخصية الرئيسية في سلسلة The Legend of Zelda؟", opts: ["Zelda", "Link", "Ganon", "Mario"], ans: 1 },
+        { q: "ما هي اللعبة التي تعتمد على البناء والبقاء وتشتهر بمكعباتها؟", opts: ["Terraria", "Minecraft", "Fortnite", "Roblox"], ans: 1 }
+    ];
+    var currentTriviaScore = 0;
+    var currentTriviaIdx = 0;
+    var triviaSessionQs = [];
+
+    window.startTrivia = function() {
+        triviaSessionQs = [...triviaQs].sort(function() { return 0.5 - Math.random(); }).slice(0, 3);
+        currentTriviaScore = 0;
+        currentTriviaIdx = 0;
+        document.getElementById('triviaStartBtn').style.display = 'none';
+        renderTriviaQuestion();
+    };
+
+    function renderTriviaQuestion() {
+        if(currentTriviaIdx >= triviaSessionQs.length) {
+            var box = document.getElementById('triviaBox');
+            if(currentTriviaScore >= 2) {
+                box.innerHTML = '<h3 style="color:#10b981;">🎉 ممتاز! أجبت على ' + currentTriviaScore + ' من 3</h3><p>ربحت +40 XP!</p>';
+                addStoreXp(40);
+                if(typeof playSfx === 'function') playSfx('win');
+            } else {
+                box.innerHTML = '<h3 style="color:#ef4444;">😢 حظ أوفر! أجبت على ' + currentTriviaScore + ' من 3</h3><p>ربحت +5 XP ترضية.</p>';
+                addStoreXp(5);
+            }
+            document.getElementById('triviaStartBtn').style.display = 'block';
+            document.getElementById('triviaStartBtn').innerText = 'إعادة المحاولة 🔄';
+            return;
+        }
+
+        var qObj = triviaSessionQs[currentTriviaIdx];
+        document.getElementById('triviaQ').innerText = qObj.q;
+        var optsHtml = qObj.opts.map(function(opt, i) {
+            return '<button class="trivia-opt" onclick="answerTrivia(' + i + ', ' + qObj.ans + ', this)">' + opt + '</button>';
+        }).join('');
+        document.getElementById('triviaOpts').innerHTML = optsHtml;
+    }
+
+    window.answerTrivia = function(selected, correct, btn) {
+        var btns = document.querySelectorAll('.trivia-opt');
+        btns.forEach(function(b) { b.disabled = true; });
+        if(selected === correct) {
+            btn.classList.add('correct');
+            currentTriviaScore++;
+            if(typeof playSfx === 'function') playSfx('xp');
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        currentTriviaIdx++;
+        setTimeout(renderTriviaQuestion, 1500);
+    };
+
+    // ================= 4. لعبة المفاعل =================
+    var reactorVal = 0;
+    var reactorInterval = null;
+    var reactorPlaying = false;
+
+    window.startReactor = function() {
+        if(reactorPlaying) return;
+        reactorPlaying = true;
+        reactorVal = 0;
+        document.getElementById('reactorVal').innerText = '0';
+        document.getElementById('reactorBarFill').style.width = '0%';
+        document.getElementById('reactorStartBtn').style.display = 'none';
+        
+        reactorInterval = setInterval(function() {
+            reactorVal -= 2; // يفرغ ببطء
+            if(reactorVal < 0) reactorVal = 0;
+            document.getElementById('reactorVal').innerText = Math.floor(reactorVal);
+            document.getElementById('reactorBarFill').style.width = reactorVal + '%';
+            
+            if(reactorVal >= 100) {
+                clearInterval(reactorInterval);
+                reactorPlaying = false;
+                addStoreXp(30);
+                if(typeof playSfx === 'function') playSfx('win');
+                alert("🎉 مفاعل مشحون بالكامل! ربحت +30 XP.");
+                document.getElementById('reactorStartBtn').style.display = 'block';
+                document.getElementById('reactorStartBtn').innerText = 'العب مرة أخرى 🔄';
+            }
+        }, 100);
+    };
+
+    window.reactorClick = function() {
+        if(!reactorPlaying) return;
+        reactorVal += 5;
+        if(reactorVal > 100) reactorVal = 100;
+        document.getElementById('reactorVal').innerText = Math.floor(reactorVal);
+        document.getElementById('reactorBarFill').style.width = reactorVal + '%';
+        if(typeof playSfx === 'function') playSfx('click');
+    };
+
+}, 2000);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->

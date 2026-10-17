@@ -791,6 +791,23 @@ body.perf-mode #aliParticlesCanvas {
 .video-container-responsive { position: relative; width: 100%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 15px; border: 1px solid var(--theme-c2); }
 .video-container-responsive video, .video-container-responsive iframe { width: 100%; height: 100%; display: block; border: none; aspect-ratio: 16/9; }
 .video-unplayable-msg { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #fca5a5; padding: 15px; border-radius: 10px; text-align: center; font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; }
+
+/* Auto CSS */
+/* إيقاف تمرير الخلفية عند فتح النافذة المنبثقة */
+body.modal-open { overflow: hidden !important; }
+
+/* تصغير حجم الفيديو ليتناسب مع شاشة الجوال ولا يدفع الأزرار للأسفل */
+@media (max-width: 768px) {
+    .video-container-responsive video, .video-container-responsive iframe { max-height: 220px; }
+    .modal-box { max-height: 85vh; overflow-y: auto; padding-bottom: 30px; }
+}
+
+/* إخفاء الأزرار العائمة (الشكوى، الفعاليات، الكنز) عند فتح أي نافذة لمنع التداخل */
+body.modal-open #floatingFeedbackBtn,
+body.modal-open #aliSuperHubBtn,
+body.modal-open #treasureMapBtn { 
+    display: none !important; 
+}
 </style>
 </head>
 <body>
@@ -4513,6 +4530,68 @@ setTimeout(function() {
 
         document.getElementById('itemModal').classList.add('active');
     };
+}, 3000);
+
+// Auto JS
+setTimeout(function() {
+    // 1. إصلاح دالة فتح النافذة
+    if (typeof window.openModal === 'function') {
+        var origOpenModal = window.openModal;
+        window.openModal = function(item) {
+            document.body.classList.add('modal-open'); // يخفي الأزرار العائمة ويمنع التمرير
+            origOpenModal(item);
+
+            // إضافة تنبيه إذا كان رابط الفيديو لا يعمل
+            var vidContainer = document.getElementById('mVideoContainer');
+            if (vidContainer && vidContainer.innerHTML.includes('<video')) {
+                var videoEl = vidContainer.querySelector('video');
+                if (videoEl) {
+                    videoEl.onerror = function() {
+                        vidContainer.innerHTML = '<div class="video-unplayable-msg">تعذر تشغيل الفيديو المباشر. تأكد أن الرابط ينتهي بـ .mp4 أو استخدم زر التحميل بالأسفل.</div>';
+                    };
+                }
+            }
+        };
+    }
+
+    // 2. إصلاح دالة إغلاق النافذة
+    if (typeof window.closeModal === 'function') {
+        var origCloseModal = window.closeModal;
+        window.closeModal = function(id) {
+            document.body.classList.remove('modal-open'); // إعادة الأزرار العائمة
+            origCloseModal(id);
+        };
+    }
+
+    // 3. إغلاق النافذة عند الضغط في الخارج
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) {
+                document.body.classList.remove('modal-open');
+            }
+        });
+    });
+
+    // 4. إصلاح صندوق الملاحظات (الشكوى) لكي لا يمر تحت الشاشة
+    var fbBtn = document.getElementById('floatingFeedbackBtn');
+    if(fbBtn) {
+        fbBtn.onclick = function() {
+            var modal = document.getElementById('fbModalNew');
+            if(modal) {
+                modal.style.display = 'flex';
+                document.body.classList.add('modal-open');
+            }
+        };
+    }
+    
+    // إغلاق صندوق الشكوى
+    var closeFbBtns = document.querySelectorAll('button[onclick*="fbModalNew\'].style.display=\'none\'"]');
+    closeFbBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.body.classList.remove('modal-open');
+        });
+    });
+
 }, 3000);
 </script>
 

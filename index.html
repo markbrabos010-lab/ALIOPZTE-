@@ -702,6 +702,44 @@ body.perf-mode #aliParticlesCanvas {
 #reactorBarFill { width: 0%; height: 100%; background: linear-gradient(90deg, #ff007f, #00f2fe); transition: width 0.1s; }
 #reactorClickBtn { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle, #7f00ff, #12091f); border: 3px solid #00f2fe; color: #fff; font-size: 1.5rem; font-weight: 900; cursor: pointer; margin: 0 auto; display: block; box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); user-select: none; }
 #reactorClickBtn:active { transform: scale(0.95); box-shadow: 0 0 40px rgba(255, 0, 127, 0.8); }
+
+/* Auto CSS */
+/* شريط الأكثر تحميلاً */
+#mostDownloadedBar {
+    background: rgba(13, 18, 30, 0.9); border: 1px solid var(--theme-c1);
+    border-radius: 12px; padding: 10px 15px; margin-bottom: 15px;
+    display: flex; align-items: center; gap: 10px; overflow-x: auto; white-space: nowrap;
+}
+.most-dl-item {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: bold;
+    color: #fff; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+}
+.most-dl-item:hover { border-color: var(--theme-c1); background: rgba(255, 0, 127, 0.2); }
+
+/* تقييم النجوم السريع */
+.quick-stars-row { display: flex; justify-content: center; gap: 8px; margin: 10px 0; font-size: 1.5rem; cursor: pointer; color: #94a3b8; }
+.quick-stars-row span:hover, .quick-stars-row span.active { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
+
+/* صندوق الملاحظات */
+#floatingFeedbackBtn {
+    position: fixed; bottom: 150px; right: 20px; width: 50px; height: 50px;
+    background: linear-gradient(135deg, #f59e0b, #ea580c); border: 2px solid #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; color: #fff; cursor: pointer; z-index: 9985;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); transition: 0.3s;
+}
+#floatingFeedbackBtn:hover { transform: scale(1.1) rotate(10deg); }
+#feedbackModalBox {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999;
+    display: none; align-items: center; justify-content: center; padding: 20px;
+    backdrop-filter: blur(10px); font-family: 'Tajawal', sans-serif;
+}
+.feedback-card {
+    background: #0d1222; border: 2px solid #f59e0b; border-radius: 16px;
+    padding: 20px; max-width: 400px; width: 100%; text-align: right;
+}
+.feedback-card textarea { width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); color: #fff; margin-bottom: 10px; font-family: inherit; resize: none; }
 </style>
 </head>
 <body>
@@ -3270,7 +3308,7 @@ setTimeout(function() {
                         <div id="scratchPrizeText">🎁</div>
                         <canvas id="scratchCanvas" width="300" height="150"></canvas>
                     </div>
-                    <button class="game-btn" id="scratchResetBtn" style="margin-top:10px; width:100%;" onclick="initScratchCard()">بطاقة جديدة (مجاناً)</button>
+                    <button class="game-btn" id="scratchResetBtn" style="margin-top:10px; width:100%;" onclick="initScratchCard()">كشط بطاقة جديدة (20 XP)</button>
                 </div>
             `}
         ];
@@ -3518,6 +3556,176 @@ setTimeout(function() {
     };
 
 }, 2000);
+
+// Auto JS
+setTimeout(function() {
+    // ================= 1. تعديل بطاقة الكشط لتصبح مدفوعة (20 XP) =================
+    var originalInit = window.initScratchCard;
+    window.initScratchCard = function() {
+        var currentXP = typeof getStoreXp === 'function' ? getStoreXp() : 0;
+        if (currentXP < 20) {
+            alert('⚠️ تحتاج إلى 20 XP لفتح بطاقة كشط جديدة! العب بعض الألعاب لجمع النقاط.');
+            return;
+        }
+        if(typeof addStoreXp === 'function') addStoreXp(-20);
+        originalInit();
+    };
+
+    // ================= 2. شريط الأكثر تحميلاً =================
+    var mostDlContainer = document.createElement('div');
+    mostDlContainer.id = 'mostDownloadedBar';
+    mostDlContainer.style.display = 'none';
+    mostDlContainer.innerHTML = '<span style="color:var(--theme-c1); font-weight:900; font-size:0.85rem;"><i class="fa-solid fa-fire"></i> الأكثر تحميلاً:</span><div id="mostDlList" style="display:flex; gap:8px; overflow-x:auto;"></div>';
+    
+    var targetGrid = document.querySelector('.main-content');
+    if(targetGrid) {
+        var itemsGrid = document.getElementById('itemsGrid');
+        if(itemsGrid) targetGrid.insertBefore(mostDlContainer, itemsGrid);
+    }
+
+    window.renderMostDownloaded = function() {
+        var counts = JSON.parse(localStorage.getItem('ali_download_counts') || '{}');
+        var items = (typeof allItems !== 'undefined') ? allItems : [];
+        var sorted = items.filter(function(i) { return counts[i.id]; }).sort(function(a, b) { return (counts[b.id] || 0) - (counts[a.id] || 0); }).slice(0, 5);
+        
+        if(sorted.length > 0) {
+            mostDlContainer.style.display = 'flex';
+            document.getElementById('mostDlList').innerHTML = sorted.map(function(item) {
+                return `<div class="most-dl-item" onclick="openModalById('${item.id}')">
+                    <span>🔥 ${item.title.substring(0, 15)}...</span>
+                    <span style="color:#10b981; font-size:0.7rem;">(${counts[item.id]} ⬇️)</span>
+                </div>`;
+            }).join('');
+        }
+    };
+
+    if(typeof grantDownloadXPOnce === 'function') {
+        var origGrant = grantDownloadXPOnce;
+        window.grantDownloadXPOnce = function() {
+            origGrant();
+            if(activeItemObj && activeItemObj.id) {
+                var counts = JSON.parse(localStorage.getItem('ali_download_counts') || '{}');
+                counts[activeItemObj.id] = (counts[activeItemObj.id] || 0) + 1;
+                localStorage.setItem('ali_download_counts', JSON.stringify(counts));
+                renderMostDownloaded();
+            }
+        };
+    }
+    renderMostDownloaded();
+
+    // ================= 3. تقييم النجوم السريع =================
+    if(typeof openModal === 'function') {
+        var origOpenModal = openModal;
+        window.openModal = function(item) {
+            origOpenModal(item);
+            var vipHint = document.getElementById('mVipHint');
+            if(vipHint && !document.getElementById('quickStarsBox')) {
+                var starsBox = document.createElement('div');
+                starsBox.id = 'quickStarsBox';
+                starsBox.innerHTML = `<div style="text-align:center; margin-top:10px;">
+                    <span style="font-size:0.8rem; color:#fff;">قيم هذا العنصر السريع (+5 XP):</span>
+                    <div class="quick-stars-row" id="quickStarsRow">
+                        <span onclick="submitQuickStars('${item.id}', 1)">★</span>
+                        <span onclick="submitQuickStars('${item.id}', 2)">★</span>
+                        <span onclick="submitQuickStars('${item.id}', 3)">★</span>
+                        <span onclick="submitQuickStars('${item.id}', 4)">★</span>
+                        <span onclick="submitQuickStars('${item.id}', 5)">★</span>
+                    </div>
+                </div>`;
+                vipHint.parentNode.insertBefore(starsBox, vipHint.nextSibling);
+            }
+        };
+    }
+
+    window.submitQuickStars = function(itemId, stars) {
+        var ratedKey = "ali_rated_" + itemId;
+        if(localStorage.getItem(ratedKey)) { alert("لقد قمت بتقييم هذا العنصر مسبقاً!"); return; }
+        localStorage.setItem(ratedKey, stars);
+        document.querySelectorAll('#quickStarsRow span').forEach(function(s, idx) {
+            if(idx < stars) s.classList.add('active');
+        });
+        addStoreXp(5);
+        if(typeof playSfx === 'function') playSfx('xp');
+        alert("✅ شكراً لتقييمك! حصلت على +5 XP.");
+    };
+
+    // ================= 4. صندوق الملاحظات =================
+    window.openFeedbackModal = function() { document.getElementById('feedbackModalBox').style.display = 'flex'; };
+    window.closeFeedbackModal = function() { document.getElementById('feedbackModalBox').style.display = 'none'; document.getElementById('feedbackMsg').innerText = ''; };
+    window.sendFeedbackToDiscord = async function() {
+        var text = document.getElementById('feedbackText').value.trim();
+        if(!text) return;
+        var msg = document.getElementById('feedbackMsg');
+        msg.style.color = '#00f2fe'; msg.innerText = '⏳ جاري الإرسال...';
+        
+        var webhook = localStorage.getItem('ali_store_webhook') || "https://discord.com/api/webhooks/1559231090017960036/YxeIkD33H6_3EMzHLFq53PKPnnQ2Zvg6f0XZo-19ZkiIk7zfI9uR9KSenZuCRtLzpO6r";
+        try {
+            await fetch(webhook, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ embeds: [{ title: "💬 ملاحظة جديدة من المتجر", description: text, color: 16776960 }] })
+            });
+            msg.style.color = '#00ff88'; msg.innerText = '✅ تم إرسال ملاحظتك بنجاح!';
+            document.getElementById('feedbackText').value = '';
+            setTimeout(closeFeedbackModal, 2000);
+        } catch(e) {
+            msg.style.color = '#ef4444'; msg.innerText = '❌ حدث خطأ، حاول لاحقاً.';
+        }
+    };
+
+    // ================= 5. خريطة الكنز =================
+    if(document.querySelector('.hub-tabs')) {
+        var mapBtn = document.createElement('button');
+        mapBtn.className = 'hub-tab-btn';
+        mapBtn.innerHTML = '🗺️ خريطة الكنز';
+        mapBtn.onclick = function() { switchHubTab('hub-treasuremap', this); };
+        document.querySelector('.hub-tabs').appendChild(mapBtn);
+
+        var mapPane = document.createElement('div');
+        mapPane.id = 'hub-treasuremap';
+        mapPane.className = 'hub-pane';
+        mapPane.innerHTML = `<div style="text-align:center;">
+            <p style="font-size:0.82rem; color:#94a3b8; margin-bottom:10px;">ابحث عن الكنز المخفي في الصفحة! الكنز يتغير مكانه يومياً.</p>
+            <div style="font-size:5rem; margin:15px 0;">🗺️</div>
+            <button class="game-btn" onclick="launchTreasureMap()" style="width:100%;">بدء البحث 🔍</button>
+        </div>`;
+        document.querySelector('.hub-box').appendChild(mapPane);
+    }
+
+    window.launchTreasureMap = function() {
+        document.getElementById('aliSuperHubModal').style.display = 'none';
+        var oldChest = document.getElementById('tempTreasureChest');
+        if(oldChest) oldChest.remove();
+
+        var chest = document.createElement('div');
+        chest.id = 'tempTreasureChest';
+        chest.innerHTML = '🎁';
+        chest.style.cssText = "position:fixed; font-size:3rem; z-index:99999; cursor:pointer; filter:drop-shadow(0 0 15px #ffd700); transition:0.3s; animation:pulse 1s infinite;";
+        
+        var x = Math.floor(Math.random() * 80) + 10;
+        var y = Math.floor(Math.random() * 70) + 15;
+        chest.style.left = x + 'vw';
+        chest.style.top = y + 'vh';
+
+        chest.onclick = function() {
+            addStoreXp(50);
+            if(typeof playSfx === 'function') playSfx('win');
+            alert('🎉 لقد وجدت الكنز المخفي! ربحت +50 XP.');
+            chest.remove();
+        };
+        document.body.appendChild(chest);
+        setTimeout(function() { if(chest) chest.remove(); }, 30000); // يختفي بعد 30 ثانية
+    };
+
+    // ================= 6. الألقاب الأسطورية =================
+    if(typeof XP_SHOP_ITEMS !== 'undefined') {
+        XP_SHOP_ITEMS.push(
+            { id: 'title_king_legend', name: '👑 لقب: حاكم النيون', cost: 500, type: 'title', val: '👑 حاكم النيون' },
+            { id: 'title_god_legend', name: '🌌 لقب: إله المتجر', cost: 1000, type: 'title', val: '🌌 إله المتجر' }
+        );
+        if(typeof renderXpShop === 'function') renderXpShop();
+    }
+
+}, 3500); // تأخير لضمان تحميل الدوال الأساسية
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
@@ -3590,5 +3798,20 @@ setTimeout(function() {
 <!-- واجهة المساعد الآلي العائم (رقم 4) -->
 <img id="aliMascot" src="https://cdn-icons-png.flaticon.com/512/8066/8066033.png" onclick="pokeMascot()">
 <div id="mascotBubble" class="mascot-bubble">أهلاً بك في المتجر يا وحش!</div>
+
+<!-- صندوق الملاحظات العائم -->
+<div id="floatingFeedbackBtn" onclick="openFeedbackModal()" title="أرسل لنا ملاحظة أو اقتراح">💬</div>
+<div id="feedbackModalBox">
+    <div class="feedback-card">
+        <h3 style="color:#f59e0b; margin-bottom:10px;"><i class="fa-solid fa-comment-dots"></i> ملاحظة أو اقتراح</h3>
+        <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:10px;">اكتب اقتراحك أو الملاحظة التي تريد إرسالها للإدارة.</p>
+        <textarea id="feedbackText" rows="3" placeholder="اكتب هنا..."></textarea>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-card-view" style="flex:1; font-size:0.9rem; padding:8px;" onclick="sendFeedbackToDiscord()">إرسال</button>
+            <button class="btn-glass" style="flex:1; font-size:0.9rem; padding:8px; border-radius:8px; background:rgba(255,255,255,0.1); border:none; color:#fff; cursor:pointer;" onclick="closeFeedbackModal()">إلغاء</button>
+        </div>
+        <p id="feedbackMsg" style="margin-top:10px; font-size:0.8rem; font-weight:bold;"></p>
+    </div>
+</div>
 </body>
 </html>

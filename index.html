@@ -808,6 +808,42 @@ body.modal-open #aliSuperHubBtn,
 body.modal-open #treasureMapBtn { 
     display: none !important; 
 }
+
+/* Auto CSS */
+/* إصلاح مشكلة قص النافذة المنبثقة على الجوال */
+.modal-overlay.active {
+    align-items: flex-start !important; /* تبدأ النافذة من الأعلى بدلاً من المنتصف */
+    overflow-y: auto !important; /* السماح بالتمرير داخل الخلفية السوداء */
+    padding-top: 20px !important;
+    padding-bottom: 40px !important;
+    -webkit-overflow-scrolling: touch !important; /* تمرير سلس على الآيفون والأندرويد */
+}
+
+.modal-box {
+    max-height: none !important; /* إلغاء الحد الأقصى للطول */
+    overflow-y: visible !important; /* إلغاء التمرير الداخلي المعقد */
+    margin-top: 10px !important;
+    margin-bottom: 30px !important;
+    padding-bottom: 25px !important; /* مساحة إضافية في الأسفل */
+}
+
+/* تصغير حجم الصور والفيديو داخل النافذة حتى تتسع الأزرار */
+#mImg {
+    max-height: 200px !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.video-container-responsive {
+    max-height: 200px !important;
+    overflow: hidden !important;
+}
+
+.video-container-responsive video, 
+.video-container-responsive iframe {
+    max-height: 200px !important;
+    object-fit: contain !important;
+}
 </style>
 </head>
 <body>

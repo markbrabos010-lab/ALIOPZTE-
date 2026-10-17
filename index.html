@@ -580,6 +580,46 @@
     background: #05070e; color: #00ff88; font-family: monospace;
 }
 #aliParticlesCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 9980; display: none; }
+
+/* Auto CSS */
+/* مؤشرات الماوس القيمنج (رقم 6) */
+body, html {
+    cursor: url('https://cdn-icons-png.flaticon.com/32/386/386060.png') 0 0, crosshair !important;
+}
+a, button, input, select, .btn, #aliSuperHubBtn, [onclick], .hub-tab-btn {
+    cursor: url('https://cdn-icons-png.flaticon.com/32/386/386016.png') 16 16, pointer !important;
+}
+
+/* المساعد الآلي العائم (رقم 4) */
+#aliMascot {
+    position: fixed; bottom: 85px; left: 20px; z-index: 9989;
+    width: 60px; height: 60px; transition: 0.3s; cursor: pointer !important;
+    animation: floatUpDown 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px #00f2fe);
+}
+#aliMascot:hover { transform: scale(1.1); filter: drop-shadow(0 0 20px #7f00ff); }
+@keyframes floatUpDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+.mascot-bubble {
+    position: fixed; bottom: 150px; left: 20px; background: #0d1222;
+    border: 2px solid #00f2fe; color: #fff; padding: 12px 16px;
+    border-radius: 16px 16px 16px 0; font-size: 0.85rem; font-weight: 900;
+    box-shadow: 0 0 20px rgba(0,242,254,0.3); opacity: 0;
+    transition: 0.3s; pointer-events: none; z-index: 9990;
+    max-width: 220px; text-align: center;
+}
+.mascot-bubble.show { opacity: 1; transform: translateY(-8px); }
+
+/* صندوق الغموض (رقم 1) */
+.loot-box-container { text-align: center; padding: 20px; }
+.loot-box-img {
+    width: 140px; transition: 0.3s; filter: drop-shadow(0 0 20px #7f00ff); margin-bottom: 15px; cursor: pointer !important;
+}
+.loot-box-img:hover { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 0 30px #00f2fe); }
+.loot-box-img.shaking { animation: boxShake 0.4s infinite; }
+@keyframes boxShake { 0% {transform: rotate(-12deg);} 50% {transform: rotate(12deg);} 100% {transform: rotate(-12deg);} }
 </style>
 </head>
 <body>
@@ -2823,6 +2863,88 @@ function checkVaultGuess() {
 }
 
 window.addEventListener('load', applyEquippedCustomizations);
+
+// Auto JS
+// برمجة صندوق الغموض والمساعد الآلي (رقم 1 و 4)
+window.addEventListener('load', function() {
+    // 1. إضافة تبويب صندوق الغموض تلقائياً إلى مركز الفعاليات
+    var hubTabs = document.querySelector('.hub-tabs');
+    var hubBox = document.querySelector('.hub-box');
+    if(hubTabs && hubBox) {
+        var newTab = document.createElement('button');
+        newTab.className = 'hub-tab-btn';
+        newTab.innerHTML = '📦 1. صندوق الغموض';
+        newTab.onclick = function() { switchHubTab('hub-lootbox', this); };
+        hubTabs.appendChild(newTab);
+        
+        var newPane = document.createElement('div');
+        newPane.id = 'hub-lootbox';
+        newPane.className = 'hub-pane';
+        newPane.innerHTML = '<div class="loot-box-container">' +
+            '<p style="font-size:0.85rem; color:#94a3b8;">ادفع <b>50 XP</b> لفتح صندوق الغموض! قد تربح 10، 60، 150 XP أو حتى جائزة أسطورية! جرب حظك 🎲</p>' +
+            '<img id="lootBoxImg" class="loot-box-img" src="https://cdn-icons-png.flaticon.com/512/3079/3079144.png" onclick="openLootBox()">' +
+            '<button id="lootBoxBtn" class="hub-action-btn" style="display:block; margin:0 auto; padding:10px 20px; font-size:1rem;" onclick="openLootBox()">فتح الصندوق (50 XP)</button>' +
+            '<h3 id="lootBoxResult" style="margin-top:15px; min-height:30px; font-weight:900;"></h3>' +
+        '</div>';
+        hubBox.appendChild(newPane);
+    }
+});
+
+function openLootBox() {
+    if (typeof getStoreXp !== 'function') { alert("مركز الفعاليات غير محمل بشكل صحيح!"); return; }
+    if (getStoreXp() < 50) { alert("⚠️ رصيدك غير كافٍ! تحتاج 50 XP على الأقل لفتح الصندوق."); return; }
+    
+    var btn = document.getElementById('lootBoxBtn');
+    var img = document.getElementById('lootBoxImg');
+    var res = document.getElementById('lootBoxResult');
+    if(btn.disabled) return;
+    
+    addStoreXp(-50); // سحب 50 نقطة
+    btn.disabled = true;
+    img.classList.add('shaking');
+    res.style.color = '#fff';
+    res.innerText = "جاري فتح الصندوق...";
+    
+    setTimeout(function() {
+        img.classList.remove('shaking');
+        var rand = Math.random();
+        var prize = 0, msg = "", color = "";
+        
+        // نظام الاحتمالات والحظوظ
+        if(rand < 0.3) {
+            prize = 10; msg = "حظ سيء! الصندوق شبه فارغ.. ربحت 10 XP فقط 😢"; color = "#ef4444";
+        } else if(rand < 0.7) {
+            prize = 60; msg = "ممتاز! استرجعت قيمته.. ربحت 60 XP 👍"; color = "#00f2fe";
+        } else if(rand < 0.95) {
+            prize = 150; msg = "كفووو! ضربة حظ قوية! ربحت 150 XP 🔥"; color = "#10b981";
+        } else {
+            prize = 300; msg = "مستحيييل!! صندوق أسطوري! ربحت 300 XP 👑"; color = "#ffd700";
+        }
+        
+        addStoreXp(prize);
+        res.style.color = color;
+        res.innerText = msg;
+        btn.disabled = false;
+    }, 1800);
+}
+
+// 4. رسائل وتفاعلات المساعد الآلي العائم
+var mascotMsgs = [
+    "لا تنسَ تفتح عجلة الحظ اليوم! 🎁",
+    "جمّع XP عشان تشتري ألقاب فخمة! ⚡",
+    "سرعتك في الإيم قوية؟ جرب اختبار الـ CPS! 🎯",
+    "سمعت إن فيه خزنة سرية مليانة XP... 🕵️‍♂️",
+    "يا هلا بالقيمرز! أي مساعدة أنا حاضر! 🤖",
+    "جربت تفتح صندوق الغموض؟ يمكن تطلع لك جائزة أسطورية! 📦"
+];
+function pokeMascot() {
+    var b = document.getElementById('mascotBubble');
+    if(!b) return;
+    b.innerText = mascotMsgs[Math.floor(Math.random() * mascotMsgs.length)];
+    b.classList.add('show');
+    setTimeout(function() { b.classList.remove('show'); }, 4000); // إخفاء الرسالة بعد 4 ثواني
+}
+setInterval(function() { if(Math.random() > 0.65) pokeMascot(); }, 15000);
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
@@ -2891,5 +3013,9 @@ window.addEventListener('load', applyEquippedCustomizations);
         </div>
     </div>
 </div>
+
+<!-- واجهة المساعد الآلي العائم (رقم 4) -->
+<img id="aliMascot" src="https://cdn-icons-png.flaticon.com/512/8066/8066033.png" onclick="pokeMascot()">
+<div id="mascotBubble" class="mascot-bubble">أهلاً بك في المتجر يا وحش!</div>
 </body>
 </html>

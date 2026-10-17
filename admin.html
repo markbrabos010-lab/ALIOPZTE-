@@ -1171,6 +1171,55 @@
             a.download = "data-backup.json";
             a.click();
         }
-    </script>
+    
+// Auto JS
+window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        var saveBtn = document.getElementById('mainSaveBtn');
+        if (saveBtn && !document.getElementById('reportBtn')) {
+            var reportBtn = document.createElement('button');
+            reportBtn.id = 'reportBtn';
+            reportBtn.className = 'btn btn-glass';
+            reportBtn.innerHTML = 'نسخ التقرير اليومي';
+            reportBtn.style.marginLeft = '10px';
+            reportBtn.onclick = function() { generateDailyReport(); };
+            saveBtn.parentNode.insertBefore(reportBtn, saveBtn);
+        }
+    }, 1000);
+});
+
+window.generateDailyReport = function() {
+    if (typeof storeData === 'undefined') {
+        alert('بيانات المتجر لم يتم تحميلها بعد.');
+        return;
+    }
+    
+    var itemsCount = storeData.items ? storeData.items.length : 0;
+    var codesCount = storeData.codes ? storeData.codes.length : 0;
+    var partnersCount = storeData.partners ? storeData.partners.length : 0;
+    var wheelState = storeData.wheelStatus === 'open' ? 'مفتوحة' : (storeData.wheelStatus === 'locked' ? 'مقفلة' : 'مخفية');
+    
+    var latestItems = [];
+    if (storeData.items && storeData.items.length > 0) {
+        latestItems = storeData.items.slice(0, 3).map(function(i) { return "- " + i.title; });
+    }
+    
+    var report = "التقرير اليومي لمتجر ALIOPZTE\n\n" +
+                 "اجمالي العناصر: " + itemsCount + " عنصر\n" +
+                 "اكواد الهدايا: " + codesCount + " كود\n" +
+                 "الشركاء: " + partnersCount + " شريك\n" +
+                 "حالة عجلة الحظ: " + wheelState + "\n\n" +
+                 "احدث 3 اضافات:\n" +
+                 (latestItems.length > 0 ? latestItems.join('\n') : 'لا توجد اضافات حديثة') + "\n\n" +
+                 "التاريخ: " + new Date().toLocaleDateString('ar-EG') + "\n" +
+                 "رابط المتجر: https://markbrabos010-lab.github.io/ALIOPZTE-/";
+
+    navigator.clipboard.writeText(report).then(function() {
+        alert('تم نسخ التقرير بنجاح! الصقه في الديسكورد.');
+    }).catch(function() {
+        prompt('انسخ التقرير يدويا:', report);
+    });
+};
+</script>
 </body>
 </html>

@@ -3879,6 +3879,63 @@ setTimeout(function() {
     };
 
 }, 4000);
+
+// Auto JS
+setTimeout(function() {
+    // هذا الكود سيقوم بتحديث دالة الكنز القديمة وإضافة مؤقت الـ 5 ساعات بدون الحاجة لحذف الكود القديم
+    window.launchTreasureMap = function() {
+        var cooldown = 5 * 60 * 60 * 1000; // 5 ساعات
+        var lastPlayed = parseInt(localStorage.getItem('ali_treasure_map_last_played')) || 0;
+        var now = Date.now();
+        
+        // التحقق من الوقت المتبقي
+        if (lastPlayed && (now - lastPlayed < cooldown)) {
+            var minsLeft = Math.ceil((cooldown - (now - lastPlayed)) / 60000);
+            var hoursLeft = Math.floor(minsLeft / 60);
+            var remainingMins = minsLeft % 60;
+            var timeStr = hoursLeft > 0 ? hoursLeft + " ساعة و " + remainingMins + " دقيقة" : remainingMins + " دقيقة";
+            
+            if(typeof showToast === 'function') { 
+                showToast("⏳ الكنز مخفي! عُد بعد " + timeStr + ".", "#f59e0b"); 
+            } else { 
+                alert("⏳ عُد بعد " + timeStr + " للبحث عن الكنز مجدداً!"); 
+            }
+            return;
+        }
+
+        var oldChest = document.getElementById('tempTreasureChest');
+        if (oldChest) oldChest.remove();
+
+        var chest = document.createElement('div');
+        chest.id = 'tempTreasureChest';
+        chest.innerHTML = '🎁';
+        chest.style.cssText = "position:fixed; font-size:4rem; z-index:99999; cursor:pointer; filter:drop-shadow(0 0 20px #ffd700); transition:0.3s; animation:pulse 1s infinite;";
+        
+        var x = Math.floor(Math.random() * 80) + 10;
+        var y = Math.floor(Math.random() * 70) + 15;
+        chest.style.left = x + 'vw';
+        chest.style.top = y + 'vh';
+
+        chest.onclick = function() {
+            // حفظ وقت الفتح الحالي
+            localStorage.setItem('ali_treasure_map_last_played', Date.now());
+            
+            if (typeof addStoreXp === 'function') addStoreXp(50);
+            if (typeof playSfx === 'function') playSfx('win');
+            
+            if(typeof showToast === 'function') { 
+                showToast("🎉 وجدت الكنز! ربحت +50 XP.", "#ffd700"); 
+            } else { 
+                alert('🎉 لقد وجدت الكنز المخفي! ربحت +50 XP.'); 
+            }
+            chest.remove();
+        };
+        document.body.appendChild(chest);
+        
+        // يختفي الكنز بعد 30 ثانية إذا لم يجده اللاعب
+        setTimeout(function() { if (chest) chest.remove(); }, 30000);
+    };
+}, 4000); // تأخير 4 ثواني لضمان تحميل باقي الأكواد
 </script>
 
 <!-- زر ونافذة الميزات الأربع الجديدة (1, 4, 7, 10) -->
